@@ -13,7 +13,7 @@ You'll also need git to be installed on your machine.
 
 ### Installing
 You'll need to do the following:
-- clone the repo to your local machine using: `git clone [repo's url]`
+- clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/ATmega16-32-Library-Collection.git`
 - create new project in your IDE.
 - add the three main folders from cloned repo folder to the project: `app`, `hal`, `rtos`. 
 - scale down the layers according to the size of your application by modifying the following files: `app_depend.h`, `rtos_config.h`, `rtos_depend`, `ecu_depend.h` - see [Project Contents](#projectcontents).
@@ -47,7 +47,7 @@ The mcu layer contains:
 - timer driver - 8-bit timers TIMER0 and TIMER2
 - timer16 driver - 16-bit timers TIMER1
 - twi driver - two wire interface (I2C bus)
-- usart driver - serial interface (USB, USART)
+- usart driver - serial interface (USB,RS232)
 - wdt driver - watchdog timer
 
 ## <a name="projectlayout"></a>Project Layout
