@@ -26,5 +26,6 @@ void ac_disableBandGap(void);
 void ac_enableInterrupt(void);
 void ac_disableInterrupt(void);
 void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode);
+void ac_setISRCallback(ISRcallback_t a_acISRCalback);
 
 #endif /* AC_H_ */

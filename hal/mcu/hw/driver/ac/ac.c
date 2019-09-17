@@ -7,6 +7,8 @@
 
 #include "ac.h"
 
+static ISRcallback_t g_acISRCallback;
+
 void ac_enable(void){
 	
 	gpio_setPinDirection(AC_IN0_PIN,IO_INPUT);
@@ -51,5 +53,17 @@ void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode){
 	
 	CRI(ACSR,0x03);
 	SRI(ACSR,a_acInterruptMode);
+	
+}
+
+void ac_setISRCallback(ISRcallback_t a_acISRCalback){
+	
+	g_acISRCallback = a_acISRCalback;
+	
+}
+
+ISR(ANA_COMP_vect){
+	
+	g_acISRCallback();
 	
 }
