@@ -15,8 +15,9 @@ You'll also need git to be installed on your machine.
 You'll need to do the following:
 - clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/ATmega16-32-Library-Collection.git`
 - create new project in your IDE.
+- add your project root directory to compiler include path (in project toolchain settings).
 - add the three main folders from cloned repo folder to the project: `app`, `hal`, `rtos`. 
-- scale down the layers according to the size of your application by modifying the following files: `app_depend.h`, `rtos_config.h`, `rtos_depend`, `ecu_depend.h` - see [Project Contents](#projectcontents).
+- scale down the layers according to the size of your application by removing unwanted modules (if you are using RTOS, modify the following file: `rtos_config.h`) - see [Project Contents](#projectcontents).
 - remove unwanted modules simply by removing their folders in the rtos, ecu and mcu layer - see [Project Layout](#projectlayout).
 - after removing unwanted modules from the project, rebuild the project to check that no errors are thrown by the preprocessor or the linker.
 
@@ -53,20 +54,18 @@ The mcu layer contains:
 ## <a name="projectlayout"></a>Project Layout
 ```
 └───ATmega16-32-Library-Collection
-    |───app
+    ├───app
     │   ├───config
     │   └───examples
     │       ├───include
     │       └───source
-    |───hal
+    ├───hal
     │   ├───ecu
-    │   │   ├───config
-    │   │   └───devices
-    │   │       ├───glcd
-    │   │       ├───keypad
-    │   │       ├───lcd
-    │   │       ├───rtcc
-    │   │       └───servo
+    │   │   ├───glcd
+    │   │   ├───keypad
+    │   │   ├───lcd
+    │   │   ├───rtcc
+    │   │   └───servo
     │   └───mcu
     │       ├───boot
     │       ├───hw
@@ -90,6 +89,7 @@ The mcu layer contains:
         ├───config
         ├───include
         └───source
+
 ```
 ## Built With
 - Atmel Studio 7 - The official AVR IDE
