@@ -9,8 +9,6 @@
 #ifndef SOFTRESET_H_
 #define SOFTRESET_H_
 
-#include "../../driver/wdt/wdt.h"
-
 void softReset(void);
 
 #endif /* SOFTRESET_H_ */

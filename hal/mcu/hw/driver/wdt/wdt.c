@@ -6,6 +6,7 @@
  */ 
 
 #include "wdt.h"
+#include "hal/mcu/io/io_macros.h"
 
 void wdt_enable(wdttimeout_t a_wdtTimeout){
 	

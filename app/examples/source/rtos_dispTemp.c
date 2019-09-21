@@ -5,9 +5,11 @@
  *  Author: Loay Ashraf
  */ 
 
-#include "../include/examples.h"
-#include <stdlib.h>
-#include <string.h>
+#include "app/examples/include/examples.h"
+#include "rtos/config/rtos_config.h"
+#include "hal/ecu/lcd/lcd.h"
+#include "hal/mcu/hw/driver/adc/adc.h"
+#include "hal/mcu/hw/driver/gpio/gpio.h"
 
 /* EEPROM routines used only with the WinAVR compiler. */
 #include <avr/eeprom.h>

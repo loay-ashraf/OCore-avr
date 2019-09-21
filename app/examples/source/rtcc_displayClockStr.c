@@ -5,7 +5,9 @@
  *  Author: Loay Ashraf
  */ 
 
-#include "../include/examples.h"
+#include "app/examples/include/examples.h"
+#include "hal/ecu/lcd/lcd.h"
+#include "hal/ecu/rtcc/rtcc.h"
 
 void ex_rtcc_displayClockStr(void){
 	

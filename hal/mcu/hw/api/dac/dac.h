@@ -9,13 +9,8 @@
 #ifndef DAC_H_
 #define DAC_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../sys/delay.h"
-#include "../../../sys/std_types.h"
-#include "../../driver/gpio/gpio.h"
-#include "../../driver/timer/timer.h"
-#include "../../driver/timer16/timer16.h"
 #include "dac_config.h"
+#include "hal/mcu/sys/std_types.h"
 
 typedef enum{DA_CH0,DA_CH1,DA_CH2,DA_CH3}dacchannel_t;
 

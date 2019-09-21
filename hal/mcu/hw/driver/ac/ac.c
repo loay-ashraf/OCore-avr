@@ -6,8 +6,11 @@
  */ 
 
 #include "ac.h"
+#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/io/io_macros.h"
+#include "hal/mcu/sys/interrupt.h"
 
-static ISRcallback_t g_acISRCallback;
 
 void ac_enable(void){
 	
@@ -53,17 +56,5 @@ void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode){
 	
 	CRI(ACSR,0x03);
 	SRI(ACSR,a_acInterruptMode);
-	
-}
-
-void ac_setISRCallback(ISRcallback_t a_acISRCalback){
-	
-	g_acISRCallback = a_acISRCalback;
-	
-}
-
-ISR(ANA_COMP_vect){
-	
-	g_acISRCallback();
 	
 }

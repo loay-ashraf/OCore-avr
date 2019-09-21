@@ -5,7 +5,9 @@
  *  Author: Loay Ashraf
  */ 
 
-#include "../include/examples.h"
+#include "app/examples/include/examples.h"
+#include "hal/mcu/hw/api/dac/dac.h"
+#include "hal/mcu/sys/delay.h"
 
 void ex_dac_fade(void){
 	

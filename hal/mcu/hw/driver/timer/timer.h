@@ -9,11 +9,8 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/interrupt.h"
-#include "../../../sys/std_types.h"
-#include "../gpio/gpio.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 #define TIMER0_OC_PIN	PB3_M
 #define TIMER0_T_PIN	PB0_M

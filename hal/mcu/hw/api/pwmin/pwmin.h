@@ -11,13 +11,9 @@
 
 /*------------INCLUDE MCU CONFIGURATION AND REQUIRED HEADER FILES------------*/
 
-#include "../../../io/io_defs.h"
-#include "../../../sys/delay.h"
-#include "../../../sys/std_types.h"
-#include "../../driver/gpio/gpio.h"
-#include "../../driver/timer/timer.h"
-#include "../../driver/timer16/timer16.h"
 #include "pwmin_config.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 typedef enum{PWMIN_FALLING,PWMIN_RISING}pwminedge_t;
 

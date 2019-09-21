@@ -9,11 +9,6 @@
 #ifndef AC_H_
 #define AC_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/interrupt.h"
-#include "../gpio/gpio.h"
-
 #define AC_IN0_PIN		PB2_M
 #define AC_IN1_PIN		PB3_M
 
@@ -26,6 +21,5 @@ void ac_disableBandGap(void);
 void ac_enableInterrupt(void);
 void ac_disableInterrupt(void);
 void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode);
-void ac_setISRCallback(ISRcallback_t a_acISRCalback);
 
 #endif /* AC_H_ */

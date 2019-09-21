@@ -5,7 +5,7 @@
  * Author : Loay Ashraf
  */ 
 
-#include "examples/include/examples.h"
+#include "app/examples/include/examples.h"
 
 int main(void){
 	

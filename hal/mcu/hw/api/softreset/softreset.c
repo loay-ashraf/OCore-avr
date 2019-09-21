@@ -6,6 +6,7 @@
  */ 
 
 #include "softreset.h"
+#include "hal/mcu/hw/driver/wdt/wdt.h"
 
 void softReset(void){
 	

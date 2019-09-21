@@ -6,6 +6,9 @@
  */ 
 
 #include "spi.h"
+#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/mcu/io/io_macros.h"
+#include "hal/mcu/sys/interrupt.h"
 
 static ISRcallback_t g_spiISRCallback;
 

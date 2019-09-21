@@ -10,7 +10,12 @@
 //------------INCLUDE DRIVER HEADER FILE------------//
 
  #include "usart.h"
-
+ #include "hal/mcu/hw/driver/gpio/gpio.h"
+ #include "hal/mcu/io/io_macros.h"
+ #include "hal/mcu/sys/cpu_config.h"
+ #include "hal/mcu/sys/delay.h"
+ #include "hal/mcu/sys/interrupt.h"
+ 
 //------------DECLARE LOCAL VARIABLES------------//
 
 /** @var uint8_t mode_flag

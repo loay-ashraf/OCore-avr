@@ -7,6 +7,13 @@
 //------------INCLUDE DRIVER HEADER FILE------------//
 
  #include "glcd.h"
+ #include "hal/mcu/hw/driver/gpio/gpio.h"
+ #include "hal/mcu/hw/driver/spi/spi.h"
+ #include "hal/mcu/sys/delay.h"
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <avr/pgmspace.h>
  
 //------------DECLARE LOCAL VARIABLES------------//
  

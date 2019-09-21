@@ -11,6 +11,9 @@
 //------------INCLUDE DRIVER HEADER FILE------------//
 
  #include "keypad.h"
+ #include "hal/mcu/hw/driver/gpio/gpio.h"
+ #include "hal/mcu/hw/driver/timer16/timer16.h"
+ #include "hal/mcu/sys/delay.h"
  
  static char g_keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS];
  static keyhandler_t g_keyHandlerCallback;
@@ -91,19 +94,29 @@
 			#if (KEYPAD_CONFIG == 1)
 				
 				if (gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
-						
-					gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
-					return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
 					
+					DELAY_MS(100);
+					
+					if (gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){	
+						
+						gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
+						return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
+						
+					}
 				}
 					
 			#elif (KEYPAD_CONFIG == -1)
 				
 				if (!gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
-						
-					gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
-					return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
 					
+					DELAY_MS(100);
+					
+					if (!gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+						
+						gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
+						return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
+						
+					}
 				}
 					
 			#endif	

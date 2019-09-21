@@ -6,6 +6,10 @@
  */ 
 
 #include "dac.h"
+#include "hal/mcu/hw/driver/timer/timer.h"
+#include "hal/mcu/hw/driver/timer16/timer16.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/delay.h"
 
 static bool_t g_isActivated[4];
 

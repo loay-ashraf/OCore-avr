@@ -1,9 +1,9 @@
 /** @file mcu_boot.h
- *  @brief includes the MCU boot required files and headers
- *  @author Loay Ashraf
- *  @version 1.0.0
+ *  @brief includes the MCU configuration parameters and required header files
+ *  @author Hussam Mostafa
+ *	@version 1.0.0
  *  @bug no known bugs
-*/
+ */
 
 #ifndef MCU_BOOT_H_
 #define MCU_BOOT_H_

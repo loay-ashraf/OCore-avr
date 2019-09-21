@@ -8,8 +8,9 @@
 #ifndef SERVO_H_
 #define SERVO_H_
 
-#include "../../config/ecu_depend.h"
+/*#include "../../config/ecu_depend.h"*/
 #include "servo_config.h"
+#include "hal/mcu/sys/std_types.h"
 
 typedef enum{SER_CH0,SER_CH1}servochannel_t;
 

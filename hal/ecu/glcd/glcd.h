@@ -11,12 +11,8 @@
 
 /*------------INCLUDE MCU CONFIGURATION AND REQUIRED HEADER FILES------------*/
 
-#include "../../config/ecu_depend.h"
 #include "glcd_config.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <avr/pgmspace.h>
+#include "hal/mcu/sys/std_types.h"
 
 /*------------DEFINE GGLCD COMMANDS------------*/
 

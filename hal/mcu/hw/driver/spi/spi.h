@@ -9,12 +9,9 @@
 #ifndef SPI_H_
 #define SPI_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/interrupt.h"
-#include "../../../sys/std_types.h"
-#include "../gpio/gpio.h"
 #include "spi_config.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 typedef enum{SP_SLAVE0,SP_SLAVE1,SP_SLAVE2,SP_SLAVE3}spislave_t;
 					

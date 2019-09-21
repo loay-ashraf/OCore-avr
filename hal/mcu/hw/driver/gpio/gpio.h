@@ -9,10 +9,8 @@
 #ifndef GPIO_H_
 #define GPIO_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/interrupt.h"
-#include "../../../sys/std_types.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 #define GPIO_INT0_PIN	PD2_M
 #define GPIO_INT1_PIN	PD3_M

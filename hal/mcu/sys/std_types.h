@@ -1,12 +1,14 @@
 /*
  * std_types.h
  *
- *  Created on: 5/12/2019 5:34:59 PM
- *  Author: Loay Ashraf
+ *  Created on: Dec 8, 2015
+ *      Author: hussam_mostafa
  */
 
 #ifndef STD_TYPES_H_
 #define STD_TYPES_H_
+
+#include <stdint.h>
 
 #define NONE	0
 

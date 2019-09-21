@@ -9,11 +9,8 @@
 #ifndef TIMER16_H_
 #define TIMER16_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/interrupt.h"
-#include "../../../sys/std_types.h"
-#include "../gpio/gpio.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 #define TIMER1_OCA_PIN		PD5_M
 #define TIMER1_OCB_PIN		PD4_M

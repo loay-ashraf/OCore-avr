@@ -9,8 +9,6 @@
 #ifndef EXAMPLES_H_
 #define EXAMPLES_H_
 
-#include "../../config/app_depend.h"
-
 void ex_adc_lm35(void);
 void ex_dac_fade(void);
 void ex_glcd_displayImg(void);

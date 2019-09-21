@@ -5,9 +5,11 @@
  *  Author: Loay Ashraf
  */ 
 
-#include "../include/examples.h"
-#include <stdlib.h>
-#include <string.h>
+#include "app/examples/include/examples.h"
+#include "rtos/config/rtos_config.h"
+#include "hal/ecu/lcd/lcd.h"
+#include "hal/ecu/keypad/keypad.h"
+#include "hal/mcu/hw/driver/gpio/gpio.h"
 
 /* EEPROM routines used only with the WinAVR compiler. */
 #include <avr/eeprom.h>
@@ -68,7 +70,7 @@ static void scanKeypad(void *pvParameters){
 	
 	for(;;){	/* loop forever */
 		
-		vTaskDelay(10);
+		vTaskDelay(100);
 		
 		key = Keypad_scan();
 		
@@ -84,7 +86,7 @@ static void updateLCD(void *pvParameters){
 	
 	for(;;){	/* loop forever */
 		
-		vTaskDelay(150);
+		vTaskDelay(200);
 		
 		if(key)
 			LCD_putc(key);

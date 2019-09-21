@@ -14,12 +14,8 @@
 
 //------------INCLUDE MCU CONFIGURATION------------//
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/delay.h"
-#include "../../../sys/interrupt.h"
-#include "../../../sys/std_types.h"
-#include "../gpio/gpio.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 #define ADC_PORT	PORTA_M
 

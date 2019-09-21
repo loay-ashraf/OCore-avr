@@ -5,7 +5,10 @@
  *  Author: Loay Ashraf
  */ 
 
-#include "RTCC.h"
+#include "rtcc.h"
+#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/mcu/hw/driver/twi/twi.h"
+#include <stdio.h>
 
 static clockmode_t g_clockMode;
 static ISRcallback_t g_alarmHandlerCallback[2];

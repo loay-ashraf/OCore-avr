@@ -14,8 +14,8 @@
 
 //------------INCLUDE MCU CONFIGURATION------------//
 
-#include "../../config/ecu_depend.h"
 #include "keypad_config.h"
+#include "hal/mcu/sys/std_types.h"
 
 typedef void (*keyhandler_t) (char);
 

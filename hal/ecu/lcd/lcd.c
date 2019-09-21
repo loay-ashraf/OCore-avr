@@ -8,9 +8,14 @@
  *  @see LCD.h
  */
 
-//------------INCLUDE DRIVER HEADER FILE------------//
+//------------INCLUDE REQUIRED HEADER FILES------------//
 
  #include "lcd.h"
+ #include "hal/mcu/hw/driver/gpio/gpio.h"
+ #include "hal/mcu/sys/delay.h"
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
  
 //------------DECLARE LOCAL VARIABLES------------//
  
@@ -392,8 +397,7 @@ static void clearCursorPositionUpdateFlag(void);
 	 ubyte_t rows;
 	 
 	 for(rows = 0; rows < LCD_ROWS; rows++)
-	 
-	 strcpy(g_LCD.frameBuffer[rows],a_buffer[rows]);
+		strcpy(g_LCD.frameBuffer[rows],a_buffer[rows]);
 	 
 	 putBuffer();
 	 
@@ -404,7 +408,6 @@ static void clearCursorPositionUpdateFlag(void);
 	ubyte_t rows;
 	
 	for(rows = 0; rows < LCD_ROWS; rows++)
-	
 		strcpy(a_returnedBuffer[rows],g_LCD.frameBuffer[rows]);
 		
  }	
@@ -573,7 +576,7 @@ static void clearCursorPositionUpdateFlag(void);
 	 
 	 LCD_setCursorPosition(a_row,0); 
 	 
-	 for (index=0;index<a_width;index++)
+	 for(index=0;index<a_width;index++)
 		rowData[index] = LCD_readChar();
 		
 	rowData[a_width] = '\0';

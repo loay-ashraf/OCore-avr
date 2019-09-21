@@ -9,9 +9,9 @@
 #ifndef RTCC_H_
 #define RTCC_H_
 
-#include "../../config/ecu_depend.h"
 #include "rtcc_config.h"
-#include <stdio.h>
+#include "hal/mcu/sys/std_types.h"
+#include "hal/mcu/io/io_defs.h"
 
 typedef enum{TWELVE,TWENTY_FOUR}clockmode_t;
 typedef enum{AM,PM=2}ampm_t;	

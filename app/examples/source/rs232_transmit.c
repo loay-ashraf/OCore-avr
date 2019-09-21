@@ -6,6 +6,10 @@
  */ 
 
 #include "../include/examples.h"
+#include "hal/ecu/lcd/lcd.h"
+#include "hal/ecu/keypad/keypad.h"
+#include "hal/mcu/hw/driver/usart/usart.h"
+#include "hal/mcu/sys/delay.h"
 
 static char keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS] = {{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'#','0','*','D'}};	/* Keypad key map array */
 static usartconfig_t usartConfig = {.mode=US_ASYNC,.frameSize=8,.parity=US_EVEN,.speed=US_NORMAL,.stopBit=US_ONE_BIT};			/* USART configuration structure */
@@ -67,8 +71,6 @@ void ex_rs232_transmit(void){
 			
 			}
 		}
-		
-		DELAY_MS(150);		/* delay to prevent accidental key print */
 		
 	}
 	

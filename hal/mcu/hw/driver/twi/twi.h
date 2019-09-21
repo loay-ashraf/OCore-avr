@@ -9,13 +9,9 @@
 #ifndef TWI_H_
 #define TWI_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/delay.h"
-#include "../../../sys/interrupt.h"
-#include "../../../sys/std_types.h"
-#include "../gpio/gpio.h"
 #include "twi_config.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 #define ERROR			FALSE
 #define PASS			TRUE

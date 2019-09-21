@@ -14,11 +14,8 @@
 
 //------------INCLUDE MCU CONFIGURATION------------//
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
-#include "../../../sys/cpu_config.h"
-#include "../../../sys/interrupt.h"
-#include "../../../sys/std_types.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 //------------DEFINE CONFIGURATION PARAMETERS ABBREVIATIONS------------//
 

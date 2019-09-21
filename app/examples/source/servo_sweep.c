@@ -5,7 +5,9 @@
  *  Author: Loay Ashraf
  */ 
 
-#include "../include/examples.h"
+#include "app/examples/include/examples.h"
+#include "hal/ecu/servo/servo.h"
+#include "hal/mcu/sys/delay.h"
 
 void ex_servo_sweep(void){
 	

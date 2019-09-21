@@ -13,13 +13,10 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-/*------------INCLUDE MCU CONFIGURATION AND REQUIRED HEADER FILES------------*/
+/*------------INCLUDE LCD CONFIGURATION AND REQUIRED HEADER FILES------------*/
 
-#include "../../config/ecu_depend.h"
 #include "lcd_config.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "hal/mcu/sys/std_types.h"
 
 /*------------DEFINE LCD COMMANDS------------*/
 

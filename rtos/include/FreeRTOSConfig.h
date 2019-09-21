@@ -28,7 +28,7 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-#include "../config/rtos_depend.h"
+#include "hal/mcu/sys/cpu_config.h"
 
 /*-----------------------------------------------------------
  * Application specific definitions.

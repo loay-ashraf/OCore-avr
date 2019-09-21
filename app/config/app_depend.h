@@ -8,6 +8,6 @@
 #ifndef APP_DEPEND_H_
 #define APP_DEPEND_H_
 
-#include "../../rtos/config/rtos_config.h"
+#include "app/examples/include/examples.h"
 
 #endif /* APP_DEPEND_H_ */

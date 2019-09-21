@@ -10,7 +10,7 @@
 #define RTOS_CONFIG_H_
 
 /* Scheduler include files. */
-#include "../include/FreeRTOS.h"
-#include "../include/task.h"
+#include "rtos/include/FreeRTOS.h"
+#include "rtos/include/task.h"
 
 #endif /* RTOS_CONFIG_H_ */

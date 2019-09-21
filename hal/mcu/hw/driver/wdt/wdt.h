@@ -9,8 +9,8 @@
 #ifndef WDT_H_
 #define WDT_H_
 
-#include "../../../io/io_defs.h"
-#include "../../../io/io_macros.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/std_types.h"
 
 typedef enum{WD_16,WD_32,WD_65,WD_130,WD_260,WD_520,WD_1000,WD_2100}wdttimeout_t;
 

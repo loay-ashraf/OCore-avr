@@ -4,7 +4,13 @@
  * Created: 11/09/2019 12:37:15 PM
  *  Author: Loay Ashraf
  */ 
+
 #include "pwmin.h"
+#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/mcu/hw/driver/timer/timer.h"
+#include "hal/mcu/hw/driver/timer16/timer16.h"
+#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/delay.h"
 
 static uint16_t gateWindow = 100;
 

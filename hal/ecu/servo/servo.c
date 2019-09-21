@@ -6,6 +6,8 @@
  */ 
 
 #include "servo.h"
+#include "hal/mcu/hw/driver/timer16/timer16.h"
+#include "hal/mcu/sys/delay.h"
 
 static uint16_t g_servoSpeed[2];
 static uint16_t g_servoDelay[2];
