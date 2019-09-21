@@ -54,41 +54,41 @@ The mcu layer contains:
 ## <a name="projectlayout"></a>Project Layout
 ```
 └───ATmega16-32-Library-Collection
-    ├───app
-    │   ├───config
-    │   └───examples
-    │       ├───include
-    │       └───source
-    ├───hal
-    │   ├───ecu
-    │   │   ├───glcd
-    │   │   ├───keypad
-    │   │   ├───lcd
-    │   │   ├───rtcc
-    │   │   └───servo
-    │   └───mcu
-    │       ├───boot
-    │       ├───hw
-    │       │   ├───api
-    │       │   │   ├───dac
-    │       │   │   ├───pwmin
-    │       │   │   └───softreset
-    │       │   └───driver
-    │       │       ├───ac
-    │       │       ├───adc
-    │       │       ├───gpio
-    │       │       ├───spi
-    │       │       ├───timer
-    │       │       ├───timer16
-    │       │       ├───twi
-    │       │       ├───usart
-    │       │       └───wdt
-    │       ├───io
-    │       └───sys
-    └───rtos
-        ├───config
-        ├───include
-        └───source
+      ├───app
+      │    ├───config
+      │    └───examples
+      │          ├───include
+      │          └───source
+      ├───hal
+      │    ├───ecu
+      │    │    ├───glcd
+      │    │    ├───keypad
+      │    │    ├───lcd
+      │    │    ├───rtcc
+      │    │    └───servo
+      │    └───mcu
+      │          ├───boot
+      │          ├───hw
+      │          │    ├───api
+      │          │    │     ├───dac
+      │          │    │     ├───pwmin
+      │          │    │     └───softreset
+      │          │    └───driver
+      │          │          ├───ac
+      │          │          ├───adc
+      │          │          ├───gpio
+      │          │          ├───spi
+      │          │          ├───timer
+      │          │          ├───timer16
+      │          │          ├───twi
+      │          │          ├───usart
+      │          │          └───wdt
+      │          ├───io
+      │          └───sys
+      └───rtos
+            ├───config
+            ├───include
+            └───source
 
 ```
 ## Built With
