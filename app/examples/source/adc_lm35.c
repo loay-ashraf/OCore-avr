@@ -6,7 +6,7 @@
  */ 
 
 #include "app/examples/include/examples.h"
-#include "hal/ecu/lcd/lcd.h"
+#include "hal/ecu/lcd/api/lcd.h"
 #include "hal/mcu/hw/driver/adc/adc.h"
 #include "hal/mcu/sys/delay.h"
 
