@@ -11,8 +11,7 @@
 //------------INCLUDE REQUIRED HEADER FILES------------//
 
  #include "lcd.h"
- #include "hal/mcu/hw/driver/gpio/gpio.h"
- #include "hal/mcu/sys/delay.h"
+ #include "lcd_macros.h"
  #include <stdlib.h>
  #include <stdio.h>
  #include <string.h>
@@ -33,9 +32,6 @@
 
 static lcd_t g_LCD;
 
-static void resetDisplay(void);
-static void sendNibble(ubyte_t a_data, lcdtransmissiontype_t a_transmissionType);
-static ubyte_t readNibble(void);
 static void initBuffer(void);
 static void putBuffer(void);	
 static void clearBuffer(void);
@@ -61,73 +57,13 @@ static void clearCursorPositionUpdateFlag(void);
 	setCursorPositionUpdateFlag();
 	setFrameBufferUpdateFlag();
 	
-	#ifdef LCD_RW_PIN
-	
-		gpio_setPinDirection(LCD_RW_PIN,IO_OUTPUT);
-	
-	#endif	
-	
-	gpio_setPinDirection(LCD_EN_PIN,IO_OUTPUT);							// set control port direction register
-	gpio_setPinDirection(LCD_RS_PIN,IO_OUTPUT);	
-	gpio_setPortDirection(LCD_DATA_PORT,LCD_DATA_PORT_MASK,IO_OUTPUT);			// set data port direction register
-	
-	resetDisplay();
-	
-	#if (LCD_DATA_MODE == 4)
-		
-		//------------CONFIGURE LCD BEHAVIOUR------------//
-		
-		LCD_sendInstruction(LCD_4BIT_MODE);												// 4-bit interface, 2-line mode, 5x8 dots format
-		LCD_sendInstruction(LCD_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-		LCD_sendInstruction(LCD_CURSOR_RIGHT);											// cursor moves to the right, no display shift
-		LCD_sendInstruction(LCD_CLEAR_DISPLAY);											// clear display
-		
-	#elif (LCD_DATA_MODE == 8)
-	
-		//------------CONFIGURE LCD BEHAVIOUR------------//
-	
-		LCD_sendInstruction(LCD_8BIT_MODE);	// 8-bit interface, 2-line mode, 5x8 dots format
-		LCD_sendInstruction(LCD_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);	// display ON, cursor OFF, blink OFF
-		LCD_sendInstruction(LCD_CURSOR_RIGHT);	// cursor moves to the right, no display shift
-		LCD_sendInstruction(LCD_CLEAR_DISPLAY);	// clear display
-	
-	#endif
+	LCD_INIT(a_cursorVisible,a_cursorBlinking);
 	
  }
 
  void LCD_sendInstruction(ubyte_t a_instruction){
-	
-	#if (LCD_DATA_MODE == 4)
-	
-		#if (LCD_DATA_PORT_MASK == 0x0F)
-			
-			//------------SEND HIGH NIBBLE------------//
-			
-			sendNibble((a_instruction>>4),LCD_INSTRUCTION);
 
-			//------------SEND LOW NIBBLE------------//
-
-			sendNibble(a_instruction,LCD_INSTRUCTION);
-			
-		#elif (LCD_DATA_PORT_MASK == 0xF0)
-		
-			//------------SEND HIGH NIBBLE------------//
-			
-			sendNibble(a_instruction,LCD_INSTRUCTION);
-
-			//------------SEND LOW NIBBLE------------//
-
-			sendNibble((a_instruction<<4),LCD_INSTRUCTION);
-				
-		#endif		
-	
-	#elif (LCD_DATA_MODE == 8)
-		
-		//------------SEND 8-BIT COMMAND------------//
-		
-		sendNibble(a_instruction,LCD_INSTRUCTION);
-	
-	#endif
+	LCD_SEND_INSTRUCTION(a_instruction);
    
  }
  
@@ -177,40 +113,37 @@ static void clearCursorPositionUpdateFlag(void);
 	
 	LCD_setCursorPosition(a_offset,a_column);		// column starting position
 	
-	restoreCursorConfig();			// restore cursor configuration
+	restoreCursorConfig();							// restore cursor configuration
 	 
  }
  
  void LCD_clearDisplay(void){
 	 
-	LCD_sendInstruction(LCD_CLEAR_DISPLAY);	// clear display command
+	LCD_CLEAR_DISLAY;
 	 
-	clearBuffer();			// clear frame buffer
+	clearBuffer();								// clear frame buffer
 	 
-	saveCursorPosition(0,0);		// default cursor position
+	saveCursorPosition(0,0);					// default cursor position
 
  }
  
  void LCD_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking){
-	 
-	if(a_cursorVisible < 2 && a_cursorBlinking < 2){
 		
-		// store cursor configuration
+		/* store cursor configuration */
 		
-		saveCursorConfig(a_cursorVisible, a_cursorBlinking);
+		saveCursorConfig(a_cursorVisible,a_cursorBlinking);
 
-		LCD_sendInstruction(LCD_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// configure cursor
-		
-	}
+		LCD_CONFIG_CURSOR(a_cursorVisible,a_cursorBlinking);		// configure cursor
+	
  }
 
  void LCD_setCursorPosition(ubyte_t a_row, ubyte_t a_col){
 	
 	if(a_row >= LCD_ROWS)		// check row
-		a_row = 0;
+		a_row = LCD_ROWS-1;
 	
 	if(a_col >= LCD_COLUMNS)	// check column
-		a_col = 0;
+		a_col = LCD_COLUMNS-1;
 	
 	// update cursor position
 	
@@ -220,20 +153,8 @@ static void clearCursorPositionUpdateFlag(void);
 		
 	}
 	
-	switch(a_row){
-
-		case 0: LCD_sendInstruction(LCD_ROW_ZERO+a_col);	// first row
-		break;
-		case 1: LCD_sendInstruction(LCD_ROW_ONE+a_col);	// second row
-		break;
-		case 2: LCD_sendInstruction(LCD_ROW_TWO+a_col);	// third row
-		break;
-		case 3: LCD_sendInstruction(LCD_ROW_THREE+a_col);	// fourth row
-		break;
-		default: LCD_sendInstruction(LCD_ROW_ZERO+a_col);	// default is first row
-		break;
-
-	}
+	LCD_SET_CURSOR_POSITION(a_row,a_col);
+	
   }
  
  lcdposition_t LCD_getCursorPosition(void){
@@ -247,48 +168,38 @@ static void clearCursorPositionUpdateFlag(void);
 	 updateCursorPosition(a_dir);
 	 
 	 switch (a_dir){
-		
-		#if (LCD_ROWS == 2)
-		
-			case LCD_LEFT:
-			case LCD_RIGHT: LCD_sendInstruction(LCD_SHIFT_CURSOR|(a_dir<<2));
-			break;
-						   		   	
-		#elif (LCD_ROWS == 4)
 			
-			case LCD_LEFT: {
+		case LCD_LEFT: {
 
-				if(g_LCD.cursorPos.row < LCD_ROWS-1 && g_LCD.cursorPos.column == LCD_COLUMNS-1){
+			if(g_LCD.cursorPos.column == LCD_COLUMNS-1){
 					
-					clearCursorPositionUpdateFlag();
-					LCD_setCursorPosition(g_LCD.cursorPos.row,g_LCD.cursorPos.column);
-					setCursorPositionUpdateFlag();
+				clearCursorPositionUpdateFlag();
+				LCD_setCursorPosition(g_LCD.cursorPos.row,g_LCD.cursorPos.column);
+				setCursorPositionUpdateFlag();
 					
-				}else{
+			}else{
 					
-					LCD_sendInstruction(LCD_SHIFT_CURSOR|(a_dir<<2));
+				LCD_SHIFT_CURSOR(a_dir);
 				
-				}
 			}
-			break;
+		}
+		break;
 			
-			case LCD_RIGHT: {
+		case LCD_RIGHT: {
 				
-				if(g_LCD.cursorPos.row > 0 && g_LCD.cursorPos.column == 0){
+			if(g_LCD.cursorPos.column == 0){
 					
-					clearCursorPositionUpdateFlag();
-					LCD_setCursorPosition(g_LCD.cursorPos.row,g_LCD.cursorPos.column);
-					setCursorPositionUpdateFlag();
+				clearCursorPositionUpdateFlag();
+				LCD_setCursorPosition(g_LCD.cursorPos.row,g_LCD.cursorPos.column);
+				setCursorPositionUpdateFlag();
 					
-				}else{
+			}else{
 				
-					LCD_sendInstruction(LCD_SHIFT_CURSOR|(a_dir<<2));
+				LCD_SHIFT_CURSOR(a_dir);
 				
-				}
 			}
-			break;
-		
-		#endif
+		}
+		break;
 					   
 		case LCD_UP:	 
 		case LCD_DOWN: {
@@ -388,7 +299,7 @@ static void clearCursorPositionUpdateFlag(void);
  void LCD_scrollDisplayNative(lcddirection_t a_dir){
 	 
 	if(a_dir == LCD_LEFT || a_dir == LCD_RIGHT)
-		LCD_sendInstruction(LCD_SCROLL_DISPLAY|(a_dir<<2));
+		LCD_SCROLL_DISPLAY(a_dir);
 	 
  }
  
@@ -416,16 +327,8 @@ static void clearCursorPositionUpdateFlag(void);
 	
 	clearCursorPositionUpdateFlag();
 	clearFrameBufferUpdateFlag();
-	 
-	LCD_sendInstruction(0x40+(a_characterIndex*8));
-	LCD_putc(a_characterArray[0]);	 
-	LCD_putc(a_characterArray[1]);	
-	LCD_putc(a_characterArray[2]);	
-	LCD_putc(a_characterArray[3]);	
-	LCD_putc(a_characterArray[4]);	
-	LCD_putc(a_characterArray[5]);	
-	LCD_putc(a_characterArray[6]);	
-	LCD_putc(a_characterArray[7]);	
+	
+	LCD_DEFINE_CUSTOM_CHARACTER(a_characterIndex,a_characterArray);
 	
 	setCursorPositionUpdateFlag();
 	setFrameBufferUpdateFlag();
@@ -435,38 +338,8 @@ static void clearCursorPositionUpdateFlag(void);
  }
 	
  void LCD_putc(char a_data){
-   
-	#if (LCD_DATA_MODE == 4)
-   
-		#if (LCD_DATA_PORT_MASK == 0x0F)
-		   
-			//------------SEND HIGH NIBBLE------------//
-		   
-			sendNibble((a_data>>4),LCD_DATA);
-
-			//------------SEND LOW NIBBLE------------//
-
-			sendNibble(a_data,LCD_DATA);
-		   
-		#elif (LCD_DATA_PORT_MASK == 0xF0)
-		   
-			//------------SEND HIGH NIBBLE------------//
-		   
-			sendNibble(a_data,LCD_DATA);
-
-			//------------SEND LOW NIBBLE------------//
-
-			sendNibble((a_data<<4),LCD_DATA);
-		   
-		#endif
-   
-	#elif (LCD_DATA_MODE == 8)
-   
-		//------------SEND 8-BIT COMMAND------------//
-   
-		sendNibble(a_data,LCD_DATA);
-   
-	#endif
+	
+	LCD_PUTC(a_data);
 	
 	//------------UPDATE DISPLAY BUFFER------------//
 	
@@ -478,18 +351,14 @@ static void clearCursorPositionUpdateFlag(void);
 	if(g_LCD.statusRegister.cursorpositionupdate){
 		
 		updateCursorPosition(LCD_RIGHT);
-	
-		#if (LCD_ROWS == 4)
 		
-			if(g_LCD.cursorPos.row > 0 && g_LCD.cursorPos.column == 0){
+		if(g_LCD.cursorPos.column == 0){
 			
-				clearCursorPositionUpdateFlag();
-				LCD_setCursorPosition(g_LCD.cursorPos.row,g_LCD.cursorPos.column);
-				setCursorPositionUpdateFlag();
+			clearCursorPositionUpdateFlag();
+			LCD_setCursorPosition(g_LCD.cursorPos.row,g_LCD.cursorPos.column);
+			setCursorPositionUpdateFlag();
 			
-			}
-		
-		#endif		
+		}	
 	}
 }
 
@@ -524,49 +393,15 @@ static void clearCursorPositionUpdateFlag(void);
 
  void LCD_putp(void * a_ptr){
 	 
-	 char buffer[8];
+	 char buffer[LCD_BUFFER_SIZE];
 	 sprintf(buffer,"%p",a_ptr);
 	 LCD_puts(buffer);
 	 
  }
  
  char LCD_readChar(void){
-	 
-	char data = 0;
-	 
-	#if (LCD_DATA_MODE == 4)
-	 
-		#if (LCD_DATA_PORT_MASK == 0x0F)
-	 
-			//------------READ HIGH NIBBLE------------//
-	 
-			data |= (readNibble()<<4);
 
-			//------------READ LOW NIBBLE------------//
-
-			data |= readNibble();
-	 
-		#elif (LCD_DATA_PORT_MASK == 0xF0)
-	 
-			//------------READ HIGH NIBBLE------------//
-	 
-			data |= readNibble();
-
-			//------------READ LOW NIBBLE------------//
-
-			data |= (readNibble()>>4);
-	 
-		#endif
-	 
-	#elif (LCD_DATA_MODE == 8)
-	 
-		//------------READ 8-BIT DATA------------//
-	 
-		data |= readNibble();
-	 
-	#endif
-
-	return data;
+	return LCD_READ_CHAR;
  }
  
  char * LCD_readString(uint8_t a_row, uint8_t a_width){
@@ -582,112 +417,6 @@ static void clearCursorPositionUpdateFlag(void);
 	rowData[a_width] = '\0';
 	
 	return rowData; 
- }
- 
- static void resetDisplay(void){
-	 
-	 #if (LCD_DATA_MODE == 4)
-		
-		#if (LCD_DATA_PORT_MASK == 0x0F)
-		
-			/*------------RESET THE LCD------------*/
-		
-			sendNibble(0x03,LCD_INSTRUCTION);
-			DELAY_MS(1);
-			sendNibble(0x03,LCD_INSTRUCTION);
-			DELAY_MS(1);
-			sendNibble(0x03,LCD_INSTRUCTION);
-			DELAY_MS(1);
-			sendNibble(0x02,LCD_INSTRUCTION);
-			DELAY_MS(1);
-		
-		#elif (LCD_DATA_PORT_MASK == 0xF0)
-		
-			/*------------RESET THE LCD------------*/
-		
-			sendNibble((0x03<<4),LCD_INSTRUCTION);
-			DELAY_MS(1);
-			sendNibble((0x03<<4),LCD_INSTRUCTION);
-			DELAY_MS(1);
-			sendNibble((0x03<<4),LCD_INSTRUCTION);
-			DELAY_MS(1);
-			sendNibble((0x02<<4),LCD_INSTRUCTION);
-			DELAY_MS(1);
-
-		#endif
-		
-	#elif (LCD_DATA_MODE == 8)
-		
-		/*------------RESET THE LCD------------*/
-		
-		sendNibble(0x03,LCD_INSTRUCTION);
-		DELAY_MS(1);
-		sendNibble(0x03,LCD_INSTRUCTION);
-		DELAY_MS(1);
-		sendNibble(0x03,LCD_INSTRUCTION);
-		DELAY_MS(1);
-	
-	#endif		
-	 
- }
- static void sendNibble(ubyte_t a_data, lcdtransmissiontype_t a_transType){
-	
-	//------------SEND A NIBBLE------------//
-	
-	if(a_transType == LCD_INSTRUCTION){
-		
-		gpio_setPin(LCD_EN_PIN);								// enable LCD interface for new data (EN signal), Command register is selected
-		DELAY_US(800);
-		gpio_setPort(LCD_DATA_PORT, (a_data & LCD_DATA_PORT_MASK));		// send a nibble of command
-		DELAY_US(800);
-		gpio_clearPin(LCD_EN_PIN);							// clear control port
-		DELAY_US(200);
-		gpio_clearPort(LCD_DATA_PORT, (a_data & LCD_DATA_PORT_MASK));		// clear data port
-		
-	}else if(a_transType == LCD_DATA){
-		
-		gpio_setPin(LCD_RS_PIN);								// select Data register (RS signal)
-		DELAY_US(800);
-		gpio_setPin(LCD_EN_PIN);								// enable LCD interface for new data (EN signal)
-		DELAY_US(800);
-		gpio_setPort(LCD_DATA_PORT, (a_data & LCD_DATA_PORT_MASK));		// send a nibble of data
-		DELAY_US(800);
-		gpio_clearPin(LCD_EN_PIN);			// clear EN pin
-		gpio_clearPin(LCD_RS_PIN);			// clear RS pin
-		DELAY_US(200);
-		gpio_clearPort(LCD_DATA_PORT, (a_data & LCD_DATA_PORT_MASK));		// clear data port
-		
-	}
-	 
- }
- 
- static ubyte_t readNibble(void){
-	 
-	#ifdef LCD_RW_PIN
-		
-		ubyte_t data;
-		
-		gpio_setPortDirection(LCD_DATA_PORT,LCD_DATA_PORT_MASK,IO_INPUT);
-	 
-		gpio_setPin(LCD_RS_PIN);										// select Data register (RS signal)
-		gpio_setPin(LCD_RW_PIN);										// select Data register (RW signal)
-		DELAY_US(800);
-		gpio_setPin(LCD_EN_PIN);										// enable GLCD interface for new data (EN signal)
-		DELAY_US(800);
-		data = (gpio_readPort(LCD_DATA_PORT)&LCD_DATA_PORT_MASK);		// read nibble of data
-		DELAY_US(800);
-		gpio_clearPin(LCD_EN_PIN);										// clear EN pin
-		gpio_clearPin(LCD_RW_PIN);										// clear RW pin
-		gpio_clearPin(LCD_RS_PIN);										// clear RS pin
-		DELAY_US(200);
-		
-		gpio_setPortDirection(LCD_DATA_PORT,LCD_DATA_PORT_MASK,IO_OUTPUT);
-	 
-		return data;
-	 
-	#endif
-	 
-	return 0;
  }
  
  static void initBuffer(void){
@@ -706,24 +435,13 @@ static void clearCursorPositionUpdateFlag(void);
 	clearFrameBufferUpdateFlag();
 	clearCursorPositionUpdateFlag(); 
 	resetCursorConfig();
-	
-	LCD_setCursorPosition(0,0);
-	
-	#if (LCD_ROWS == 4)
 		
-		LCD_puts(g_LCD.frameBuffer[0]);
-		LCD_puts(g_LCD.frameBuffer[2]);
-		LCD_puts(g_LCD.frameBuffer[1]);
-		LCD_puts(g_LCD.frameBuffer[3]);
+	ubyte_t rows;
 		
-	#else	
-	
-		ubyte_t rows;
-		
-		for(rows = 0; rows < LCD_ROWS; rows++)
-			LCD_puts(g_LCD.frameBuffer[rows]);
-	
-	#endif
+	for(rows = 0; rows < LCD_ROWS; rows++){
+		LCD_setCursorPosition(rows,0);
+		LCD_puts(g_LCD.frameBuffer[rows]);
+	}
 	
 	setFrameBufferUpdateFlag();
 	setCursorPositionUpdateFlag();
@@ -895,7 +613,7 @@ static void clearCursorPositionUpdateFlag(void);
  
  static void resetCursorConfig(void){
 	 
-	 LCD_sendInstruction(LCD_DISPLAY_ON); 
+	 LCD_CONFIG_CURSOR(FALSE,FALSE);
 	 
  }
  
@@ -909,7 +627,7 @@ static void clearCursorPositionUpdateFlag(void);
  
  static void restoreCursorConfig(void){
 	 
-	 LCD_sendInstruction(LCD_DISPLAY_ON|(g_LCD.statusRegister.cursorvisible<<1)|g_LCD.statusRegister.cursorblinking);
+	 LCD_CONFIG_CURSOR(g_LCD.statusRegister.cursorvisible,g_LCD.statusRegister.cursorblinking);
 	 
  }
  

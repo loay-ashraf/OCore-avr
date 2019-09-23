@@ -18,37 +18,8 @@
 #include "lcd_config.h"
 #include "hal/mcu/sys/std_types.h"
 
-/*------------DEFINE LCD COMMANDS------------*/
-
-#define LCD_4BIT_MODE		0x28
-#define LCD_8BIT_MODE		0x38
-#define LCD_DISPLAY_ON		0x0C
-#define LCD_CURSOR_RIGHT	0x06
-#define LCD_CLEAR_DISPLAY	0x01
-#define LCD_SCROLL_DISPLAY	0x18
-#define LCD_SHIFT_CURSOR	0x10
-
-/*------------DEFINE LCD ROW ADDRESSES------------*/
-
-#define LCD_ROW_ZERO		0x80
-#define LCD_ROW_ONE			0xC0
-#define LCD_ROW_TWO			0x94
-#define LCD_ROW_THREE		0xD4
-
-/*------------DEFINE LCD CUSTOM CHARACTER CODES------------*/
-
-#define LCD_CCHAR_ZERO		0
-#define LCD_CCHAR_ONE		1
-#define LCD_CCHAR_TWO		2
-#define LCD_CCHAR_THREE		3
-#define LCD_CCHAR_FOUR		4
-#define LCD_CCHAR_FIVE		5
-#define LCD_CCHAR_SIX		6
-#define LCD_CCHAR_SEVEN		7
-
 /*------------TYPEDEF LCD OBJECT STRUCT, SHIFT AND SCROLL DIRECTION ENUMS------------*/
 
-typedef enum{LCD_INSTRUCTION,LCD_DATA}lcdtransmissiontype_t;
 typedef enum{LCD_LEFT,LCD_RIGHT,LCD_UP,LCD_DOWN,LCD_NONE}lcddirection_t;
 typedef enum{LCD_BASE10=10,LCD_BASE16=16,LCD_BASE2=2}lcdnumberbase_t;
 	
