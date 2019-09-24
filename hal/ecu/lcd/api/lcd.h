@@ -18,6 +18,17 @@
 #include "lcd_config.h"
 #include "hal/mcu/sys/std_types.h"
 
+/*------------DEFINE LCD CUSTOM CHARACTER CODES------------*/
+
+#define LCD_CCHAR_ZERO		0
+#define LCD_CCHAR_ONE		1
+#define LCD_CCHAR_TWO		2
+#define LCD_CCHAR_THREE		3
+#define LCD_CCHAR_FOUR		4
+#define LCD_CCHAR_FIVE		5
+#define LCD_CCHAR_SIX		6
+#define LCD_CCHAR_SEVEN		7
+
 /*------------TYPEDEF LCD OBJECT STRUCT, SHIFT AND SCROLL DIRECTION ENUMS------------*/
 
 typedef enum{LCD_LEFT,LCD_RIGHT,LCD_UP,LCD_DOWN,LCD_NONE}lcddirection_t;

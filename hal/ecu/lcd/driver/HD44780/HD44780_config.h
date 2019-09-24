@@ -9,11 +9,6 @@
 #ifndef HD44780_CONFIG_H_
 #define HD44780_CONFIG_H_
 
-/*------------DEFINE HD44780 DIMENSIONS------------*/
-
-#define HD44780_ROWS			4
-#define HD44780_COLUMNS			20
-
 /*------------DEFINE HD44780 INTERFACE MODE------------*/
 
 /*#define HD44780_RW_PIN			PA3_M*/		// uncomment this if RW pin is connected
@@ -27,17 +22,6 @@
 #else
 #define HD44780_DATA_PORT_MASK	0xF0
 #endif
-
-/*------------DEFINE HD44780 CUSTOM CHARACTER CODES------------*/
-
-#define HD44780_CCHAR_ZERO		0
-#define HD44780_CCHAR_ONE		1
-#define HD44780_CCHAR_TWO		2
-#define HD44780_CCHAR_THREE		3
-#define HD44780_CCHAR_FOUR		4
-#define HD44780_CCHAR_FIVE		5
-#define HD44780_CCHAR_SIX		6
-#define HD44780_CCHAR_SEVEN		7
 
 
 #endif /* HD44780_CONFIG_H_ */
