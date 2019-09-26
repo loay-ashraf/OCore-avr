@@ -6,7 +6,7 @@
  */ 
 
 #include "app/examples/include/examples.h"
-#include "hal/ecu/glcd/glcd.h"
+#include "hal/ecu/glcd/api/glcd.h"
 #include "hal/mcu/sys/delay.h"
 
 static uword_t spaceInvader1[16] = {0x0000, 0x0000, 0x0000, 0x0000, 0x0410, 0x0220, 0x07F0, 0x0DD8, 0x1FFC, 0x17F4, 0x1414, 0x0360, 0x0000, 0x0000, 0x0000, 0x0000};	/* space invader char set for GLCD Module */
