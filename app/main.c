@@ -14,6 +14,8 @@ int main(void){
 	/*ex_adc_lm35();*/
 	/*ex_dac_fade();*/
 	/*ex_glcd_displayImg();*/
+	/*ex_glcd_drawBoxes();*/
+	/*ex_glcd_drawCircles();*/
 	/*ex_glcd_spaceInvaders();*/
 	/*ex_lcd_scrollDisplay();*/
 	/*ex_lcd_shiftCursor();*/

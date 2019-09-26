@@ -10,11 +10,15 @@
 
 void ex_lcd_shiftCursor(void){
 	
-	uint8_t counter;
+	uint8_t counter;		/* general purpose counter */
 	
-	LCD_init(TRUE,TRUE);
+	LCD_init(TRUE,TRUE);	/* initialize GLCD interface */
 	
 	DELAY_MS(1000);
+	
+	/************************************/
+	/* shift cursor right across screen */
+	/************************************/
 	
 	for(counter=0;counter<LCD_COLUMNS*LCD_ROWS;counter++){
 		
@@ -25,6 +29,10 @@ void ex_lcd_shiftCursor(void){
 	
 	DELAY_MS(1000);
 	
+	/***********************************/
+	/* shift cursor left across screen */
+	/***********************************/
+	
 	for(counter=0;counter<LCD_COLUMNS*LCD_ROWS;counter++){
 		
 		DELAY_MS(1000);
@@ -34,6 +42,10 @@ void ex_lcd_shiftCursor(void){
 	
 	DELAY_MS(1000);
 	
+	/*********************************/
+	/* shift cursor up across screen */
+	/*********************************/
+	
 	for(counter=0;counter<LCD_ROWS;counter++){
 		
 		DELAY_MS(1000);
@@ -42,6 +54,10 @@ void ex_lcd_shiftCursor(void){
 	}
 	
 	DELAY_MS(1000);
+	
+	/***********************************/
+	/* shift cursor down across screen */
+	/***********************************/
 	
 	for(counter=0;counter<LCD_ROWS;counter++){
 		
