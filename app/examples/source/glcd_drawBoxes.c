@@ -29,8 +29,6 @@ void ex_glcd_drawBoxes(void){
 	length = GLCD_PIXELS_Y;
 	numBoxes = 0;
 	
-	GLCD_fillDisplay(0);
-	
 	while(numBoxes++ < 5){
 		
 		GLCD_drawBox(x,y,width,length);

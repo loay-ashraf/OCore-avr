@@ -27,8 +27,6 @@ void ex_glcd_drawCircles(void){
 	x = radius+2;
 	numCircles = 0;
 	
-	GLCD_fillDisplay(0);
-	
 	while(numCircles++ < 5){
 		
 		GLCD_drawCircle(x,31,radius);

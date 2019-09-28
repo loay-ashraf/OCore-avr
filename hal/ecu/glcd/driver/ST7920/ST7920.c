@@ -7,18 +7,22 @@
 
 #include "ST7920.h"
 #include "ST7920_config.h"
+#include "hal/ecu/glcd/driver/ST7920/fonts/font_5x8.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/hw/driver/spi/spi.h"
 #include "hal/mcu/sys/delay.h"
 #include <avr/pgmspace.h>
 #include <math.h>
+#include <stdlib.h>
+
+static uint8_t g_pixelX,g_pixelY;
 
 static void putw(uword_t a_word);
-static uword_t readWord(void);
+static uword_t getw(void);
 static void resetDisplay(void);
 static void sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType);
 static ubyte_t readNibble(void);
-
+static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
 
 void ST7920_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	
@@ -130,6 +134,8 @@ void ST7920_enableGraphics(void){
 		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);
 	
 	#endif
+	
+	ST7920_fillDisplay(0);
 	
 }
 
@@ -250,6 +256,9 @@ void ST7920_setPixelCursorPosition(ubyte_t a_row, ubyte_t a_col){
 		a_row = 63;
 	if(a_col > 7)
 		a_col = 7;	
+		
+	g_pixelX = a_col;
+	g_pixelY = a_row;	
 	
 	if(a_row < 32){
 		
@@ -343,7 +352,7 @@ void ST7920_putc(char a_char){
 	
 }
 
-char ST7920_readChar(void){
+char ST7920_getc(void){
 
 	char data = 0;
 	
@@ -383,6 +392,41 @@ char ST7920_readChar(void){
 
 }
 
+void ST7920_putcGFX(char a_char){
+	
+	uint8_t y,y_end;
+	
+	a_char -= 32;
+	y_end = g_pixelY+8;
+	
+	for(y=g_pixelY;y<y_end;y++){
+		
+		ST7920_setPixelCursorPosition(y,g_pixelX);
+		ST7920_putc(pgm_read_byte(&font_5x8[(uint8_t)a_char][8-(y_end-y)]));
+		
+	}
+	
+}
+
+void ST7920_putsGFX(const char * a_data){
+	
+	uint8_t y,y_end;
+	char * charPointer;
+
+	y_end = g_pixelY+8;
+	
+	for(y=g_pixelY;y<y_end;y++){
+		
+		charPointer = (char *)a_data;
+		ST7920_setPixelCursorPosition(y,g_pixelX);
+		
+		while(*charPointer != '\0')
+			ST7920_putc(pgm_read_byte(&font_5x8[(uint8_t)((*charPointer++)-32)][8-(y_end-y)]));
+		
+	}
+	
+}
+
 void ST7920_drawPixel(uint8_t a_x, uint8_t a_y){
 	
 	#ifdef ST7920_RW_PIN
@@ -391,15 +435,84 @@ void ST7920_drawPixel(uint8_t a_x, uint8_t a_y){
 		uword_t currentData;
 		
 		pageNum = a_x/16.0;
-		bitNum = a_x - (pageNum*16);
+		bitNum = a_x-(pageNum*16);
 		
 		ST7920_setPixelCursorPosition(a_y,pageNum);
-		currentData = readWord();
+		currentData = getw();
 		ST7920_setPixelCursorPosition(a_y,pageNum);
 		putw(currentData|(1<<(15-bitNum)));
 	
 	#endif	
 		 
+}
+
+void ST7920_drawVerticalBar(uint8_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
+	
+	int8_t counter;
+	uint8_t stopY = (45-map(a_value,a_minValue,a_maxValue,0,45))+18;
+	char buffer[5];
+	
+	for(counter=63;counter>=stopY;counter--){
+		
+		ST7920_setPixelCursorPosition(counter,a_barIndex*2);
+		putw(0x00FF);
+		putw(0xFF00);
+		
+	}
+	
+	for(;counter>=0;counter--){
+		
+		ST7920_setPixelCursorPosition(counter,a_barIndex*2);
+		putw(0);
+		putw(0);
+		
+	}
+	
+	itoa(a_value,buffer,10);
+	
+	buffer[4] = '\0';
+	buffer[3] = buffer[2];
+	buffer[2] = buffer[1];
+	buffer[1] = buffer[0];
+	buffer[0] = ' ';
+	
+	ST7920_setPixelCursorPosition(5,a_barIndex*2);
+	ST7920_putsGFX(buffer);
+	
+}
+
+void ST7920_drawHorizontalBar(uint8_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
+	
+	int8_t x,y;
+	uint8_t stopX = map(a_value,a_minValue,a_maxValue,0,5);
+	uint8_t stopY = (a_barIndex*16)+15;
+	char buffer[5];
+	
+	for(y=a_barIndex*16;y<=stopY;y++){
+		
+		ST7920_setPixelCursorPosition(y,0);
+		
+		for(x=0;x<=stopX;x++){
+			
+			if(y<(a_barIndex*16)+4)
+				putw(0);
+			else if(y>(a_barIndex*16)+11)
+				putw(0);
+			else
+				putw(0xFFFF);
+			
+		}
+		
+		for(;x<=7;x++)
+			putw(0);	
+		
+	}
+	
+	itoa(a_value,buffer,10);
+	
+	ST7920_setPixelCursorPosition((a_barIndex*16)+4,6);
+	ST7920_putsGFX(buffer);
+	
 }
 
 void ST7920_fillDisplay(uword_t a_pattern){
@@ -463,14 +576,14 @@ static void putw(uword_t a_word){
 	
 }
 
-static uword_t readWord(void){
+static uword_t getw(void){
 	
 	ubyte_t byte = 0;
 	uword_t word = 0;
-	byte = ST7920_readChar();		// dummy read
-	byte = ST7920_readChar();
+	byte = ST7920_getc();		// dummy read
+	byte = ST7920_getc();
 	word |= ((byte<<8)&0xFF00);
-	byte = ST7920_readChar();
+	byte = ST7920_getc();
 	word |= (byte&0x00FF);
 	
 	return word;
@@ -614,4 +727,17 @@ static ubyte_t readNibble(void){
 		
 	#endif	
 	
+}
+
+static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
+	
+	if(a_input < a_inputMin)
+		a_input = a_inputMin;
+	else if(a_input > a_inputMax)
+		a_input = a_inputMax;
+	
+	float slope = (float)(a_outputMax-a_outputMin)/(float)(a_inputMax-a_inputMin);
+	uint16_t output = a_outputMin+slope*(a_input-a_inputMin);
+	
+	return output;
 }

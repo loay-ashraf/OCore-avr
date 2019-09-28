@@ -24,8 +24,10 @@ void ex_glcd_spaceInvaders(void){
 	
 	GLCD_defineCustomCharacter(GLCD_CCHARACTER_ZERO,spaceInvader1);
 	GLCD_defineCustomCharacter(GLCD_CCHARACTER_ONE,spaceInvader2);
-	GLCD_setCursorPosition(2,3);
-	GLCD_puts("SI");
+	GLCD_setCursorPosition(1,2);
+	GLCD_puts(" SPACE");
+	GLCD_setCursorPosition(2,2);
+	GLCD_puts("INVADERS");
 	
 	while(1){		/* loop forever */
 		
@@ -36,14 +38,14 @@ void ex_glcd_spaceInvaders(void){
 		
 		for(verticalPosition=1;verticalPosition<GLCD_ROWS;verticalPosition++){
 			
-			GLCD_setCursorPosition(verticalPosition,2);
+			GLCD_setCursorPosition(verticalPosition,1);
 			GLCD_putw(GLCD_CCHARACTER_ZERO);
-			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),5);
+			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),6);
 			GLCD_putw(GLCD_CCHARACTER_ONE);
 			DELAY_MS(1000);
-			GLCD_setCursorPosition(verticalPosition,2);
+			GLCD_setCursorPosition(verticalPosition,1);
 			GLCD_putw(GLCD_CCHARACTER_ONE);
-			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),5);
+			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),6);
 			GLCD_putw(GLCD_CCHARACTER_ZERO);
 			DELAY_MS(1000);
 			
@@ -53,14 +55,14 @@ void ex_glcd_spaceInvaders(void){
 		
 		for(verticalPosition=GLCD_ROWS-2;verticalPosition>=0;verticalPosition--){
 			
-			GLCD_setCursorPosition(verticalPosition,2);
+			GLCD_setCursorPosition(verticalPosition,1);
 			GLCD_putw(GLCD_CCHARACTER_ZERO);
-			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),5);
+			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),6);
 			GLCD_putw(GLCD_CCHARACTER_ONE);
 			DELAY_MS(1000);
-			GLCD_setCursorPosition(verticalPosition,2);
+			GLCD_setCursorPosition(verticalPosition,1);
 			GLCD_putw(GLCD_CCHARACTER_ONE);
-			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),5);
+			GLCD_setCursorPosition((GLCD_ROWS-verticalPosition-1),6);
 			GLCD_putw(GLCD_CCHARACTER_ZERO);
 			DELAY_MS(1000);
 			

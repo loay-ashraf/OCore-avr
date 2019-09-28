@@ -44,6 +44,8 @@ static void saveCursorPosition(ubyte_t a_row, ubyte_t a_column);
 static void restoreCursorPosition(glcddirection_t a_dir, ubyte_t a_offset, ubyte_t a_width);
 static void setCursorPositionUpdateFlag(void);
 static void clearCursorPositionUpdateFlag(void);
+static void setGraphicsModeFlag(void);
+static void clearGraphicsModeFlag(void);
 
  void GLCD_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	 
@@ -63,6 +65,8 @@ static void clearCursorPositionUpdateFlag(void);
 	clearFrameBufferUpdateFlag();
 	clearCursorPositionUpdateFlag();
 	resetCursorConfig();
+	setGraphicsModeFlag();
+	
 	GLCD_ENABLE_GRAPHICS;
 	 
  }
@@ -75,6 +79,7 @@ static void clearCursorPositionUpdateFlag(void);
 	setCursorPositionUpdateFlag();
 	restoreCursorConfig();
 	restoreCursorPosition(GLCD_NONE,0,0);
+	clearGraphicsModeFlag();
 	 
  }
 
@@ -156,25 +161,27 @@ static void clearCursorPositionUpdateFlag(void);
 
  void GLCD_setCursorPosition(ubyte_t a_row, ubyte_t a_col){
 	
-	if(a_row >= GLCD_ROWS)		// check row
-		a_row = 0;
-	
-	if(a_col >= (GLCD_COLUMNS/2))	// check column
-		a_col = 0;
-	
-	/* update cursor position */
-	
-	if(g_GLCD.statusRegister.cursorpositionupdate)
-		saveCursorPosition(a_row,a_col*2);
-	
-	GLCD_SET_CURSOR_POSITION(a_row,a_col);
-	
- }
-  
- void GLCD_setPixelCursorPosition(ubyte_t a_row, ubyte_t a_col){
-	 
-	 GLCD_SET_PIXEL_CURSOR_POSITION(a_row,a_col);
-	 
+	if(g_GLCD.statusRegister.graphicsmode){
+		
+		GLCD_SET_PIXEL_CURSOR_POSITION(a_row,a_col);
+		
+	}else{
+		
+		if(a_row >= GLCD_ROWS)		// check row
+			a_row = GLCD_ROWS-1;
+		
+		if(a_col >= (GLCD_COLUMNS/2))	// check column
+			a_col = (GLCD_COLUMNS/2)-1;
+		
+		/* update cursor position */
+		
+		if(g_GLCD.statusRegister.cursorpositionupdate)
+			saveCursorPosition(a_row,a_col*2);
+		
+		GLCD_SET_CURSOR_POSITION(a_row,a_col);
+		
+	}
+
  }
  
  glcdposition_t GLCD_getCursorPosition(void){
@@ -199,7 +206,7 @@ static void clearCursorPositionUpdateFlag(void);
 					GLCD_setCursorPosition(g_GLCD.cursorPos.row,g_GLCD.cursorPos.column);
 					setCursorPositionUpdateFlag();
 					
-					}else{
+				}else{
 					
 					GLCD_SHIFT_CURSOR(a_dir);
 					
@@ -224,7 +231,7 @@ static void clearCursorPositionUpdateFlag(void);
 					GLCD_setCursorPosition(g_GLCD.cursorPos.row,g_GLCD.cursorPos.column);
 					setCursorPositionUpdateFlag();
 					
-					}else{
+				}else{
 					
 					GLCD_SHIFT_CURSOR(a_dir);
 					
@@ -379,32 +386,41 @@ static void clearCursorPositionUpdateFlag(void);
 	
  void GLCD_putc(char a_char){
 	
-	GLCD_PUTC(a_char);
+	if(g_GLCD.statusRegister.graphicsmode)
 	
-	//------------UPDATE DISPLAY BUFFER------------//
-	
-	if(g_GLCD.statusRegister.framebufferupdate)
-		g_GLCD.frameBuffer[g_GLCD.cursorPos.row][g_GLCD.cursorPos.column] = a_char;
-	
-	//------------UPDATE CURSOR POSITION------------//
-	
-	if(g_GLCD.statusRegister.cursorpositionupdate){
+		GLCD_PUTC_GFX(a_char);
 		
-		updateCursorPosition(GLCD_RIGHT);
+	else{
+	
+		GLCD_PUTC(a_char);	
+	
+		//------------UPDATE DISPLAY BUFFER------------//
+	
+		if(g_GLCD.statusRegister.framebufferupdate)
+			g_GLCD.frameBuffer[g_GLCD.cursorPos.row][g_GLCD.cursorPos.column] = a_char;
+	
+		//------------UPDATE CURSOR POSITION------------//
+	
+		if(g_GLCD.statusRegister.cursorpositionupdate){
 		
-		#if (LCD_CURSOR_SW_SHFT == 1)
+			updateCursorPosition(GLCD_RIGHT);
 		
-			if(g_GLCD.cursorPos.column == 0){
+			#if (LCD_CURSOR_SW_SHFT == 1)
+		
+				if(g_GLCD.cursorPos.column == 0){
 				
-				clearCursorPositionUpdateFlag();
-				GLCD_setCursorPosition(g_GLCD.cursorPos.row,g_GLCD.cursorPos.column);
-				setCursorPositionUpdateFlag();
+					clearCursorPositionUpdateFlag();
+					GLCD_setCursorPosition(g_GLCD.cursorPos.row,g_GLCD.cursorPos.column);
+					setCursorPositionUpdateFlag();
 				
-			}
+				}
 		
-		#endif
+			#endif
 		
+		}
+	
 	}
+	
 }
 
 void GLCD_putw(uword_t a_word){
@@ -415,10 +431,18 @@ void GLCD_putw(uword_t a_word){
 }
 
  void GLCD_puts(const char * a_data){
-
-	while(*a_data != '\0')
-		GLCD_putc(*a_data++);
-
+	
+	if(g_GLCD.statusRegister.graphicsmode)
+		
+		GLCD_PUTS_GFX(a_data);
+		
+	else{
+		
+		while(*a_data != '\0')
+			GLCD_putc(*a_data++);
+		
+	}	
+	
  }
  
  void GLCD_puti(udword_t a_data, glcdnumberbase_t a_numberBase){
@@ -451,20 +475,20 @@ void GLCD_putw(uword_t a_word){
 	 
  }
  
-char GLCD_readChar(void){
+char GLCD_getc(void){
 
-	return GLCD_READ_CHAR;
+	return GLCD_GETC;
 	
 }
 
-uword_t GLCD_readWord(void){
+uword_t GLCD_getw(void){
 	
 	ubyte_t byte = 0;
 	uword_t word = 0;
-	byte = GLCD_READ_CHAR;		// dummy read
-	byte = GLCD_READ_CHAR;
+	byte = GLCD_GETC;		// dummy read
+	byte = GLCD_GETC;
 	word |= ((byte<<8)&0xFF00);
-	byte = GLCD_READ_CHAR;
+	byte = GLCD_GETC;
 	word |= (byte&0x00FF);
 	
 	return word;
@@ -604,6 +628,18 @@ void GLCD_drawCircle(uint8_t a_centerX, uint8_t a_centerY, uint8_t a_radius){
 		 GLCD_drawPixel(a_centerX-y,a_centerY-x);
 		
 	 }
+	
+}
+
+void GLCD_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
+	
+	GLCD_DRAW_VERTICAL_BAR(a_barIndex,a_value,a_minValue,a_maxValue);
+	
+}
+
+void GLCD_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
+	
+	GLCD_DRAW_HORIZONTAL_BAR(a_barIndex,a_value,a_minValue,a_maxValue);
 	
 }
 
@@ -1002,4 +1038,16 @@ void GLCD_putImageROM(const ubyte_t * a_image){
 	  
 	g_GLCD.statusRegister.cursorpositionupdate = FALSE;
 	  
+ }
+ 
+ static void setGraphicsModeFlag(void){
+	 
+	g_GLCD.statusRegister.graphicsmode = TRUE;
+	 
+ }
+ 
+ static void clearGraphicsModeFlag(void){
+	 
+	 g_GLCD.statusRegister.graphicsmode = FALSE;
+	 
  }

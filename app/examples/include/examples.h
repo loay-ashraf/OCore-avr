@@ -11,10 +11,12 @@
 
 void ex_adc_lm35(void);
 void ex_dac_fade(void);
+void ex_glcd_barTemperature(void);
 void ex_glcd_displayImg(void);
 void ex_glcd_drawBoxes(void);
 void ex_glcd_drawCircles(void);
 void ex_glcd_spaceInvaders(void);
+void ex_glcd_textGFX(void);
 void ex_lcd_scrollDisplay(void);
 void ex_lcd_shiftCursor(void);
 void ex_rs232_receive(void);
