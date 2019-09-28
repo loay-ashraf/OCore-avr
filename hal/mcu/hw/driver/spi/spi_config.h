@@ -14,10 +14,10 @@
 #define SPI_SCK_PIN		PB7_M
 #define SPI_SS_PIN		PB4_M
 
-#define SPI_MASTER		TRUE
+#define SPI_MASTER		1
 #define SPI_PRESCALER	128
-#define SPI_2X_MODE		FALSE
-#define SPI_LSB_FRST	FALSE
+#define SPI_2X_MODE		0
+#define SPI_LSB_FRST	0
 #define SPI_DATA_MODE	3
 
 /************************************************************************/

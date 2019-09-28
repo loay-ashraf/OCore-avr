@@ -21,7 +21,7 @@ void spi_enable(void){
 		SBI(SPCR,MSTR);
 		gpio_setPinDirection(SPI_MOSI_PIN,IO_OUTPUT);
 		gpio_setPinDirection(SPI_SCK_PIN,IO_OUTPUT);
-		gpio_setPin(SPI_SS_PIN);
+		gpio_enablePinPullUp(SPI_SS_PIN);
 		
 		gpio_setPinDirection(SPI_SLAVE0_PIN,IO_OUTPUT);
 		gpio_setPinDirection(SPI_SLAVE1_PIN,IO_OUTPUT);

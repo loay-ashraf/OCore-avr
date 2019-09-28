@@ -14,6 +14,6 @@
 
 #define TWI_ADDRESS		0b1110000
 #define TWI_FREQ_K		200.0
-#define TWI_GC			FALSE
+#define TWI_GC			0
 
 #endif /* TWI_CONFIG_H_ */

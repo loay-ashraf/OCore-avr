@@ -28,7 +28,11 @@ void ST7920_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	
 	#ifdef ST7920_RW_PIN
 	
-		gpio_setPinDirection(ST7920_RW_PIN,IO_OUTPUT);
+		#if (ST7920_INTERFACE == 1)
+		
+			gpio_setPinDirection(ST7920_RW_PIN,IO_OUTPUT);
+			
+		#endif	
 	
 	#endif
 	
@@ -40,12 +44,12 @@ void ST7920_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	#endif
 	
 	gpio_setPinDirection(ST7920_PSB_PIN,IO_OUTPUT);
-	gpio_setPinDirection(ST7920_EN_PIN,IO_OUTPUT);										// set control port direction register
 	gpio_setPinDirection(ST7920_RS_PIN,IO_OUTPUT);
 	
 	#if (ST7920_INTERFACE == 1)
 	
 		gpio_setPin(ST7920_PSB_PIN);
+		gpio_setPinDirection(ST7920_EN_PIN,IO_OUTPUT);								
 		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);		// set data port direction register
 	
 	#elif (ST7920_INTERFACE == 0)
@@ -688,9 +692,11 @@ static void sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	#elif (ST7920_INTERFACE == 0)
 	
 		gpio_setPin(ST7920_RS_PIN);								// select ST7920 chip (SS signal)
-		spi_transreceive(a_transType? 0xFA : 0xF8);
-		spi_transreceive(a_data&0xF0);
-		spi_transreceive((a_data<<4)&0xF0);
+		DELAY_US(350);
+		spi_transmitByte(a_transType? 0xFA : 0xF8);
+		spi_transmitByte(a_data&0xF0);
+		spi_transmitByte((a_data<<4)&0xF0);
+		DELAY_US(350);
 		gpio_clearPin(ST7920_RS_PIN);								// release ST7920 chip (SS signal)
 	
 	#endif
