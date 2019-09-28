@@ -65,6 +65,7 @@ The mcu layer contains:
     │   │   │   ├───api
     │   │   │   └───driver
     │   │   │       └───ST7920
+    │   │   │           └───fonts
     │   │   ├───keypad
     │   │   ├───lcd
     │   │   │   ├───api
