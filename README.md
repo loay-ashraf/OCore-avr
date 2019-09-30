@@ -63,12 +63,13 @@ The mcu layer contains:
     │   ├───ecu
     │   │   ├───glcd
     │   │   │   ├───api
+    │   │   │   ├───common   
     │   │   │   └───driver
     │   │   │       └───ST7920
-    │   │   │           └───fonts
     │   │   ├───keypad
     │   │   ├───lcd
     │   │   │   ├───api
+    │   │   │   ├───common     
     │   │   │   └───driver
     │   │   │       └───HD44780
     │   │   ├───rtcc
