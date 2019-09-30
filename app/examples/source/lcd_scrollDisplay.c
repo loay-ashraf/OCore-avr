@@ -12,7 +12,7 @@ void ex_lcd_scrollDisplay(void){
 	
 	uint8_t counter;		/* general purpose counter */
 	
-	LCD_init(TRUE,TRUE);	/* initialize GLCD interface */
+	LCD_init(TRUE,TRUE,TRUE);	/* initialize LCD interface */
 	
 	/***************************************/
 	/* print text to be scrolled on screen */
@@ -22,13 +22,19 @@ void ex_lcd_scrollDisplay(void){
 	
 		LCD_puts("Hello World!");
 		LCD_setCursorPosition(1,0);
-		LCD_puts("I'm 16x2 LCD");
+		LCD_puts("I'm ");
+		LCD_puti(LCD_COLUMNS,LCD_BASE10);
+		LCD_putc('x');
+		LCD_puts("2 LCD");
 		
 	#elif (LCD_ROWS == 4)
 		
 		LCD_puts("Hello World!");
 		LCD_setCursorPosition(1,0);
-		LCD_puts("I'm 20x4 LCD");
+		LCD_puts("I'm ");
+		LCD_puti(LCD_COLUMNS,LCD_BASE10);
+		LCD_putc('x');
+		LCD_puts("4 LCD");
 		LCD_setCursorPosition(2,0);
 		LCD_puts("I'm scrolling now");
 		LCD_setCursorPosition(3,0);

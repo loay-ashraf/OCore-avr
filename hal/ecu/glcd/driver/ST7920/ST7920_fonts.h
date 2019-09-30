@@ -1,13 +1,12 @@
 /*
- * font_5x8.h
+ * ST7920_fonts.h
  *
  * Created: 28/09/2019 05:59:01 AM
  *  Author: Loay Ashraf
  */ 
 
-
-#ifndef FONT_5X8_H_
-#define FONT_5X8_H_
+#ifndef ST7920_FONTS_H_
+#define ST7920_FONTS_H_
 
 #include "hal/mcu/sys/std_types.h"
 #include <avr/pgmspace.h>
@@ -110,4 +109,4 @@ const uint8_t font_5x8[95][8] PROGMEM = {
 	{0x00, 0x00, 0x00, 0x32, 0x4C, 0x00, 0x00, 0x00} //~ 94
 };
 
-#endif /* 5X8_H_ */
+#endif /* ST7920_FONTS */

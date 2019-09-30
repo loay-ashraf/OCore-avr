@@ -50,7 +50,7 @@ void ex_rtos_dispTemp(void){
 	/***************************************************/
 	
 	gpio_setPinDirection(PD2_M,IO_OUTPUT);
-	LCD_init(FALSE,FALSE);
+	LCD_init(FALSE,FALSE,TRUE);
 	adc_config(AD_DIV16,AD_AVCC,FALSE);
 	adc_enable();
 	

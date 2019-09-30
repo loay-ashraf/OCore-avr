@@ -7,14 +7,25 @@
 
 #include "HD44780.h"
 #include "HD44780_config.h"
+#include "hal/ecu/lcd/common/lcd_config.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/sys/delay.h"
+
+#if (HD44780_SW_CURSOR_SHIFT == 1)
+static lcdposition_t g_cursorPosition;
+static bool_t g_leftToRight;
+#endif
 
 static void resetDisplay(void);
 static void sendNibble(ubyte_t a_data, hd44780transmissiontype_t a_transType);
 static ubyte_t readNibble(void);
+#if (HD44780_SW_CURSOR_SHIFT == 1)
+static void updateCursorPosition(lcddirection_t a_dir);
+#endif
 
-void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
+void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
+	
+	g_leftToRight = a_leftToRight;
 	
 	#ifdef HD44780_RW_PIN
 	
@@ -22,7 +33,7 @@ void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	
 	#endif
 	
-	gpio_setPinDirection(HD44780_EN_PIN,IO_OUTPUT);							// set control port direction register
+	gpio_setPinDirection(HD44780_EN_PIN,IO_OUTPUT);										// set control port direction register
 	gpio_setPinDirection(HD44780_RS_PIN,IO_OUTPUT);
 	gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);			// set data port direction register
 	
@@ -34,8 +45,8 @@ void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	
 		HD44780_sendInstruction(HD44780_4BIT_MODE);												// 4-bit interface, 2-line mode, 5x8 dots format
 		HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-		HD44780_sendInstruction(HD44780_CURSOR_RIGHT);											// cursor moves to the right, no display shift
 		HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);											// clear display
+		HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));							// no display shift
 	
 	#elif (HD44780_DATA_MODE == 8)
 	
@@ -43,9 +54,9 @@ void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	
 		HD44780_sendInstruction(HD44780_8BIT_MODE);												// 8-bit interface, 2-line mode, 5x8 dots format
 		HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-		HD44780_sendInstruction(HD44780_CURSOR_RIGHT);											// cursor moves to the right, no display shift
 		HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);											// clear display
-	
+		HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));							// no display shift
+		
 	#endif
 	
 	
@@ -99,7 +110,35 @@ void HD44780_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 
 }
 
+void HD44780_configTextDirection(bool_t a_leftToRight){
+	
+	#if (HD44780_SW_CURSOR_SHIFT == 1)
+		
+		g_leftToRight = a_leftToRight;
+		
+	#endif
+		
+	HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));			// configure text direction
+	
+}
+
 void HD44780_setCursorPosition(ubyte_t a_row, ubyte_t a_col){
+	
+	#if (HD44780_SW_CURSOR_SHIFT == 1)
+	
+		if(a_row >= LCD_ROWS)		// check row
+			a_row = LCD_ROWS-1;
+	
+		if(a_col >= LCD_COLUMNS)	// check column
+			a_col = LCD_COLUMNS-1;
+			
+		if(g_cursorPosition.row != a_row)
+			g_cursorPosition.row = a_row;
+		
+		if(g_cursorPosition.column != a_col)
+			g_cursorPosition.column = a_col;	
+	
+	#endif
 	
 	switch(a_row){
 
@@ -117,9 +156,63 @@ void HD44780_setCursorPosition(ubyte_t a_row, ubyte_t a_col){
 	}
 }
 
-void HD44780_shiftCursor(bool_t a_dir){
+lcdposition_t HD44780_shiftCursor(lcddirection_t a_dir){
 	
-	HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
+	#if (HD44780_SW_CURSOR_SHIFT == 1)
+	
+		updateCursorPosition(a_dir);
+		
+		switch (a_dir){
+			
+			case LCD_LEFT: {
+				
+				if(g_cursorPosition.column == LCD_COLUMNS-1)
+				
+					HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
+				
+				else
+				
+					HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
+				
+				
+			}
+			break;
+			
+			case LCD_RIGHT: {
+				
+				if(g_cursorPosition.column == 0)
+				
+					HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
+				
+				else
+				
+					HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
+				
+			}
+			break;
+			
+			case LCD_UP:
+			case LCD_DOWN: {
+				
+				HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
+				
+			}
+			break;
+			
+			default: break;
+		}
+		
+		return g_cursorPosition;
+		
+	#elif (HD44780_SW_CURSOR_SHIFT == 0)	
+		
+		if(a_dir == LCD_LEFT || a_dir == LCD_RIGHT)
+		
+			HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
+		
+		return (lcdposition_t) {.row = 0, .column = 0};
+		
+	#endif	
 	
 }
 
@@ -143,7 +236,7 @@ void HD44780_defineCustomCharacter(ubyte_t a_characterIndex, ubyte_t a_character
 	
 }
 
-void HD44780_putc(char a_data){
+lcdposition_t HD44780_putc(char a_data){
 	
 	#if (HD44780_DATA_MODE == 4)
 	
@@ -177,9 +270,35 @@ void HD44780_putc(char a_data){
 	
 	#endif
 	
+	#if (HD44780_SW_CURSOR_SHIFT == 1)
+	
+		updateCursorPosition((lcddirection_t)g_leftToRight);
+		
+		if(g_leftToRight){
+			
+			if(g_cursorPosition.column == 0)
+			
+				HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
+			
+		}else{
+			
+			if(g_cursorPosition.column == LCD_COLUMNS-1)
+			
+				HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
+			
+		}
+	
+		return g_cursorPosition;
+			
+	#elif (HD44780_SW_CURSOR_SHIFT == 0)	
+	
+		return (lcdposition_t) {.row = 0, .column = 0};	
+	
+	#endif
+	
 }
 
-char HD44780_readChar(void){
+char HD44780_getc(void){
 	
 	char data = 0;
 	
@@ -326,3 +445,76 @@ static ubyte_t readNibble(void){
 		
 	#endif	
 }
+
+#if (HD44780_SW_CURSOR_SHIFT == 1)
+
+static void updateCursorPosition(lcddirection_t a_dir){
+	
+	switch (a_dir){
+		
+		case LCD_LEFT: {
+			
+			if(g_cursorPosition.column == 0){
+				
+				g_cursorPosition.column = LCD_COLUMNS-1;
+				
+				if(g_cursorPosition.row == 0)
+					g_cursorPosition.row = LCD_ROWS-1;
+				else
+					g_cursorPosition.row--;
+				
+			}else{
+				
+				g_cursorPosition.column--;
+				
+			}
+			
+		}
+		break;
+		
+		case LCD_RIGHT: {
+			
+			if(g_cursorPosition.column == LCD_COLUMNS-1){
+				
+				g_cursorPosition.column = 0;
+				
+				if(g_cursorPosition.row == LCD_ROWS-1)
+					g_cursorPosition.row = 0;
+				else
+					g_cursorPosition.row++;
+				
+			}else{
+				
+				g_cursorPosition.column++;
+				
+			}
+			
+		}
+		break;
+		
+		case LCD_UP: {
+			
+			if(g_cursorPosition.row == 0)
+				g_cursorPosition.row = LCD_ROWS-1;
+			else
+				g_cursorPosition.row--;
+			
+		}
+		break;
+		
+		case LCD_DOWN: {
+			
+			if(g_cursorPosition.row == LCD_ROWS-1)
+				g_cursorPosition.row = 0;
+			else
+				g_cursorPosition.row++;
+			
+		}
+		break;
+		
+		default: break;
+		
+	}
+}
+
+#endif

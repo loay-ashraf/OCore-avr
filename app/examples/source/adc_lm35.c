@@ -16,7 +16,7 @@ void ex_adc_lm35(void){
 	
 	adc_config(AD_DIV16,AD_AVCC,FALSE);
 	adc_enable();
-	LCD_init(FALSE,FALSE);
+	LCD_init(FALSE,FALSE,TRUE);
 	
 	while(1){		/* loop forever */
 		

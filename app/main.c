@@ -17,8 +17,8 @@ int main(void){
 	/*ex_glcd_displayImg();*/
 	/*ex_glcd_drawBoxes();*/
 	/*ex_glcd_drawCircles();*/
-	/*ex_glcd_spaceInvaders();*/
-	/*ex_glcd_textGFX();*/
+	/*ex_glcd_text();*/
+	/*ex_lcd_customChars();*/
 	/*ex_lcd_scrollDisplay();*/
 	/*ex_lcd_shiftCursor();*/
 	/*ex_rtcc_displayClockStr();*/

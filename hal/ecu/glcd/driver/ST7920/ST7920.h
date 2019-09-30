@@ -9,7 +9,7 @@
 #ifndef ST7920_H_
 #define ST7920_H_
 
-#include "hal/mcu/sys/std_types.h"
+#include "hal/ecu/glcd/common/glcd_types.h"
 
 /*------------DEFINE ST7920 COMMANDS------------*/
 
@@ -37,25 +37,19 @@ typedef enum{ST7920_INSTRUCTION,ST7920_DATA}st7920transmissiontype_t;
 	
 /*------------FUNCTION DECLARATIONS------------*/	
 
-void ST7920_init(bool_t a_cursorVisible, bool_t a_cursorBlinking);
-void ST7920_enableGraphics(void);
-void ST7920_disableGraphics(void);
+void ST7920_init(void);
 void ST7920_sendInstruction(ubyte_t a_instruction);
 void ST7920_clearDisplay(void);
 void ST7920_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking);
-void ST7920_setCursorPosition(ubyte_t a_row, ubyte_t a_col);
-void ST7920_setPixelCursorPosition(ubyte_t a_row, ubyte_t a_col);
-void ST7920_shiftCursor(bool_t a_dir);
-void ST7920_scrollDisplay(bool_t a_dir);
-void ST7920_defineCustomCharacter(ubyte_t a_characterIndex, uword_t a_characterArray[16]);
+void ST7920_setCursorPosition(uint8_t a_x, uint8_t a_y);
+void ST7920_setFont(glcdfont_t a_font);
 void ST7920_putc(char a_char);
+void ST7920_puts(const char * a_data);
 char ST7920_getc(void);
-void ST7920_putcGFX(char a_char);
-void ST7920_putsGFX(const char * a_data);
 void ST7920_drawPixel(uint8_t a_x, uint8_t a_y);
-void ST7920_drawVerticalBar(uint8_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue);
-void ST7920_drawHorizontalBar(uint8_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue);
-void ST7920_fillDisplay(uword_t a_pattern);
+void ST7920_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue);
+void ST7920_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue);
+void ST7920_fillDisplay(ubyte_t a_pattern);
 void ST7920_putImageRAM(const ubyte_t * a_image);
 void ST7920_putImageROM(const ubyte_t * a_image);
 

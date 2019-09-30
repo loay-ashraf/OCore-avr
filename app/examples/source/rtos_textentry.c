@@ -51,7 +51,7 @@ void ex_rtos_textEntry(void){
 	/***************************************************/
 	
 	gpio_setPinDirection(PD2_M,IO_OUTPUT);
-	LCD_init(TRUE,TRUE);
+	LCD_init(TRUE,TRUE,TRUE);
 	Keypad_setKeyMap(keyMap);
 	Keypad_init();
 	

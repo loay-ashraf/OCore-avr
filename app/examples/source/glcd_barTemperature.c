@@ -18,8 +18,7 @@ void ex_glcd_barTemperature(void){
 	/* initialize GLCD and ADC interfaces */
 	/**************************************/
 	
-	GLCD_init(FALSE,FALSE);
-	GLCD_enableGraphics();
+	GLCD_init();
 	adc_config(AD_DIV16,AD_AVCC,FALSE);
 	adc_enable();
 	

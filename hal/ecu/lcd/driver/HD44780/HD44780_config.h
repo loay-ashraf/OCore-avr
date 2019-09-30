@@ -23,5 +23,8 @@
 #define HD44780_DATA_PORT_MASK	0xF0
 #endif
 
+/*------------CONFIGURE SOFTWARE COREECTION OF CURSOR POSITION------------*/
+
+#define HD44780_SW_CURSOR_SHIFT	1
 
 #endif /* HD44780_CONFIG_H_ */

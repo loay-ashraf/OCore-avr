@@ -15,7 +15,7 @@ void ex_rtcc_displayClockStr(void){
 	/* initialize LCD and RTCC interfaces */
 	/**************************************/
 	
-	LCD_init(FALSE,FALSE);
+	LCD_init(FALSE,FALSE,TRUE);
 	RTCC_enable();
 	
 	while(1){		/* loop forever */

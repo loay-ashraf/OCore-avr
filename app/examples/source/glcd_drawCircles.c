@@ -16,14 +16,13 @@ void ex_glcd_drawCircles(void){
 	/* initialize GLCD interface and enable graphics mode */
 	/******************************************************/
 	
-	GLCD_init(FALSE,FALSE);
-	GLCD_enableGraphics();
+	GLCD_init();
 	
 	/**************************************************/
 	/* draw a chain of five circles beside each other */
 	/**************************************************/
 	
-	radius = GLCD_PIXELS_X/6.0;
+	radius = GLCD_X_PIXELS/6.0;
 	x = radius+2;
 	numCircles = 0;
 	

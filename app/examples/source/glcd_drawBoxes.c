@@ -16,8 +16,7 @@ void ex_glcd_drawBoxes(void){
 	/* initialize GLCD interface and enable graphics mode */
 	/******************************************************/
 	
-	GLCD_init(FALSE,FALSE);
-	GLCD_enableGraphics();
+	GLCD_init();
 	
 	/*************************************/
 	/* draw five boxes inside each other */
@@ -25,8 +24,8 @@ void ex_glcd_drawBoxes(void){
 	
 	x = 0;
 	y = 0;
-	width = GLCD_PIXELS_X;
-	length = GLCD_PIXELS_Y;
+	width = GLCD_X_PIXELS;
+	length = GLCD_Y_PIXELS;
 	numBoxes = 0;
 	
 	while(numBoxes++ < 5){

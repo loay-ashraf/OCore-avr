@@ -12,7 +12,7 @@ void ex_lcd_shiftCursor(void){
 	
 	uint8_t counter;		/* general purpose counter */
 	
-	LCD_init(TRUE,TRUE);	/* initialize GLCD interface */
+	LCD_init(TRUE,TRUE,TRUE);	/* initialize LCD interface */
 	
 	DELAY_MS(1000);
 	

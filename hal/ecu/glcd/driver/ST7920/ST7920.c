@@ -7,7 +7,8 @@
 
 #include "ST7920.h"
 #include "ST7920_config.h"
-#include "hal/ecu/glcd/driver/ST7920/fonts/font_5x8.h"
+#include "ST7920_fonts.h"
+#include "hal/ecu/glcd/common/glcd_config.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/hw/driver/spi/spi.h"
 #include "hal/mcu/sys/delay.h"
@@ -16,25 +17,23 @@
 #include <stdlib.h>
 
 static uint8_t g_pixelX,g_pixelY;
+static glcdfont_t g_font;
 
-static void putw(uword_t a_word);
-static uword_t getw(void);
-static void resetDisplay(void);
-static void sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType);
-static ubyte_t readNibble(void);
-static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
+static void _putc(char a_char);
+static void _putw(uword_t a_word);
+#ifdef ST7920_RW_PIN
+static uword_t _getw(void);
+#endif
+static void _resetDisplay(void);
+static void _sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType);
+static ubyte_t _readNibble(void);
+static void _enableGraphics(void);
+static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
 
-void ST7920_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
+void ST7920_init(void){
 	
-	#ifdef ST7920_RW_PIN
-	
-		#if (ST7920_INTERFACE == 1)
-		
-			gpio_setPinDirection(ST7920_RW_PIN,IO_OUTPUT);
-			
-		#endif	
-	
-	#endif
+	gpio_setPinDirection(ST7920_PSB_PIN,IO_OUTPUT);
+	gpio_setPinDirection(ST7920_RS_PIN,IO_OUTPUT);
 	
 	#ifdef ST7920_RST_PIN
 	
@@ -43,12 +42,16 @@ void ST7920_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	
 	#endif
 	
-	gpio_setPinDirection(ST7920_PSB_PIN,IO_OUTPUT);
-	gpio_setPinDirection(ST7920_RS_PIN,IO_OUTPUT);
-	
 	#if (ST7920_INTERFACE == 1)
 	
 		gpio_setPin(ST7920_PSB_PIN);
+		
+		#ifdef ST7920_RW_PIN
+		
+			gpio_setPinDirection(ST7920_RW_PIN,IO_OUTPUT);
+		
+		#endif
+		
 		gpio_setPinDirection(ST7920_EN_PIN,IO_OUTPUT);								
 		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);		// set data port direction register
 	
@@ -59,125 +62,46 @@ void ST7920_init(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	
 	#endif
 	
-	resetDisplay();
+	_resetDisplay();
 	
 	#if (ST7920_INTERFACE == 1)
 	
 		#if (ST7920_DATA_MODE == 4)
 	
 			//------------CONFIGURE ST7920 BEHAVIOUR------------//
-			ST7920_sendInstruction(ST7920_4BIT_MODE);												// 4-bit interface, 2-line mode, 5x8 dots format
-			ST7920_sendInstruction(ST7920_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-			ST7920_sendInstruction(ST7920_CURSOR_RIGHT);											// cursor moves to the right, no display shift
-			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);											// clear display
+			ST7920_sendInstruction(ST7920_4BIT_MODE);									// 4-bit interface, 2-line mode, 5x8 dots format
+			ST7920_sendInstruction(ST7920_DISPLAY_ON);									// display ON, cursor OFF, blink OFF
+			ST7920_sendInstruction(ST7920_CURSOR_RIGHT);								// cursor moves to the right, no display shift
+			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);								// clear display
 	
 		#elif (ST7920_DATA_MODE == 8)
 	
 			//------------CONFIGURE ST7920 BEHAVIOUR------------//
 	
-			ST7920_sendInstruction(ST7920_8BIT_MODE);												// 8-bit interface, 2-line mode, 5x8 dots format
-			ST7920_sendInstruction(ST7920_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-			ST7920_sendInstruction(ST7920_CURSOR_RIGHT);											// cursor moves to the right, no display shift
-			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);											// clear display
+			ST7920_sendInstruction(ST7920_8BIT_MODE);									// 8-bit interface, 2-line mode, 5x8 dots format
+			ST7920_sendInstruction(ST7920_DISPLAY_ON);									// display ON, cursor OFF, blink OFF
+			ST7920_sendInstruction(ST7920_CURSOR_RIGHT);								// cursor moves to the right, no display shift
+			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);								// clear display
 	
 		#endif
 	
 	#elif (ST7920_INTERFACE == 0)
 	
 		//------------CONFIGURE ST7920 BEHAVIOUR------------//
-		ST7920_sendInstruction(ST7920_8BIT_MODE);												// 8-bit interface, 2-line mode, 5x8 dots format
-		ST7920_sendInstruction(ST7920_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-		ST7920_sendInstruction(ST7920_CURSOR_RIGHT);											// cursor moves to the right, no display shift
-		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);											// clear display
+		ST7920_sendInstruction(ST7920_8BIT_MODE);										// 8-bit interface, 2-line mode, 5x8 dots format
+		ST7920_sendInstruction(ST7920_DISPLAY_ON);										// display ON, cursor OFF, blink OFF
+		ST7920_sendInstruction(ST7920_CURSOR_RIGHT);									// cursor moves to the right, no display shift
+		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);									// clear display
 	
 	#endif
 	
 	DELAY_MS(10);
 	
-}
-
-void ST7920_enableGraphics(void){
+	_enableGraphics();
 	
-	DELAY_MS(1); 
-	
-	#if (ST7920_INTERFACE == 1)
-	
-		#if (ST7920_DATA_MODE == 4)
-	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
-			ST7920_sendInstruction(ST7920_4BIT_MODE);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_4BIT_MODE|ST7920_EXT_INSTRUCTION);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_4BIT_MODE|ST7920_GRAPHICS_ON);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);
-	
-		#elif (ST7920_DATA_MODE == 8)
-	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
-	
-			ST7920_sendInstruction(ST7920_8BIT_MODE);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_EXT_INSTRUCTION);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_GRAPHICS_ON);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);
-	
-		#endif
-	
-	#elif (ST7920_INTERFACE == 0)
-	
-		ST7920_sendInstruction(ST7920_8BIT_MODE);
-		DELAY_MS(1);
-		ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_EXT_INSTRUCTION);
-		DELAY_MS(1);
-		ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_GRAPHICS_ON);
-		DELAY_MS(1);
-		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);
-	
-	#endif
-	
-	ST7920_fillDisplay(0);
+	g_font = GLCD_5X8;
 	
 }
-
-void ST7920_disableGraphics(void){
-	
-	#if (ST7920_INTERFACE == 1)
-	
-		#if (ST7920_DATA_MODE == 4)
-	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
-
-			ST7920_sendInstruction(ST7920_4BIT_MODE|ST7920_EXT_INSTRUCTION);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_4BIT_MODE);
-			DELAY_MS(1);
-	
-		#elif (ST7920_DATA_MODE == 8)
-	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
-	
-			ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_EXT_INSTRUCTION);
-			DELAY_MS(1);
-			ST7920_sendInstruction(ST7920_8BIT_MODE);
-			DELAY_MS(1);
-	
-		#endif
-	
-	#elif (ST7920_INTERFACE == 0)
-	
-		ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_EXT_INSTRUCTION);
-		DELAY_MS(1);
-		ST7920_sendInstruction(ST7920_8BIT_MODE);
-		DELAY_MS(1);
-	
-	#endif
-	
-}
-
 
 void ST7920_sendInstruction(ubyte_t a_instruction){
 	
@@ -189,21 +113,21 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 	
 				//------------SEND HIGH NIBBLE------------//
 	
-				sendNibble((a_instruction>>4),ST7920_INSTRUCTION);
+				_sendNibble((a_instruction>>4),ST7920_INSTRUCTION);
 
 				//------------SEND LOW NIBBLE------------//
 
-				sendNibble(a_instruction,ST7920_INSTRUCTION);
+				_sendNibble(a_instruction,ST7920_INSTRUCTION);
 	
 			#elif (ST7920_DATA_PORT_MASK == 0xF0)
 	
 				//------------SEND HIGH NIBBLE------------//
 	
-				sendNibble(a_instruction,ST7920_INSTRUCTION);
+				_sendNibble(a_instruction,ST7920_INSTRUCTION);
 
 				//------------SEND LOW NIBBLE------------//
 
-				sendNibble((a_instruction<<4),ST7920_INSTRUCTION);
+				_sendNibble((a_instruction<<4),ST7920_INSTRUCTION);
 	
 			#endif
 	
@@ -211,13 +135,13 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 	
 			//------------SEND 8-BIT COMMAND------------//
 	
-			sendNibble(a_instruction,ST7920_INSTRUCTION);
+			_sendNibble(a_instruction,ST7920_INSTRUCTION);
 	
 		#endif
 	
 	#elif (ST7920_INTERFACE == 0)
 	
-		sendNibble(a_instruction,ST7920_INSTRUCTION);
+		_sendNibble(a_instruction,ST7920_INSTRUCTION);
 	
 	#endif
 	
@@ -225,134 +149,80 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 
 void ST7920_clearDisplay(void){
 
-	ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);	// clear display command
+	ST7920_fillDisplay(0);		// clear display command
 	
 }
 
-void ST7920_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking){
+void ST7920_setCursorPosition(uint8_t a_x, uint8_t a_y){
 	
-	ST7920_sendInstruction(ST7920_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// configure cursor
+	if(a_y > GLCD_Y_PIXELS-1)
+		a_y = GLCD_Y_PIXELS-1;
+	if(a_x > (GLCD_X_PIXELS/ST7920_X_PAGE_SIZE*2)-1)
+		a_x = (GLCD_X_PIXELS/ST7920_X_PAGE_SIZE*2)-1;	
 	
-}
-
-void ST7920_setCursorPosition(ubyte_t a_row, ubyte_t a_col){
+	if(g_pixelX != a_x)	
+		g_pixelX = a_x;
+	if(g_pixelY != a_y)	
+		g_pixelY = a_y;	
 	
-	switch(a_row){
-
-		case 0: ST7920_sendInstruction(ST7920_ROW_ZERO+a_col);	// first row
-		break;
-		case 1: ST7920_sendInstruction(ST7920_ROW_ONE+a_col);	// second row
-		break;
-		case 2: ST7920_sendInstruction(ST7920_ROW_TWO+a_col);	// third row
-		break;
-		case 3: ST7920_sendInstruction(ST7920_ROW_THREE+a_col);	// fourth row
-		break;
-		default: ST7920_sendInstruction(ST7920_ROW_ZERO+a_col);	// default is first row
-		break;
-
-	}
-	
-}
-
-void ST7920_setPixelCursorPosition(ubyte_t a_row, ubyte_t a_col){
-	
-	if(a_row > 63)
-		a_row = 63;
-	if(a_col > 7)
-		a_col = 7;	
+	if(a_y < 32){
 		
-	g_pixelX = a_col;
-	g_pixelY = a_row;	
-	
-	if(a_row < 32){
-		
-		ST7920_sendInstruction(0x80+a_row);
-		ST7920_sendInstruction(0x80+a_col);
+		ST7920_sendInstruction(0x80+a_y);
+		ST7920_sendInstruction(0x80+a_x);
 		
 	}else{
 		
-		ST7920_sendInstruction(0x80+(a_row-32));
-		ST7920_sendInstruction(0x88+a_col);
+		ST7920_sendInstruction(0x80+(a_y-32));
+		ST7920_sendInstruction(0x88+a_x);
 		
 	}
 	
 }
 
-void ST7920_shiftCursor(bool_t a_dir){
+void ST7920_setFont(glcdfont_t a_font){
 	
-	ST7920_sendInstruction(ST7920_SHIFT_CURSOR|(a_dir<<2));
-	
-}
-
-void ST7920_scrollDisplay(bool_t a_dir){
-	
-	ST7920_sendInstruction(ST7920_SCROLL_DISPLAY|(a_dir<<2));
+	g_font = a_font;
 	
 }
 
-void ST7920_defineCustomCharacter(ubyte_t a_characterIndex, uword_t a_characterArray[16]){
-	
-	ST7920_sendInstruction(0x40+(a_characterIndex*8));
-	putw(a_characterArray[0]); // 0
-	putw(a_characterArray[1]); // 1
-	putw(a_characterArray[2]); // 2
-	putw(a_characterArray[3]); // 3
-	putw(a_characterArray[4]); // 4
-	putw(a_characterArray[5]); // 5
-	putw(a_characterArray[6]); // 6
-	putw(a_characterArray[7]); // 7
-	putw(a_characterArray[8]); // 8
-	putw(a_characterArray[9]); // 9
-	putw(a_characterArray[10]); // A
-	putw(a_characterArray[11]); // B
-	putw(a_characterArray[12]); // C
-	putw(a_characterArray[13]); // D
-	putw(a_characterArray[14]); // E
-	putw(a_characterArray[15]); // F
-	
-}
 
 void ST7920_putc(char a_char){
 	
-	#if (ST7920_INTERFACE == 1)
+	uint8_t y,y_end;
 	
-		#if (ST7920_DATA_MODE == 4)
+	a_char -= 32;
+	y_end = g_pixelY+8;
 	
-			#if (ST7920_DATA_PORT_MASK == 0x0F)
+	for(y=g_pixelY;y<y_end;y++){
+		
+		ST7920_setCursorPosition(g_pixelX,y);
+		
+		if(g_font == GLCD_5X8)
+			_putc(pgm_read_byte(&font_5x8[(uint8_t)a_char][8-(y_end-y)]));
+		
+	}
 	
-				//------------SEND HIGH NIBBLE------------//
-	
-				sendNibble((a_char>>4),ST7920_DATA);
+}
 
-				//------------SEND LOW NIBBLE------------//
+void ST7920_puts(const char * a_data){
+	
+	uint8_t y,y_end;
+	char * charPointer;
 
-				sendNibble(a_char,ST7920_DATA);
+	y_end = g_pixelY+8;
 	
-			#elif (ST7920_DATA_PORT_MASK == 0xF0)
-	
-				//------------SEND HIGH NIBBLE------------//
-	
-				sendNibble(a_char,ST7920_DATA);
-
-				//------------SEND LOW NIBBLE------------//
-
-				sendNibble((a_char<<4),ST7920_DATA);
-	
-			#endif
-	
-		#elif (ST7920_DATA_MODE == 8)
-	
-			//------------SEND 8-BIT DATA------------//
-	
-			sendNibble(a_char,ST7920_DATA);
-	
-		#endif
-	
-	#elif (ST7920_INTERFACE == 0)
-	
-		sendNibble(a_char,ST7920_DATA);
-	
-	#endif
+	for(y=g_pixelY;y<y_end;y++){
+		
+		charPointer = (char *)a_data;
+		ST7920_setCursorPosition(g_pixelX,y);
+		
+		if(g_font == GLCD_5X8){
+		
+			while(*charPointer != '\0')
+				_putc(pgm_read_byte(&font_5x8[(uint8_t)((*charPointer++)-32)][8-(y_end-y)]));
+		
+		}
+	}
 	
 }
 
@@ -366,21 +236,21 @@ char ST7920_getc(void){
 
 			//------------READ HIGH NIBBLE------------//
 
-			data |= (readNibble()<<4);
+			data |= (_readNibble()<<4);
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= readNibble();
+			data |= _readNibble();
 
 		#elif (ST7920_DATA_PORT_MASK == 0xF0)
 
 			//------------READ HIGH NIBBLE------------//
 
-			data |= readNibble();
+			data |= _readNibble();
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= (readNibble()>>4);
+			data |= (_readNibble()>>4);
 
 		#endif
 
@@ -388,47 +258,12 @@ char ST7920_getc(void){
 
 		//------------READ 8-BIT DATA------------//
 
-		data |= readNibble();
+		data |= _readNibble();
 
 	#endif
 	
 	return data;
 
-}
-
-void ST7920_putcGFX(char a_char){
-	
-	uint8_t y,y_end;
-	
-	a_char -= 32;
-	y_end = g_pixelY+8;
-	
-	for(y=g_pixelY;y<y_end;y++){
-		
-		ST7920_setPixelCursorPosition(y,g_pixelX);
-		ST7920_putc(pgm_read_byte(&font_5x8[(uint8_t)a_char][8-(y_end-y)]));
-		
-	}
-	
-}
-
-void ST7920_putsGFX(const char * a_data){
-	
-	uint8_t y,y_end;
-	char * charPointer;
-
-	y_end = g_pixelY+8;
-	
-	for(y=g_pixelY;y<y_end;y++){
-		
-		charPointer = (char *)a_data;
-		ST7920_setPixelCursorPosition(y,g_pixelX);
-		
-		while(*charPointer != '\0')
-			ST7920_putc(pgm_read_byte(&font_5x8[(uint8_t)((*charPointer++)-32)][8-(y_end-y)]));
-		
-	}
-	
 }
 
 void ST7920_drawPixel(uint8_t a_x, uint8_t a_y){
@@ -441,34 +276,34 @@ void ST7920_drawPixel(uint8_t a_x, uint8_t a_y){
 		pageNum = a_x/16.0;
 		bitNum = a_x-(pageNum*16);
 		
-		ST7920_setPixelCursorPosition(a_y,pageNum);
-		currentData = getw();
-		ST7920_setPixelCursorPosition(a_y,pageNum);
-		putw(currentData|(1<<(15-bitNum)));
+		ST7920_setCursorPosition(pageNum,a_y);
+		currentData = _getw();
+		ST7920_setCursorPosition(pageNum,a_y);
+		_putw(currentData|(1<<(15-bitNum)));
 	
 	#endif	
 		 
 }
 
-void ST7920_drawVerticalBar(uint8_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
+void ST7920_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
 	int8_t counter;
-	uint8_t stopY = (45-map(a_value,a_minValue,a_maxValue,0,45))+18;
+	uint8_t stopY = (45-_map(a_value,a_minValue,a_maxValue,0,45))+18;
 	char buffer[5];
 	
 	for(counter=63;counter>=stopY;counter--){
 		
-		ST7920_setPixelCursorPosition(counter,a_barIndex*2);
-		putw(0x00FF);
-		putw(0xFF00);
+		ST7920_setCursorPosition(a_barIndex*2,counter);
+		_putw(0x00FF);
+		_putw(0xFF00);
 		
 	}
 	
 	for(;counter>=0;counter--){
 		
-		ST7920_setPixelCursorPosition(counter,a_barIndex*2);
-		putw(0);
-		putw(0);
+		ST7920_setCursorPosition(a_barIndex*2,counter);
+		_putw(0);
+		_putw(0);
 		
 	}
 	
@@ -480,56 +315,57 @@ void ST7920_drawVerticalBar(uint8_t a_barIndex, uint8_t a_value, uint8_t a_minVa
 	buffer[1] = buffer[0];
 	buffer[0] = ' ';
 	
-	ST7920_setPixelCursorPosition(5,a_barIndex*2);
-	ST7920_putsGFX(buffer);
+	ST7920_setCursorPosition(a_barIndex*2,5);
+	ST7920_puts(buffer);
 	
 }
 
-void ST7920_drawHorizontalBar(uint8_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
+void ST7920_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
 	int8_t x,y;
-	uint8_t stopX = map(a_value,a_minValue,a_maxValue,0,5);
+	uint8_t stopX = _map(a_value,a_minValue,a_maxValue,0,5);
 	uint8_t stopY = (a_barIndex*16)+15;
 	char buffer[5];
 	
 	for(y=a_barIndex*16;y<=stopY;y++){
 		
-		ST7920_setPixelCursorPosition(y,0);
+		ST7920_setCursorPosition(0,y);
 		
 		for(x=0;x<=stopX;x++){
 			
 			if(y<(a_barIndex*16)+4)
-				putw(0);
+				_putw(0);
 			else if(y>(a_barIndex*16)+11)
-				putw(0);
+				_putw(0);
 			else
-				putw(0xFFFF);
+				_putw(0xFFFF);
 			
 		}
 		
 		for(;x<=7;x++)
-			putw(0);	
+			_putw(0);	
 		
 	}
 	
 	itoa(a_value,buffer,10);
 	
-	ST7920_setPixelCursorPosition((a_barIndex*16)+4,6);
-	ST7920_putsGFX(buffer);
+	ST7920_setCursorPosition(6,(a_barIndex*16)+4);
+	ST7920_puts(buffer);
 	
 }
 
-void ST7920_fillDisplay(uword_t a_pattern){
+void ST7920_fillDisplay(ubyte_t a_pattern){
 	
 	uint8_t x,y;
 	
 	for(y=0;y<64;y++){
 		
-		ST7920_setPixelCursorPosition(y,0);
+		ST7920_setCursorPosition(0,y);
 		
 		for(x=0;x<8;x++){
 			
-			putw(a_pattern);
+			_putc(a_pattern);
+			_putc(a_pattern);
 			
 		}
 	}	
@@ -541,12 +377,12 @@ void ST7920_putImageRAM(const ubyte_t * a_image){
 	
 	for(y=0;y<64;y++){
 		
-		ST7920_setPixelCursorPosition(y,0);
+		ST7920_setCursorPosition(0,y);
 		
 		for(x=0;x<8;x++){
 			
-			ST7920_putc(a_image[(2*x)+(16*y)]);
-			ST7920_putc(a_image[(2*x)+1+(16*y)]);
+			_putc(a_image[(2*x)+(16*y)]);
+			_putc(a_image[(2*x)+1+(16*y)]);
 			
 		}
 	}
@@ -559,28 +395,73 @@ void ST7920_putImageROM(const ubyte_t * a_image){
 	
 	for(y=0;y<64;y++){
 		
-		ST7920_setPixelCursorPosition(y,0);
+		ST7920_setCursorPosition(0,y);
 		
 		for(x=0;x<8;x++){
 			
 			byte = pgm_read_byte(&a_image[(2*x)+(16*y)]);
-			ST7920_putc(byte);
+			_putc(byte);
 			
 			byte = pgm_read_byte(&a_image[(2*x)+(16*y)+1]);
-			ST7920_putc(byte);
+			_putc(byte);
 			
 		}
 	}
 }
 
-static void putw(uword_t a_word){
+static void _putc(char a_char){
 	
-	ST7920_putc((a_word>>8)&0xFF);
-	ST7920_putc(a_word&0xFF);
+	#if (ST7920_INTERFACE == 1)
+	
+		#if (ST7920_DATA_MODE == 4)
+	
+			#if (ST7920_DATA_PORT_MASK == 0x0F)
+	
+				//------------SEND HIGH NIBBLE------------//
+	
+				_sendNibble((a_char>>4),ST7920_DATA);
+
+				//------------SEND LOW NIBBLE------------//
+
+				_sendNibble(a_char,ST7920_DATA);
+	
+			#elif (ST7920_DATA_PORT_MASK == 0xF0)
+	
+				//------------SEND HIGH NIBBLE------------//
+	
+				_sendNibble(a_char,ST7920_DATA);
+
+				//------------SEND LOW NIBBLE------------//
+
+				_sendNibble((a_char<<4),ST7920_DATA);
+	
+			#endif
+	
+		#elif (ST7920_DATA_MODE == 8)
+	
+			//------------SEND 8-BIT DATA------------//
+	
+			_sendNibble(a_char,ST7920_DATA);
+	
+		#endif
+	
+	#elif (ST7920_INTERFACE == 0)
+	
+	_sendNibble(a_char,ST7920_DATA);
+	
+	#endif
 	
 }
 
-static uword_t getw(void){
+static void _putw(uword_t a_word){
+	
+	_putc((a_word>>8)&0xFF);
+	_putc(a_word&0xFF);
+	
+}
+
+#ifdef ST7920_RW_PIN
+static uword_t _getw(void){
 	
 	ubyte_t byte = 0;
 	uword_t word = 0;
@@ -593,8 +474,9 @@ static uword_t getw(void){
 	return word;
 	
 }
+#endif
 
-static void resetDisplay(void){
+static void _resetDisplay(void){
 	
 	#if (ST7920_INTERFACE == 1)
 	
@@ -604,26 +486,26 @@ static void resetDisplay(void){
 	
 				/*------------RESET THE ST7920------------*/
 	
-				sendNibble(0x03,ST7920_INSTRUCTION);
+				_sendNibble(0x03,ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				sendNibble(0x03,ST7920_INSTRUCTION);
+				_sendNibble(0x03,ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				sendNibble(0x03,ST7920_INSTRUCTION);
+				_sendNibble(0x03,ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				sendNibble(0x02,ST7920_INSTRUCTION);
+				_sendNibble(0x02,ST7920_INSTRUCTION);
 				DELAY_MS(1);
 	
 			#elif (ST7920_DATA_PORT_MASK == 0xF0)
 	
 				/*------------RESET THE ST7920------------*/
 	
-				sendNibble((0x03<<4),ST7920_INSTRUCTION);
+				_sendNibble((0x03<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				sendNibble((0x03<<4),ST7920_INSTRUCTION);
+				_sendNibble((0x03<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				sendNibble((0x03<<4),ST7920_INSTRUCTION);
+				_sendNibble((0x03<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				sendNibble((0x02<<4),ST7920_INSTRUCTION);
+				_sendNibble((0x02<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
 
 			#endif
@@ -632,11 +514,11 @@ static void resetDisplay(void){
 	
 			/*------------RESET THE ST7920------------*/
 	
-			sendNibble(0x03,ST7920_INSTRUCTION);
+			_sendNibble(0x03,ST7920_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble(0x03,ST7920_INSTRUCTION);
+			_sendNibble(0x03,ST7920_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble(0x03,ST7920_INSTRUCTION);
+			_sendNibble(0x03,ST7920_INSTRUCTION);
 			DELAY_MS(1);
 	
 		#endif
@@ -645,18 +527,18 @@ static void resetDisplay(void){
 	
 		/*------------RESET THE ST7920------------*/
 	
-		sendNibble(0x03,ST7920_INSTRUCTION);
+		_sendNibble(0x03,ST7920_INSTRUCTION);
 		DELAY_MS(1);
-		sendNibble(0x03,ST7920_INSTRUCTION);
+		_sendNibble(0x03,ST7920_INSTRUCTION);
 		DELAY_MS(1);
-		sendNibble(0x03,ST7920_INSTRUCTION);
+		_sendNibble(0x03,ST7920_INSTRUCTION);
 		DELAY_MS(1);
 	
 	#endif
 	
 }
 
-static void sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType){
+static void _sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	
 	#if (ST7920_INTERFACE == 1)
 	
@@ -703,7 +585,7 @@ static void sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	
 }
 
-static ubyte_t readNibble(void){
+static ubyte_t _readNibble(void){
 	
 	#ifdef ST7920_RW_PIN
 	
@@ -735,7 +617,56 @@ static ubyte_t readNibble(void){
 	
 }
 
-static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
+static void _enableGraphics(void){
+	
+	DELAY_MS(1);
+	
+	#if (ST7920_INTERFACE == 1)
+	
+		#if (ST7920_DATA_MODE == 4)
+	
+			//------------CONFIGURE ST7920 BEHAVIOUR------------//
+			ST7920_sendInstruction(ST7920_4BIT_MODE);
+			DELAY_MS(1);
+			ST7920_sendInstruction(ST7920_4BIT_MODE|ST7920_EXT_INSTRUCTION);
+			DELAY_MS(1);
+			ST7920_sendInstruction(ST7920_4BIT_MODE|ST7920_GRAPHICS_ON);
+			DELAY_MS(1);
+			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);
+	
+		#elif (ST7920_DATA_MODE == 8)
+	
+			//------------CONFIGURE ST7920 BEHAVIOUR------------//
+	
+			ST7920_sendInstruction(ST7920_8BIT_MODE);
+			DELAY_MS(1);
+			ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_EXT_INSTRUCTION);
+			DELAY_MS(1);
+			ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_GRAPHICS_ON);
+			DELAY_MS(1);
+			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);
+	
+		#endif
+	
+	#elif (ST7920_INTERFACE == 0)
+	
+		ST7920_sendInstruction(ST7920_8BIT_MODE);
+		DELAY_MS(1);
+		ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_EXT_INSTRUCTION);
+		DELAY_MS(1);
+		ST7920_sendInstruction(ST7920_8BIT_MODE|ST7920_GRAPHICS_ON);
+		DELAY_MS(1);
+		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);
+	
+	#endif
+	
+	ST7920_fillDisplay(0);
+	
+}
+
+
+
+static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
 	
 	if(a_input < a_inputMin)
 		a_input = a_inputMin;
