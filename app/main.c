@@ -5,7 +5,7 @@
  * Author : Loay Ashraf
  */ 
 
-#include "app/examples/include/examples.h"
+#include "app/config/app_depend.h"
 
 int main(void){
 	
