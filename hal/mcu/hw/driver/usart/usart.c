@@ -56,7 +56,7 @@
 			
 			WRI(UCSRC,((1<<URSEL)|((a_usartConfig.frameSize-5)<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
 
-		}else if (a_usartConfig.frameSize == 9){
+		}else if (a_usartConfig.frameSize == US_NINE_BITS){
 			
 			// set number of bits to 9 in the data frame
 			SBI(UCSRB,UCSZ2);
@@ -70,7 +70,7 @@
 			
 			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|((a_usartConfig.frameSize-5)<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
 
-		}else if (a_usartConfig.frameSize == 9){
+		}else if (a_usartConfig.frameSize == US_NINE_BITS){
 			
 			// set number of bits to 9 in the data frame
 			SBI(UCSRB,UCSZ2);
