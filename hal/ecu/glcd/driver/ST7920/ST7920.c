@@ -19,14 +19,14 @@
 static uint8_t g_pixelX,g_pixelY;
 static glcdfont_t g_font;
 
+static void _resetDisplay(void);
+static void _sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType);
+static ubyte_t _readNibble(void);
 static void _putc(char a_char);
 static void _putw(uword_t a_word);
 #ifdef ST7920_RW_PIN
 static uword_t _getw(void);
 #endif
-static void _resetDisplay(void);
-static void _sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType);
-static ubyte_t _readNibble(void);
 static void _enableGraphics(void);
 static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
 
@@ -71,7 +71,7 @@ void ST7920_init(void){
 			//------------CONFIGURE ST7920 BEHAVIOUR------------//
 			ST7920_sendInstruction(ST7920_4BIT_MODE);									// 4-bit interface, 2-line mode, 5x8 dots format
 			ST7920_sendInstruction(ST7920_DISPLAY_ON);									// display ON, cursor OFF, blink OFF
-			ST7920_sendInstruction(ST7920_CURSOR_RIGHT);								// cursor moves to the right, no display shift
+			ST7920_sendInstruction(ST7920_ENTRY_MODE);								// cursor moves to the right, no display shift
 			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);								// clear display
 	
 		#elif (ST7920_DATA_MODE == 8)
@@ -80,7 +80,7 @@ void ST7920_init(void){
 	
 			ST7920_sendInstruction(ST7920_8BIT_MODE);									// 8-bit interface, 2-line mode, 5x8 dots format
 			ST7920_sendInstruction(ST7920_DISPLAY_ON);									// display ON, cursor OFF, blink OFF
-			ST7920_sendInstruction(ST7920_CURSOR_RIGHT);								// cursor moves to the right, no display shift
+			ST7920_sendInstruction(ST7920_ENTRY_MODE);								// cursor moves to the right, no display shift
 			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);								// clear display
 	
 		#endif
@@ -90,7 +90,7 @@ void ST7920_init(void){
 		//------------CONFIGURE ST7920 BEHAVIOUR------------//
 		ST7920_sendInstruction(ST7920_8BIT_MODE);										// 8-bit interface, 2-line mode, 5x8 dots format
 		ST7920_sendInstruction(ST7920_DISPLAY_ON);										// display ON, cursor OFF, blink OFF
-		ST7920_sendInstruction(ST7920_CURSOR_RIGHT);									// cursor moves to the right, no display shift
+		ST7920_sendInstruction(ST7920_ENTRY_MODE);									// cursor moves to the right, no display shift
 		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);									// clear display
 	
 	#endif
@@ -185,6 +185,13 @@ void ST7920_setFont(glcdfont_t a_font){
 	
 }
 
+void ST7920_scrollDisplay(glcddirection_t a_direction){
+	
+	if(a_direction == GLCD_LEFT || a_direction == GLCD_RIGHT);
+	
+		ST7920_sendInstruction(ST7920_SCROLL_DISPLAY|(a_direction<<2));
+	
+}
 
 void ST7920_putc(char a_char){
 	
@@ -409,73 +416,6 @@ void ST7920_putImageROM(const ubyte_t * a_image){
 	}
 }
 
-static void _putc(char a_char){
-	
-	#if (ST7920_INTERFACE == 1)
-	
-		#if (ST7920_DATA_MODE == 4)
-	
-			#if (ST7920_DATA_PORT_MASK == 0x0F)
-	
-				//------------SEND HIGH NIBBLE------------//
-	
-				_sendNibble((a_char>>4),ST7920_DATA);
-
-				//------------SEND LOW NIBBLE------------//
-
-				_sendNibble(a_char,ST7920_DATA);
-	
-			#elif (ST7920_DATA_PORT_MASK == 0xF0)
-	
-				//------------SEND HIGH NIBBLE------------//
-	
-				_sendNibble(a_char,ST7920_DATA);
-
-				//------------SEND LOW NIBBLE------------//
-
-				_sendNibble((a_char<<4),ST7920_DATA);
-	
-			#endif
-	
-		#elif (ST7920_DATA_MODE == 8)
-	
-			//------------SEND 8-BIT DATA------------//
-	
-			_sendNibble(a_char,ST7920_DATA);
-	
-		#endif
-	
-	#elif (ST7920_INTERFACE == 0)
-	
-	_sendNibble(a_char,ST7920_DATA);
-	
-	#endif
-	
-}
-
-static void _putw(uword_t a_word){
-	
-	_putc((a_word>>8)&0xFF);
-	_putc(a_word&0xFF);
-	
-}
-
-#ifdef ST7920_RW_PIN
-static uword_t _getw(void){
-	
-	ubyte_t byte = 0;
-	uword_t word = 0;
-	byte = ST7920_getc();		// dummy read
-	byte = ST7920_getc();
-	word |= ((byte<<8)&0xFF00);
-	byte = ST7920_getc();
-	word |= (byte&0x00FF);
-	
-	return word;
-	
-}
-#endif
-
 static void _resetDisplay(void){
 	
 	#if (ST7920_INTERFACE == 1)
@@ -617,6 +557,73 @@ static ubyte_t _readNibble(void){
 	
 }
 
+static void _putc(char a_char){
+	
+	#if (ST7920_INTERFACE == 1)
+	
+		#if (ST7920_DATA_MODE == 4)
+	
+			#if (ST7920_DATA_PORT_MASK == 0x0F)
+	
+				//------------SEND HIGH NIBBLE------------//
+	
+				_sendNibble((a_char>>4),ST7920_DATA);
+
+				//------------SEND LOW NIBBLE------------//
+
+				_sendNibble(a_char,ST7920_DATA);
+	
+			#elif (ST7920_DATA_PORT_MASK == 0xF0)
+	
+				//------------SEND HIGH NIBBLE------------//
+	
+				_sendNibble(a_char,ST7920_DATA);
+
+				//------------SEND LOW NIBBLE------------//
+
+				_sendNibble((a_char<<4),ST7920_DATA);
+	
+			#endif
+	
+		#elif (ST7920_DATA_MODE == 8)
+	
+			//------------SEND 8-BIT DATA------------//
+	
+			_sendNibble(a_char,ST7920_DATA);
+	
+		#endif
+	
+	#elif (ST7920_INTERFACE == 0)
+	
+		_sendNibble(a_char,ST7920_DATA);
+	
+	#endif
+	
+}
+
+static void _putw(uword_t a_word){
+	
+	_putc((a_word>>8)&0xFF);
+	_putc(a_word&0xFF);
+	
+}
+
+#ifdef ST7920_RW_PIN
+static uword_t _getw(void){
+	
+	ubyte_t byte = 0;
+	uword_t word = 0;
+	byte = ST7920_getc();		// dummy read
+	byte = ST7920_getc();
+	word |= ((byte<<8)&0xFF00);
+	byte = ST7920_getc();
+	word |= (byte&0x00FF);
+	
+	return word;
+	
+}
+#endif
+
 static void _enableGraphics(void){
 	
 	DELAY_MS(1);
@@ -660,11 +667,9 @@ static void _enableGraphics(void){
 	
 	#endif
 	
-	ST7920_fillDisplay(0);
+	ST7920_clearDisplay();
 	
 }
-
-
 
 static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
 	

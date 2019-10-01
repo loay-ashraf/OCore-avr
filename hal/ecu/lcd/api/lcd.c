@@ -309,7 +309,7 @@ static void clearCursorPositionUpdateFlag(void);
 	
 	if(g_LCD.statusRegister.framebufferupdate){
 		
-		if(a_data == '\0')
+		if(a_data == LCD_CCHARACTER_ZERO)
 			
 			g_LCD.frameBuffer[g_LCD.cursorPosition.row][g_LCD.cursorPosition.column] = '\n';
 			

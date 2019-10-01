@@ -21,6 +21,7 @@ void GLCD_sendInstruction(ubyte_t a_instruction);
 void GLCD_clearDisplay(void);
 void GLCD_setCursorPosition(uint8_t a_x, uint8_t a_y);
 void GLCD_setFont(glcdfont_t a_font);
+void GLCD_scrollDisplay(glcddirection_t a_direction);
 void GLCD_putc(char a_char);
 void GLCD_putw(uword_t a_word);
 void GLCD_puts(const char * a_data);

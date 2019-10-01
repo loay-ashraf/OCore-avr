@@ -42,19 +42,25 @@
 	GLCD_SET_FONT(a_font);
 	 
  }
+ 
+ void GLCD_scrollDisplay(glcddirection_t a_direction){
+	 
+	 GLCD_SCROLL_DISPLAY(a_direction);
+	 
+ }
 	
  void GLCD_putc(char a_char){
 	
 	GLCD_PUTC(a_char);
 	
-}
+ }
 
-void GLCD_putw(uword_t a_word){
+ void GLCD_putw(uword_t a_word){
 	
 	GLCD_putc((a_word>>8)&0xFF);
 	GLCD_putc(a_word&0xFF);
 	
-}
+ }
 
  void GLCD_puts(const char * a_data){
 		

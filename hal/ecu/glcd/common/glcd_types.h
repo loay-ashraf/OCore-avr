@@ -12,9 +12,10 @@
 #include "glcd_config.h"
 #include "hal/mcu/sys/std_types.h"
 
-/*------------TYPEDEF GLCD OBJECT STRUCT, SHIFT AND SCROLL DIRECTION ENUMS------------*/
+/*------------TYPEDEF SCROLL DIRECTION AND FONT ENUMS------------*/
 
 typedef enum{GLCD_5X8}glcdfont_t;
+typedef enum{GLCD_LEFT,GLCD_RIGHT,GLCD_UP,GLCD_DOWN}glcddirection_t;
 typedef enum{GLCD_BASE10=10,GLCD_BASE16=16,GLCD_BASE2=2}glcdnumberbase_t;
 typedef enum{GLCD_BAR0,GLCD_BAR1,GLCD_BAR2,GLCD_BAR3}glcdbarindex_t;
 

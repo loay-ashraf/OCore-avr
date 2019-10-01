@@ -18,6 +18,7 @@
 	#define GLCD_CLEAR_DISLAY											ST7920_clearDisplay()
 	#define GLCD_SET_CURSOR_POSITION(X,Y)								ST7920_setCursorPosition(X,Y)
 	#define GLCD_SET_FONT(FONT)											ST7920_setFont(FONT)
+	#define GLCD_SCROLL_DISPLAY(DIR)									ST7920_scrollDisplay(DIR)
 	#define GLCD_PUTC(DATA)												ST7920_putc(DATA)
 	#define GLCD_PUTS(STR)												ST7920_puts(STR)
 	#define GLCD_GETC													ST7920_getc()
