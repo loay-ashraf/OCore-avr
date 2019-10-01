@@ -44,56 +44,60 @@ void ex_lcd_scrollDisplay(void){
 	
 	DELAY_MS(1000);
 	
-	/**************************************/
-	/* scroll text on screen to the right */
-	/**************************************/
+	while(1){		/* loop forever */
 	
-	for(counter=0;counter<LCD_COLUMNS;counter++){
+		/**************************************/
+		/* scroll text on screen to the right */
+		/**************************************/
+	
+		for(counter=0;counter<LCD_COLUMNS;counter++){
 		
+			DELAY_MS(1000);
+			LCD_scrollDisplay(LCD_RIGHT,0,LCD_ROWS);
+		
+		}
+	
 		DELAY_MS(1000);
-		LCD_scrollDisplay(LCD_RIGHT,0,LCD_ROWS);
+	
+		/*************************************/
+		/* scroll text on screen to the left */
+		/*************************************/
+	
+		for(counter=0;counter<LCD_COLUMNS;counter++){
+		
+			DELAY_MS(1000);
+			LCD_scrollDisplay(LCD_LEFT,0,LCD_ROWS);
+		
+		}
+	
+		DELAY_MS(1000);
+	
+		/*********************************/
+		/* scroll text on screen upwards */
+		/*********************************/
+	
+		for(counter=0;counter<LCD_ROWS;counter++){
+		
+			DELAY_MS(1000);
+			LCD_scrollDisplay(LCD_UP,0,LCD_COLUMNS);
+		
+		}
+	
+		DELAY_MS(1000);
+	
+		/***********************************/
+		/* scroll text on screen downwards */
+		/***********************************/
+	
+		for(counter=0;counter<LCD_ROWS;counter++){
+		
+			DELAY_MS(1000);
+			LCD_scrollDisplay(LCD_DOWN,0,LCD_COLUMNS);
+		
+		}
+	
+		DELAY_MS(1000);
 		
 	}
-	
-	DELAY_MS(1000);
-	
-	/*************************************/
-	/* scroll text on screen to the left */
-	/*************************************/
-	
-	for(counter=0;counter<LCD_COLUMNS;counter++){
-		
-		DELAY_MS(1000);
-		LCD_scrollDisplay(LCD_LEFT,0,LCD_ROWS);
-		
-	}
-	
-	DELAY_MS(1000);
-	
-	/*********************************/
-	/* scroll text on screen upwards */
-	/*********************************/
-	
-	for(counter=0;counter<LCD_ROWS;counter++){
-		
-		DELAY_MS(1000);
-		LCD_scrollDisplay(LCD_UP,0,LCD_COLUMNS);
-		
-	}
-	
-	DELAY_MS(1000);
-	
-	/***********************************/
-	/* scroll text on screen downwards */
-	/***********************************/
-	
-	for(counter=0;counter<LCD_ROWS;counter++){
-		
-		DELAY_MS(1000);
-		LCD_scrollDisplay(LCD_DOWN,0,LCD_COLUMNS);
-		
-	}
-	
-	DELAY_MS(1000);
 	
 }

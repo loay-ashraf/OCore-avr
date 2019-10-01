@@ -5,11 +5,8 @@
  *  Author: Loay Ashraf
  */ 
 
-
 #ifndef SERVO_CONFIG_H_
 #define SERVO_CONFIG_H_
-
-#include "hal/mcu/sys/cpu_config.h"
 
 #define SERVO_TIMER				TIMER1_M
 #define SERVO_TIMER_MODE		T16_FAST_PWM_ICR

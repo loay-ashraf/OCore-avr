@@ -37,7 +37,7 @@ static void prvCheckOtherTasksAreStillRunning(void);
 static void prvIncrementResetCount(void);
 
 /*-----------------------------------------------------------*/
-static char keyMap[4][4] = {{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'#','0','*','D'}};	/* Keypad key map array */
+static char keyMap[4][4] = {{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};	/* Keypad key map array */
 
 static volatile char key;											/* variable to hold value of pressed key */
 static volatile bool_t scanKeypad_isRunning,updateLCD_isRunning;	/* variables used to check if LCD and Keypad tasks are running */

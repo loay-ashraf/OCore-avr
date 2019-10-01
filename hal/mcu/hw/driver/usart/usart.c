@@ -10,10 +10,8 @@
 //------------INCLUDE DRIVER HEADER FILE------------//
 
  #include "usart.h"
- #include "hal/mcu/hw/driver/gpio/gpio.h"
  #include "hal/mcu/io/io_macros.h"
  #include "hal/mcu/sys/cpu_config.h"
- #include "hal/mcu/sys/delay.h"
  #include "hal/mcu/sys/interrupt.h"
  
 //------------DECLARE LOCAL VARIABLES------------//
@@ -31,8 +29,7 @@
  */
 
  static usartmode_t g_mode;
- static usartspeed_t g_speed;
- static bool_t g_ninthBit;
+ static usartframsize_t g_frameSize;
  static ISRcallback_t g_usartISRCallback[3];
 
  /** @brief initializes the USART interface
@@ -46,7 +43,7 @@
  void usart_config(usartconfig_t a_usartConfig){
     
 	g_mode = a_usartConfig.mode; 
-	g_speed = a_usartConfig.speed;
+	g_frameSize = a_usartConfig.frameSize;
     
 	if(!a_usartConfig.mode){
 	
@@ -55,36 +52,29 @@
 		else
 			CBI(UCSRA,U2X);
 		
-		if(a_usartConfig.frameSize != 9 && a_usartConfig.frameSize >= 5){
+		if(a_usartConfig.frameSize != US_NINE_BITS && a_usartConfig.frameSize >= US_FIVE_BITS){
 			
-			g_ninthBit = 0;
 			WRI(UCSRC,((1<<URSEL)|((a_usartConfig.frameSize-5)<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
 
 		}else if (a_usartConfig.frameSize == 9){
-
-			g_ninthBit = 1;
 			
 			// set number of bits to 9 in the data frame
 			SBI(UCSRB,UCSZ2);
-			WRI(UCSRC,((1<<URSEL)|(3<<UCSZ0)));
+			WRI(UCSRC,((1<<URSEL)|(3<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
 			
 		}
 
 	}else if (a_usartConfig.mode == US_SYNC){
 	
-		
-		if(a_usartConfig.frameSize != 9 && a_usartConfig.frameSize >= 5){
+		if(a_usartConfig.frameSize != US_NINE_BITS && a_usartConfig.frameSize >= US_FIVE_BITS){
 			
-			g_ninthBit = 0;
 			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|((a_usartConfig.frameSize-5)<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
 
 		}else if (a_usartConfig.frameSize == 9){
-
-			g_ninthBit = 1;
 			
 			// set number of bits to 9 in the data frame
 			SBI(UCSRB,UCSZ2);
-			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|(3<<UCSZ0)));
+			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|(3<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
 			
 		}
 	
@@ -100,21 +90,21 @@
    
 	uint16_t UBValue = 0;
    
-	usart_disableTXRX();		// disable receiver and transmitter buffers
+	usart_disableTXRX();								// disable receiver and transmitter buffers
 
 	if(!g_mode){
 
-		if (g_speed == 0)
+		if (!RBI(UCSRA,U2X))
 
-		UBValue = ((F_CPU)/(16.0*a_baudrate))-1;	// calculate baud rate based on CPU clock frequency, equations on p. 143 in datasheet
+			UBValue = ((F_CPU)/(16.0*a_baudrate))-1;	// calculate baud rate based on CPU clock frequency, equations on p. 143 in datasheet
 
-		else if(g_speed == 1)
+		else if(RBI(UCSRA,U2X))
 
-		UBValue = ((F_CPU)/(8.0*a_baudrate))-1;		// calculate baud rate based on CPU clock frequency, equations on p. 143 in datasheet
+			UBValue = ((F_CPU)/(8.0*a_baudrate))-1;		// calculate baud rate based on CPU clock frequency, equations on p. 143 in datasheet
 
 	}else if(g_mode == US_SYNC){
     
-		UBValue = ((F_CPU)/(2.0*a_baudrate))-1;		// calculate baud rate based on CPU clock frequency, equations on p. 143 in datasheet
+		UBValue = ((F_CPU)/(2.0*a_baudrate))-1;			// calculate baud rate based on CPU clock frequency, equations on p. 143 in datasheet
 	}
    
    // set the baud rate
@@ -144,18 +134,18 @@
   */
  void usart_transmitCharacter(char a_char){
 
-	while(!RBI(UCSRA,UDRE));		// wait for empty transmit buffer
+	while(!RBI(UCSRA,UDRE));			// wait for empty transmit buffer
 	
-	if(!g_ninthBit){
+	if(g_frameSize < US_NINE_BITS){
 
 		WRI(UDR,a_char);				// start transmission
 
 	}else{
 	  
-		CBI(UCSRB,TXB8);			// clear ninth data bit
+		CBI(UCSRB,TXB8);				// clear ninth data bit
 		
 		if(a_char & 0x0100)
-			SBI(UCSRB,TXB8);		// set ninth data bit if it's set in the data
+			SBI(UCSRB,TXB8);			// set ninth data bit if it's set in the data
 	  
 		WRI(UDR,a_char);				// start transmission
 
@@ -168,11 +158,9 @@
   */
  void usart_transmitString(const char * a_str, usartlineterm_t a_usartLineTerm){
 
-   while(*a_str != '\0'){
+   while(*a_str != '\0')
       
 	  usart_transmitCharacter(*a_str++);		// iterate through the array till the NULL terminator
-
-    }
 	
 	/*------------transmit line terminator-----------*/
 	
@@ -203,7 +191,7 @@
     
 	while(!RBI(UCSRA,RXC));			// Wait for incoming data
    
-	if (!g_ninthBit){
+	if (g_frameSize < US_NINE_BITS){
 		
 		return RRI(UDR);			// return UDR register if there's no ninth bit
 

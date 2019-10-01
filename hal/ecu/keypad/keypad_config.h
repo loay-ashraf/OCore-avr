@@ -5,7 +5,6 @@
  *  Author: Loay Ashraf
  */ 
 
-
 #ifndef KEYPAD_CONFIG_H_
 #define KEYPAD_CONFIG_H_
 

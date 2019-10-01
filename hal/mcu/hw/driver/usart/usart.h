@@ -29,6 +29,7 @@
 
 typedef enum{US_ASYNC,US_SYNC}usartmode_t;
 typedef enum{US_NORMAL,US_DOUBLE}usartspeed_t;
+typedef enum{US_FIVE_BITS=5,US_SIX_BITS,US_SEVEN_BITS,US_EIGHT_BITS,US_NINE_BITS}usartframsize_t;	
 typedef enum{US_EVEN=2,US_ODD=3}usartparity_t;
 typedef enum{US_ONE_BIT,US_TWO_BITS}usartstopbit_t;
 typedef enum{US_50=50,US_75=75,US_110=110,US_134=134,US_150=150,US_200=200,US_300=300,US_600=600,US_1200=1200,US_1800=1800,
@@ -40,7 +41,7 @@ typedef struct{
 	
 	usartmode_t mode;
 	usartspeed_t speed;
-	uint8_t frameSize;
+	usartframsize_t frameSize;
 	usartparity_t parity;
 	usartstopbit_t stopBit;
 	

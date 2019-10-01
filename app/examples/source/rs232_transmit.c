@@ -11,8 +11,8 @@
 #include "hal/mcu/hw/driver/usart/usart.h"
 #include "hal/mcu/sys/delay.h"
 
-static char keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS] = {{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'#','0','*','D'}};	/* Keypad key map array */
-static usartconfig_t usartConfig = {.mode=US_ASYNC,.frameSize=8,.parity=US_EVEN,.speed=US_NORMAL,.stopBit=US_ONE_BIT};			/* USART configuration structure */
+static char keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS] = {{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};				/* Keypad key map array */
+static usartconfig_t usartConfig = {.mode=US_ASYNC,.frameSize=US_EIGHT_BITS,.parity=US_EVEN,.speed=US_NORMAL,.stopBit=US_ONE_BIT};			/* USART configuration structure */
 
 void ex_rs232_transmit(void){
 	
@@ -42,10 +42,12 @@ void ex_rs232_transmit(void){
 				/*****************************************************************/
 				
 				uint8_t row,col;
-				lcdposition_t cursorPosition = LCD_getCursorPosition();
 				char frameBuffer[LCD_ROWS][LCD_COLUMNS+1];
-				LCD_copyBuffer(frameBuffer);
 				char transmitString[LCD_ROWS*LCD_COLUMNS];
+				lcdposition_t cursorPosition;
+				
+				cursorPosition = LCD_getCursorPosition();
+				LCD_copyBuffer(frameBuffer);
 				uint8_t transmitStringLength = (cursorPosition.row*LCD_COLUMNS)+cursorPosition.column;
 				
 				for(row=0;row<=cursorPosition.row;row++){

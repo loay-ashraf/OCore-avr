@@ -25,14 +25,14 @@ void ex_lcd_customChars(void){
 	/* define LCD custom characters */
 	/********************************/
 	
-	LCD_defineCustomCharacter(LCD_CCHARACTER_ZERO,Heart);
-	LCD_defineCustomCharacter(LCD_CCHARACTER_ONE,Bell);
-	LCD_defineCustomCharacter(LCD_CCHARACTER_TWO,Alien);
-	LCD_defineCustomCharacter(LCD_CCHARACTER_THREE,Check);
-	LCD_defineCustomCharacter(LCD_CCHARACTER_FOUR,Speaker);
-	LCD_defineCustomCharacter(LCD_CCHARACTER_FIVE,Sound);
-	LCD_defineCustomCharacter(LCD_CCHARACTER_SIX,Skull);
-	LCD_defineCustomCharacter(LCD_CCHARACTER_SEVEN,Lock);
+	LCD_defineCustomCharacter(LCD_CCHAR0,Heart);
+	LCD_defineCustomCharacter(LCD_CCHAR1,Bell);
+	LCD_defineCustomCharacter(LCD_CCHAR2,Alien);
+	LCD_defineCustomCharacter(LCD_CCHAR3,Check);
+	LCD_defineCustomCharacter(LCD_CCHAR4,Speaker);
+	LCD_defineCustomCharacter(LCD_CCHAR5,Sound);
+	LCD_defineCustomCharacter(LCD_CCHAR6,Skull);
+	LCD_defineCustomCharacter(LCD_CCHAR7,Lock);
 	
 	/***********************************/
 	/* put custom characters on screen */
@@ -44,21 +44,21 @@ void ex_lcd_customChars(void){
 		LCD_puts("Custom Character");
 		
 		LCD_setCursorPosition(1,0);
-		LCD_putc(LCD_CCHARACTER_ZERO);
+		LCD_putc(LCD_CCHAR0);
 		LCD_setCursorPosition(1,2);
-		LCD_putc(LCD_CCHARACTER_ONE);
+		LCD_putc(LCD_CCHAR1);
 		LCD_setCursorPosition(1,4);
-		LCD_putc(LCD_CCHARACTER_TWO);
+		LCD_putc(LCD_CCHAR2);
 		LCD_setCursorPosition(1,6);
-		LCD_putc(LCD_CCHARACTER_THREE);
+		LCD_putc(LCD_CCHAR3);
 		LCD_setCursorPosition(1,8);
-		LCD_putc(LCD_CCHARACTER_FOUR);
+		LCD_putc(LCD_CCHAR4);
 		LCD_setCursorPosition(1,10);
-		LCD_putc(LCD_CCHARACTER_FIVE);
+		LCD_putc(LCD_CCHAR5);
 		LCD_setCursorPosition(1,12);
-		LCD_putc(LCD_CCHARACTER_SIX);
+		LCD_putc(LCD_CCHAR6);
 		LCD_setCursorPosition(1,14);
-		LCD_putc(LCD_CCHARACTER_SEVEN);
+		LCD_putc(LCD_CCHAR7);
 		
 	#elif (LCD_COLUMNS == 20)	
 	
@@ -66,21 +66,21 @@ void ex_lcd_customChars(void){
 		LCD_puts("Custom Character");
 		
 		LCD_setCursorPosition(2,2);
-		LCD_putc(LCD_CCHARACTER_ZERO);
+		LCD_putc(LCD_CCHAR0);
 		LCD_setCursorPosition(2,4);
-		LCD_putc(LCD_CCHARACTER_ONE);
+		LCD_putc(LCD_CCHAR1);
 		LCD_setCursorPosition(2,6);
-		LCD_putc(LCD_CCHARACTER_TWO);
+		LCD_putc(LCD_CCHAR2);
 		LCD_setCursorPosition(2,8);
-		LCD_putc(LCD_CCHARACTER_THREE);
+		LCD_putc(LCD_CCHAR3);
 		LCD_setCursorPosition(2,10);
-		LCD_putc(LCD_CCHARACTER_FOUR);
+		LCD_putc(LCD_CCHAR4);
 		LCD_setCursorPosition(2,12);
-		LCD_putc(LCD_CCHARACTER_FIVE);
+		LCD_putc(LCD_CCHAR5);
 		LCD_setCursorPosition(2,14);
-		LCD_putc(LCD_CCHARACTER_SIX);
+		LCD_putc(LCD_CCHAR6);
 		LCD_setCursorPosition(2,16);
-		LCD_putc(LCD_CCHARACTER_SEVEN);
+		LCD_putc(LCD_CCHAR7);
 	
 	#endif
 	

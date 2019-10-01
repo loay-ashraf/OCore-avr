@@ -100,6 +100,9 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 
 void HD44780_clearDisplay(void){
 	
+	g_cursorPosition.row = 0;
+	g_cursorPosition.column = 0;
+	
 	HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);			// clear display command
 
 }
@@ -122,7 +125,7 @@ void HD44780_configTextDirection(bool_t a_leftToRight){
 	
 }
 
-void HD44780_setCursorPosition(ubyte_t a_row, ubyte_t a_col){
+void HD44780_setCursorPosition(uint8_t a_row, uint8_t a_col){
 	
 	#if (HD44780_SW_CURSOR_SHIFT == 1)
 	
@@ -222,9 +225,9 @@ void HD44780_scrollDisplay(bool_t a_dir){
 	
 }
 
-void HD44780_defineCustomCharacter(ubyte_t a_characterIndex, ubyte_t a_characterArray[8]){
+void HD44780_defineCustomCharacter(lcdcustomcharacter_t a_characterIndex, ubyte_t a_characterArray[8]){
 	
-	HD44780_sendInstruction(0x40+(a_characterIndex*8));
+	HD44780_sendInstruction(0x40+((uint8_t)a_characterIndex*8));
 	HD44780_putc(a_characterArray[0]);
 	HD44780_putc(a_characterArray[1]);
 	HD44780_putc(a_characterArray[2]);

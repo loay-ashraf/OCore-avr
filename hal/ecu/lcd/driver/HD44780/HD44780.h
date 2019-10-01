@@ -35,10 +35,10 @@ void HD44780_sendInstruction(ubyte_t a_instruction);
 void HD44780_clearDisplay(void);
 void HD44780_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking);
 void HD44780_configTextDirection(bool_t a_leftToRight);
-void HD44780_setCursorPosition(ubyte_t a_row, ubyte_t a_col);
+void HD44780_setCursorPosition(uint8_t a_row, uint8_t a_col);
 lcdposition_t HD44780_shiftCursor(lcddirection_t a_dir);
 void HD44780_scrollDisplay(bool_t a_dir);
-void HD44780_defineCustomCharacter(ubyte_t a_characterIndex, ubyte_t a_characterArray[8]);
+void HD44780_defineCustomCharacter(lcdcustomcharacter_t a_characterIndex, ubyte_t a_characterArray[8]);
 lcdposition_t HD44780_putc(char a_data);
 char HD44780_getc(void);
 

@@ -5,7 +5,6 @@
  *  Author: Loay Ashraf
  */ 
 
-
 #ifndef HD44780_CONFIG_H_
 #define HD44780_CONFIG_H_
 

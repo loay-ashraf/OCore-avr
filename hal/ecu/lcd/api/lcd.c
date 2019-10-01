@@ -151,7 +151,7 @@ static void clearCursorPositionUpdateFlag(void);
 	 
  }
 
- void LCD_setCursorPosition(ubyte_t a_row, ubyte_t a_col){
+ void LCD_setCursorPosition(uint8_t a_row, uint8_t a_col){
 	
 	// update cursor position
 	
@@ -289,7 +289,7 @@ static void clearCursorPositionUpdateFlag(void);
 		
  }	
  
- void LCD_defineCustomCharacter(ubyte_t a_characterIndex, ubyte_t a_characterArray[8]){
+ void LCD_defineCustomCharacter(lcdcustomcharacter_t a_characterIndex, ubyte_t a_characterArray[8]){
 	
 	clearCursorPositionUpdateFlag();
 	clearFrameBufferUpdateFlag();
@@ -309,7 +309,7 @@ static void clearCursorPositionUpdateFlag(void);
 	
 	if(g_LCD.statusRegister.framebufferupdate){
 		
-		if(a_data == LCD_CCHARACTER_ZERO)
+		if(a_data == LCD_CCHAR0)
 			
 			g_LCD.frameBuffer[g_LCD.cursorPosition.row][g_LCD.cursorPosition.column] = '\n';
 			
@@ -323,7 +323,7 @@ static void clearCursorPositionUpdateFlag(void);
 	
 	if(a_data == '\n')
 		
-		a_data = LCD_CCHARACTER_ZERO;
+		a_data = LCD_CCHAR0;
 	
 	if(g_LCD.statusRegister.cursorpositionupdate)
 		

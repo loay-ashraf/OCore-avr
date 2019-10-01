@@ -10,7 +10,7 @@
 #include "hal/mcu/hw/driver/usart/usart.h"
 #include <string.h>
 
-static usartconfig_t usartConfig = {.mode=US_ASYNC,.frameSize=8,.parity=US_EVEN,.speed=US_NORMAL,.stopBit=US_ONE_BIT};	/* USART configuration structure */
+static usartconfig_t usartConfig = {.mode=US_ASYNC,.frameSize=US_NINE_BITS,.parity=US_EVEN,.speed=US_NORMAL,.stopBit=US_ONE_BIT};	/* USART configuration structure */
 
 /*****************************************************************************/
 /* define callback function to be called upon triggering a receive interrupt */

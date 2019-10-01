@@ -14,6 +14,7 @@
 
 /*------------TYPEDEF LCD OBJECT STRUCT, SHIFT AND SCROLL DIRECTION ENUMS------------*/
 
+typedef enum{LCD_CCHAR0,LCD_CCHAR1,LCD_CCHAR2,LCD_CCHAR3,LCD_CCHAR4,LCD_CCHAR5,LCD_CCHAR6,LCD_CCHAR7}lcdcustomcharacter_t;
 typedef enum{LCD_LEFT,LCD_RIGHT,LCD_UP,LCD_DOWN}lcddirection_t;
 typedef enum{LCD_BASE10=10,LCD_BASE16=16,LCD_BASE2=2}lcdnumberbase_t;
 

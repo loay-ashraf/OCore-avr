@@ -9,8 +9,6 @@
 #ifndef ST7920_CONFIG_H_
 #define ST7920_CONFIG_H_
 
-#include "hal/mcu/hw/driver/spi/spi_config.h"
-
 /*------------DEFINE ST7920 PAGE SIZES------------*/
 
 #define ST7920_X_PAGE_SIZE		8

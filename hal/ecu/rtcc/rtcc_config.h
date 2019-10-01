@@ -5,7 +5,6 @@
  *  Author: Loay Ashraf
  */ 
 
-
 #ifndef RTCC_CONFIG_H_
 #define RTCC_CONFIG_H_
 
