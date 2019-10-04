@@ -21,7 +21,7 @@ void ex_lcd_scrollDisplay(void);
 void ex_lcd_shiftCursor(void);
 void ex_rs232_receive(void);
 void ex_rs232_transmit(void);
-void ex_rtcc_displayClockStr(void);
+void ex_rtcc_displayClock(void);
 void ex_rtos_dispTemp(void);
 void ex_rtos_textEntry(void);
 void ex_servo_knob(void);
