@@ -30,10 +30,18 @@ static uword_t _getw(void);
 static void _enableGraphics(void);
 static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
 
-void ST7920_init(void){
+void ST7920_init(bool_t a_backlightON){
 	
 	gpio_setPinDirection(ST7920_PSB_PIN,IO_OUTPUT);
 	gpio_setPinDirection(ST7920_RS_PIN,IO_OUTPUT);
+	
+	#ifdef ST7920_BL_PIN
+	
+		gpio_setPinDirection(ST7920_BL_PIN,IO_OUTPUT);
+		
+		ST7920_configBacklight(a_backlightON);
+	
+	#endif
 	
 	#ifdef ST7920_RST_PIN
 	
@@ -150,6 +158,36 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 void ST7920_clearDisplay(void){
 
 	ST7920_fillDisplay(0);		// clear display command
+	
+}
+
+void ST7920_configBacklight(bool_t a_backlightON){
+	
+	#ifdef ST7920_BL_PIN
+	
+		#if (ST7920_BL_MODE == 1)
+		
+			if(a_backlightON)
+			
+				gpio_setPin(ST7920_BL_PIN);
+			
+			else
+			
+				gpio_clearPin(ST7920_BL_PIN);
+		
+		#elif (ST7920_BL_MODE == 0)
+		
+			if(a_backlightON)
+			
+				gpio_clearPin(ST7920_BL_PIN);
+			
+			else
+			
+				gpio_setPin(ST7920_BL_PIN);
+		
+		#endif
+	
+	#endif
 	
 }
 

@@ -36,10 +36,10 @@ typedef enum{ST7920_INSTRUCTION,ST7920_DATA}st7920transmissiontype_t;
 	
 /*------------FUNCTION DECLARATIONS------------*/	
 
-void ST7920_init(void);
+void ST7920_init(bool_t a_backlightON);
 void ST7920_sendInstruction(ubyte_t a_instruction);
 void ST7920_clearDisplay(void);
-void ST7920_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking);
+void ST7920_configBacklight(bool_t a_backlightON);
 void ST7920_setCursorPosition(uint8_t a_x, uint8_t a_y);
 void ST7920_setFont(glcdfont_t a_font);
 void ST7920_scrollDisplay(glcddirection_t a_direction);

@@ -86,7 +86,7 @@ void ex_glcd_displayImg(void){
 	/* initialize GLCD interface and enable graphics mode */
 	/******************************************************/
 	
-	GLCD_init();
+	GLCD_init(TRUE);
 	
 	GLCD_putImageROM(bitmap);		/* read image from ROM and print it on screen */
 	

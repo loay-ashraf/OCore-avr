@@ -19,7 +19,7 @@ static ubyte_t Lock[] = {0x0E,0x11,0x11,0x1F,0x1B,0x1B,0x1F,0x00};
 	
 void ex_lcd_customChars(void){
 	
-	LCD_init(FALSE,FALSE,TRUE);		/* initialize LCD interface */
+	LCD_init(TRUE,FALSE,FALSE,TRUE);		/* initialize LCD interface */
 	
 	/********************************/
 	/* define LCD custom characters */

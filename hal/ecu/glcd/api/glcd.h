@@ -12,13 +12,13 @@
 /*------------INCLUDE MCU CONFIGURATION AND REQUIRED HEADER FILES------------*/
 
 #include "hal/ecu/glcd/common/glcd_types.h"
-#include "hal/mcu/sys/std_types.h"
 
 /*------------FUNCTION DECLARATIONS------------*/
 
-void GLCD_init(void);
+void GLCD_init(bool_t a_backlightON);
 void GLCD_sendInstruction(ubyte_t a_instruction);
 void GLCD_clearDisplay(void);
+void GLCD_configBacklight(bool_t a_backlightON);
 void GLCD_setCursorPosition(uint8_t a_x, uint8_t a_y);
 void GLCD_setFont(glcdfont_t a_font);
 void GLCD_scrollDisplay(glcddirection_t a_direction);

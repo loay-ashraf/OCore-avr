@@ -16,7 +16,7 @@ void ex_glcd_text(void){
 	/* initialize GLCD interface and enable graphics mode */
 	/******************************************************/
 	
-	GLCD_init();
+	GLCD_init(TRUE);
 	
 	/***************************/
 	/* display 8 lines of text */

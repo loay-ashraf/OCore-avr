@@ -16,7 +16,7 @@ void ex_glcd_drawCircles(void){
 	/* initialize GLCD interface and enable graphics mode */
 	/******************************************************/
 	
-	GLCD_init();
+	GLCD_init(TRUE);
 	
 	/**************************************************/
 	/* draw a chain of five circles beside each other */

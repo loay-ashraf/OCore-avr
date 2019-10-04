@@ -34,7 +34,7 @@ void ex_rs232_receive(void){
 	/* initialize LCD and USART interfaces */
 	/***************************************/
 	
-	LCD_init(TRUE,TRUE,TRUE);
+	LCD_init(TRUE,TRUE,TRUE,TRUE);
 	usart_config(usartConfig);
 	
 	usart_setBaudrate(US_9600);							/* 9600 bits/sec baud rate */

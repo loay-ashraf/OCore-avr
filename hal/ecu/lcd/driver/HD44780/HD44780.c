@@ -17,15 +17,23 @@ static bool_t g_leftToRight;
 #endif
 
 static void resetDisplay(void);
-static void sendNibble(ubyte_t a_data, hd44780transmissiontype_t a_transType);
-static ubyte_t readNibble(void);
+static void sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType);
+static ubyte_t readByte(void);
 #if (HD44780_SW_CURSOR_SHIFT == 1)
 static void updateCursorPosition(lcddirection_t a_dir);
 #endif
 
-void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
+void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
 	
 	g_leftToRight = a_leftToRight;
+	
+	#ifdef HD44780_BL_PIN
+	
+		gpio_setPinDirection(HD44780_BL_PIN,IO_OUTPUT);
+		
+		HD44780_configBacklight(a_backlightON);
+		
+	#endif	
 	
 	#ifdef HD44780_RW_PIN
 	
@@ -33,9 +41,9 @@ void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_left
 	
 	#endif
 	
-	gpio_setPinDirection(HD44780_EN_PIN,IO_OUTPUT);										// set control port direction register
+	gpio_setPinDirection(HD44780_EN_PIN,IO_OUTPUT);												// set control port direction register
 	gpio_setPinDirection(HD44780_RS_PIN,IO_OUTPUT);
-	gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);			// set data port direction register
+	gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);					// set data port direction register
 	
 	resetDisplay();
 	
@@ -70,21 +78,21 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendNibble((a_instruction>>4),HD44780_INSTRUCTION);
+			sendByte((a_instruction>>4),HD44780_INSTRUCTION);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendNibble(a_instruction,HD44780_INSTRUCTION);
+			sendByte(a_instruction,HD44780_INSTRUCTION);
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendNibble(a_instruction,HD44780_INSTRUCTION);
+			sendByte(a_instruction,HD44780_INSTRUCTION);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendNibble((a_instruction<<4),HD44780_INSTRUCTION);
+			sendByte((a_instruction<<4),HD44780_INSTRUCTION);
 	
 		#endif
 	
@@ -92,7 +100,7 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 	
 		//------------SEND 8-BIT COMMAND------------//
 	
-		sendNibble(a_instruction,HD44780_INSTRUCTION);
+		sendByte(a_instruction,HD44780_INSTRUCTION);
 	
 	#endif
 	
@@ -105,6 +113,36 @@ void HD44780_clearDisplay(void){
 	
 	HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);			// clear display command
 
+}
+
+void HD44780_configBacklight(bool_t a_backlightON){
+	
+	#ifdef HD44780_BL_PIN
+	
+		#if (HD44780_BL_MODE == 1)
+		
+			if(a_backlightON)
+			
+				gpio_setPin(HD44780_BL_PIN);
+			
+			else
+			
+				gpio_clearPin(HD44780_BL_PIN);
+		
+		#elif (HD44780_BL_MODE == 0)
+		
+			if(a_backlightON)
+			
+				gpio_clearPin(HD44780_BL_PIN);
+			
+			else
+			
+				gpio_setPin(HD44780_BL_PIN);
+		
+		#endif
+		
+	#endif	
+	
 }
 
 void HD44780_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking){
@@ -247,21 +285,21 @@ lcdposition_t HD44780_putc(char a_data){
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendNibble((a_data>>4),HD44780_DATA);
+			sendByte((a_data>>4),HD44780_DATA);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendNibble(a_data,HD44780_DATA);
+			sendByte(a_data,HD44780_DATA);
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendNibble(a_data,HD44780_DATA);
+			sendByte(a_data,HD44780_DATA);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendNibble((a_data<<4),HD44780_DATA);
+			sendByte((a_data<<4),HD44780_DATA);
 	
 		#endif
 	
@@ -269,7 +307,7 @@ lcdposition_t HD44780_putc(char a_data){
 	
 		//------------SEND 8-BIT COMMAND------------//
 	
-		sendNibble(a_data,HD44780_DATA);
+		sendByte(a_data,HD44780_DATA);
 	
 	#endif
 	
@@ -311,21 +349,21 @@ char HD44780_getc(void){
 	
 			//------------READ HIGH NIBBLE------------//
 	
-			data |= (readNibble()<<4);
+			data |= (readByte()<<4);
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= readNibble();
+			data |= readByte();
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			//------------READ HIGH NIBBLE------------//
 	
-			data |= readNibble();
+			data |= readByte();
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= (readNibble()>>4);
+			data |= (readByte()>>4);
 	
 		#endif
 	
@@ -333,7 +371,7 @@ char HD44780_getc(void){
 	
 		//------------READ 8-BIT DATA------------//
 	
-		data |= readNibble();
+		data |= readByte();
 	
 	#endif
 
@@ -348,26 +386,26 @@ static void resetDisplay(void){
 	
 			/*------------RESET THE HD44780------------*/
 	
-			sendNibble(0x03,HD44780_INSTRUCTION);
+			sendByte(0x03,HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble(0x03,HD44780_INSTRUCTION);
+			sendByte(0x03,HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble(0x03,HD44780_INSTRUCTION);
+			sendByte(0x03,HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble(0x02,HD44780_INSTRUCTION);
+			sendByte(0x02,HD44780_INSTRUCTION);
 			DELAY_MS(1);
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			/*------------RESET THE HD44780------------*/
 	
-			sendNibble((0x03<<4),HD44780_INSTRUCTION);
+			sendByte((0x03<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble((0x03<<4),HD44780_INSTRUCTION);
+			sendByte((0x03<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble((0x03<<4),HD44780_INSTRUCTION);
+			sendByte((0x03<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendNibble((0x02<<4),HD44780_INSTRUCTION);
+			sendByte((0x02<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
 
 		#endif
@@ -376,20 +414,20 @@ static void resetDisplay(void){
 	
 		/*------------RESET THE HD44780------------*/
 	
-		sendNibble(0x03,HD44780_INSTRUCTION);
+		sendByte(0x03,HD44780_INSTRUCTION);
 		DELAY_MS(1);
-		sendNibble(0x03,HD44780_INSTRUCTION);
+		sendByte(0x03,HD44780_INSTRUCTION);
 		DELAY_MS(1);
-		sendNibble(0x03,HD44780_INSTRUCTION);
+		sendByte(0x03,HD44780_INSTRUCTION);
 		DELAY_MS(1);
 	
 	#endif
 	
 }
 
-static void sendNibble(ubyte_t a_data, hd44780transmissiontype_t a_transType){
+static void sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType){
 	
-	//------------SEND A NIBBLE------------//
+	/*------------SEND A BYTE------------*/
 	
 	if(a_transType == HD44780_INSTRUCTION){
 		
@@ -418,7 +456,7 @@ static void sendNibble(ubyte_t a_data, hd44780transmissiontype_t a_transType){
 	
 }
 
-static ubyte_t readNibble(void){
+static ubyte_t readByte(void){
 	
 	#ifdef HD44780_RW_PIN
 	

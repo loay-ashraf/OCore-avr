@@ -8,14 +8,14 @@
 /*------------INCLUDE DRIVER HEADER FILE------------*/
 
  #include "glcd.h"
- #include "glcd_macros.h"
+ #include "hal/ecu/glcd/common/glcd_macros.h"
  #include <math.h>
  #include <stdlib.h>
  #include <stdio.h>
 
- void GLCD_init(void){
+ void GLCD_init(bool_t a_backlightON){
 	
-	GLCD_INIT();
+	GLCD_INIT(a_backlightON);
 	
  }
 
@@ -29,6 +29,12 @@
 	
 	GLCD_CLEAR_DISLAY;
 
+ }
+ 
+ void GLCD_configBacklight(bool_t a_backlightON){
+	 
+	 GLCD_CONFIG_BACKLIGHT(a_backlightON);
+	 
  }
 
  void GLCD_setCursorPosition(uint8_t a_x, uint8_t a_y){

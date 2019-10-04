@@ -30,9 +30,10 @@
 
 typedef enum{HD44780_INSTRUCTION,HD44780_DATA}hd44780transmissiontype_t;
 
-void HD44780_init(bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight);
+void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight);
 void HD44780_sendInstruction(ubyte_t a_instruction);
 void HD44780_clearDisplay(void);
+void HD44780_configBacklight(bool_t a_backlightON);
 void HD44780_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking);
 void HD44780_configTextDirection(bool_t a_leftToRight);
 void HD44780_setCursorPosition(uint8_t a_row, uint8_t a_col);

@@ -13,9 +13,10 @@
 
 #if defined(ST7920_H_)
 
-	#define GLCD_INIT()													ST7920_init()
+	#define GLCD_INIT(BL_ON)											ST7920_init(BL_ON)
 	#define GLCD_SEND_INSTRUCTION(INST)									ST7920_sendInstruction(INST)
 	#define GLCD_CLEAR_DISLAY											ST7920_clearDisplay()
+	#define GLCD_CONFIG_BACKLIGHT(BL_ON)								ST7920_configBacklight(BL_ON)
 	#define GLCD_SET_CURSOR_POSITION(X,Y)								ST7920_setCursorPosition(X,Y)
 	#define GLCD_SET_FONT(FONT)											ST7920_setFont(FONT)
 	#define GLCD_SCROLL_DISPLAY(DIR)									ST7920_scrollDisplay(DIR)

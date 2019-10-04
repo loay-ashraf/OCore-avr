@@ -12,7 +12,7 @@ void ex_lcd_scrollDisplay(void){
 	
 	uint8_t counter;		/* general purpose counter */
 	
-	LCD_init(TRUE,TRUE,TRUE);	/* initialize LCD interface */
+	LCD_init(TRUE,TRUE,TRUE,TRUE);	/* initialize LCD interface */
 	
 	/***************************************/
 	/* print text to be scrolled on screen */

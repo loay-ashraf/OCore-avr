@@ -12,11 +12,15 @@
 
 void ex_adc_lm35(void){
 	
-	uint16_t adcValue;
+	uint16_t adcValue;		// variable to hold adc value
+	
+	/*************************************/
+	/* initialize LCD and ADC interfaces */
+	/*************************************/
 	
 	adc_config(AD_DIV16,AD_AVCC,FALSE);
 	adc_enable();
-	LCD_init(FALSE,FALSE,TRUE);
+	LCD_init(TRUE,FALSE,FALSE,TRUE);
 	
 	while(1){		/* loop forever */
 		

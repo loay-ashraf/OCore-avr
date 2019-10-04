@@ -11,7 +11,7 @@
 //------------INCLUDE REQUIRED HEADER FILES------------//
 
  #include "lcd.h"
- #include "lcd_macros.h"
+ #include "hal/ecu/lcd/common/lcd_macros.h"
  #include <stdlib.h>
  #include <stdio.h>
  #include <string.h>
@@ -37,20 +37,20 @@ static void putBuffer(void);
 static void clearBuffer(void);
 static void setFrameBufferUpdateFlag(void);
 static void clearFrameBufferUpdateFlag(void);
-static void shiftBuffer(lcddirection_t a_direction, ubyte_t a_offset, ubyte_t a_width);
-static void scrollBuffer(lcddirection_t a_direction, ubyte_t a_offset, ubyte_t a_width);
+static void shiftBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width);
+static void scrollBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width);
 static void resetCursorConfig(void);
 static void saveCursorConfig(bool_t a_cursorVisible, bool_t a_cursorBlinking);
 static void restoreCursorConfig(void);
 static void resetTextDirectionConfig(void);
 static void saveTextDirectionConfig(bool_t a_leftToRight);
 static void restoreTextDirectionConfig(void);
-static void saveCursorPosition(ubyte_t a_row, ubyte_t a_column);	
-static void restoreCursorPosition(lcddirection_t a_dir, ubyte_t a_offset, ubyte_t a_width);
+static void saveCursorPosition(uint8_t a_row, uint8_t a_column);	
+static void restoreCursorPosition(lcddirection_t a_dir, uint8_t a_offset, uint8_t a_width);
 static void setCursorPositionUpdateFlag(void);
 static void clearCursorPositionUpdateFlag(void);
 
- void LCD_init(bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
+ void LCD_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
 	 
 	initBuffer();		// initialize frame buffer 
 	
@@ -60,7 +60,7 @@ static void clearCursorPositionUpdateFlag(void);
 	setCursorPositionUpdateFlag();
 	setFrameBufferUpdateFlag();
 	
-	LCD_INIT(a_cursorVisible,a_cursorBlinking,a_leftToRight);
+	LCD_INIT(a_backlightON,a_cursorVisible,a_cursorBlinking,a_leftToRight);
 	
  }
 
@@ -70,7 +70,7 @@ static void clearCursorPositionUpdateFlag(void);
    
  }
  
- void LCD_clearUnit(ubyte_t a_row, ubyte_t a_column){
+ void LCD_clearUnit(uint8_t a_row, uint8_t a_column){
 	
 	resetCursorConfig();						// turn off cursor
 	
@@ -84,7 +84,7 @@ static void clearCursorPositionUpdateFlag(void);
 	
  }
  
- void LCD_clearRow(ubyte_t a_row, ubyte_t a_offset){
+ void LCD_clearRow(uint8_t a_row, uint8_t a_offset){
 	 
 	ubyte_t i;
 	
@@ -104,7 +104,7 @@ static void clearCursorPositionUpdateFlag(void);
 	
  }
  
- void LCD_clearColumn(ubyte_t a_column, ubyte_t a_offset){
+ void LCD_clearColumn(uint8_t a_column, uint8_t a_offset){
 
 	ubyte_t i;
 	
@@ -131,6 +131,12 @@ static void clearCursorPositionUpdateFlag(void);
 	 
 	saveCursorPosition(0,0);					// default cursor position
 
+ }
+ 
+ void LCD_configBacklight(bool_t a_backlightON){
+	
+	LCD_CONFIG_BACKLIGHT(a_backlightON); 
+	 
  }
  
  void LCD_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking){
@@ -181,7 +187,7 @@ static void clearCursorPositionUpdateFlag(void);
 			
  }
 
- void LCD_shiftDisplay(lcddirection_t a_dir, ubyte_t a_offset, ubyte_t a_width){
+ void LCD_shiftDisplay(lcddirection_t a_dir, uint8_t a_offset, uint8_t a_width){
 		 
 	switch(a_dir){
 		 
@@ -231,7 +237,7 @@ static void clearCursorPositionUpdateFlag(void);
 	}
  }
 
- void LCD_scrollDisplay(lcddirection_t a_dir, ubyte_t a_offset, ubyte_t a_width){
+ void LCD_scrollDisplay(lcddirection_t a_dir, uint8_t a_offset, uint8_t a_width){
 	 
 	switch(a_dir){
 		 
@@ -450,7 +456,7 @@ static void clearCursorPositionUpdateFlag(void);
 	 
  }
  
- void shiftBuffer(lcddirection_t a_direction, ubyte_t a_offset, ubyte_t a_width){
+ void shiftBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width){
 	  
 	ubyte_t rows;
 	  
@@ -517,7 +523,7 @@ static void clearCursorPositionUpdateFlag(void);
     }
  }
  
- void scrollBuffer(lcddirection_t a_direction, ubyte_t a_offset, ubyte_t a_width){
+ void scrollBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width){
 	 
 	ubyte_t rows = 0;
 	
@@ -625,14 +631,14 @@ static void clearCursorPositionUpdateFlag(void);
 	  
   }
  
- static void saveCursorPosition(ubyte_t a_row, ubyte_t a_column){
+ static void saveCursorPosition(uint8_t a_row, uint8_t a_column){
 	 
 	g_LCD.cursorPosition.row = a_row;
 	g_LCD.cursorPosition.column = a_column;
 	 
  }
  
- static void restoreCursorPosition(lcddirection_t a_dir, ubyte_t a_offset, ubyte_t a_width){
+ void restoreCursorPosition(lcddirection_t a_dir, uint8_t a_offset, uint8_t a_width){
 	
 	switch(a_dir){
 		
