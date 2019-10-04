@@ -73,6 +73,10 @@ The mcu layer contains:
     │   │   │   └───driver
     │   │   │       └───HD44780
     │   │   ├───rtcc
+    │   │   │   ├───api
+    │   │   │   ├───common     
+    │   │   │   └───driver
+    │   │   │       └───DS3231    
     │   │   └───servo
     │   └───mcu
     │       ├───boot
