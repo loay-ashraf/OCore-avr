@@ -1,13 +1,13 @@
 /**********************************************************************
 *
-* File:			adc.c
+* File:         adc.c
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 12/01/2018
 *
 * Description:	contains function definitions for analog-digital
-*				converter module.
+*               converter module.
 *
 **********************************************************************/
 
@@ -23,13 +23,13 @@
  
 /**********************************************************************
 *
-* Variable:	   g_adcISRCallback
+* Variable:    g_adcISRCallback
 *
 * Description: Holds address of interrupt callback function.
 *
 * Notes:
 *
-* Scope:	   adc.c.
+* Scope:       adc.c.
 *
 **********************************************************************/
  
@@ -39,13 +39,13 @@ static ISRcallback_t g_adcISRCallback;
 
 /**********************************************************************
 *
-* Function:	   adc_config
+* Function:    adc_config
 *
 * Description: Configures the analog-digital converter module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
 
@@ -60,13 +60,13 @@ void adc_config(adcprescaler_t a_adcPrescaler, adcreference_t a_adcReference, bo
  
 /**********************************************************************
 *
-* Function:	   adc_enable
+* Function:    adc_enable
 *
 * Description: Enables the analog-digital converter module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  
@@ -78,13 +78,13 @@ void adc_enable(void){
  
 /**********************************************************************
 *
-* Function:	   adc_disable
+* Function:    adc_disable
 *
 * Description: Disables the analog-digital converter module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  
@@ -96,14 +96,14 @@ void adc_disable(void){
  
 /**********************************************************************
 *
-* Function:	   adc_read
+* Function:    adc_read
 *
 * Description: Initiates analog-digital converter module 
-*			   conversion and reads back the result.
+*              conversion and reads back the result.
 *
 * Notes:
 *
-* Returns:	   value stored in ADC register.
+* Returns:     value stored in ADC register.
 *
 **********************************************************************/
 
@@ -129,14 +129,14 @@ uint16_t adc_read(adcchannel_t a_adcChannel){
  
 /**********************************************************************
 *
-* Function:	   adc_enableAutoTrigger
+* Function:    adc_enableAutoTrigger
 *
 * Description: Enables auto triggering of analog-digital converter 
-*			   module.
+*              module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  
@@ -151,14 +151,14 @@ void adc_enableAutoTrigger(adcautotriggersource_t a_adcAutoTriggerSource){
  
 /**********************************************************************
 *
-* Function:	   adc_enableAutoTrigger
+* Function:    adc_enableAutoTrigger
 *
 * Description: Disables auto triggering of analog-digital 
-*			   converter module.
+*              converter module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  
@@ -170,14 +170,14 @@ void adc_disableAutoTrigger(void){
  
 /**********************************************************************
 *
-* Function:	   adc_enableInterrupt
+* Function:    adc_enableInterrupt
 *
 * Description: Enables interrupt request for analog-digital 
-*			   converter module.
+*              converter module.
 *
-* Notes:	   This functions enables global interrupts if disabled.
+* Notes:       This functions enables global interrupts if disabled.
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  
@@ -191,14 +191,14 @@ void adc_enableInterrupt(void){
  
 /**********************************************************************
 *
-* Function:	   adc_disableInterrupt
+* Function:    adc_disableInterrupt
 *
 * Description: Disables interrupt request for analog-digital 
-*			   converter module.
+*              converter module.
 *
-* Notes:	   This functions doesn't disable global interrupts.
+* Notes:       This functions doesn't disable global interrupts.
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  
@@ -210,14 +210,14 @@ void adc_disableInterrupt(void){
  
 /**********************************************************************
 *
-* Function:	   adc_setISRCallback
+* Function:    adc_setISRCallback
 *
 * Description: Sets interrupt callback function for analog-digital 
-*			   converter module.
+*              converter module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  

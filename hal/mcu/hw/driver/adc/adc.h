@@ -1,14 +1,14 @@
 /**********************************************************************
 *
-* File:			adc.h
+* File:         adc.h
 *
 * Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 12/01/2018
 *
 * Description:	contains definitions, configurations, typedefs
-*				and function declarations for analog-digital
-*				converter module.
+*               and function declarations for analog-digital
+*               converter module.
 *
 **********************************************************************/
 

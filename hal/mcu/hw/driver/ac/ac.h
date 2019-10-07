@@ -1,13 +1,13 @@
 /**********************************************************************
 *
-* File:			ac.h
+* File:         ac.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 04/09/2019
 *
-* Description:	contains definitions, configurations, typedefs
-*				and function declarations for analog comparator module.
+* Description:  contains definitions, configurations, typedefs
+*               and function declarations for analog comparator module.
 *
 **********************************************************************/
 

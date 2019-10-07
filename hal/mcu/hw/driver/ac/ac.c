@@ -1,6 +1,6 @@
 /**********************************************************************
 *
-* File:		    ac.c
+* File:         ac.c
 *
 * Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
 *
@@ -22,13 +22,13 @@
  
 /**********************************************************************
 *
-* Variable:	   g_adcISRCallback
+* Variable:    g_acISRCallback
 *
 * Description: Holds address of interrupt callback function.
 *
 * Notes:
 *
-* Scope:	   ac.c.
+* Scope:       ac.c.
 *
 **********************************************************************/
  
@@ -38,13 +38,13 @@ static ISRcallback_t g_acISRCallback;
 
 /**********************************************************************
 *
-* Function:	   ac_enable
+* Function:    ac_enable
 *
 * Description: Enables the analog comparator module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
 
@@ -58,13 +58,13 @@ void ac_enable(void){
 
 /**********************************************************************
 *
-* Function:	   ac_disable
+* Function:    ac_disable
 *
 * Description: Disables the analog comparator module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
 
@@ -76,10 +76,10 @@ void ac_disable(void){
 
 /**********************************************************************
 *
-* Function:	   ac_enableBandGap
+* Function:    ac_enableBandGap
 *
 * Description: Enables band gap feature for analog comparator 
-*			   module.
+*              module.
 *
 * Notes:
 *
@@ -98,7 +98,7 @@ void ac_enableBandGap(void){
 * Function:    ac_disableBandGap
 *
 * Description: Disables band gap feature for analog comparator 
-*			   module.
+*              module.
 *
 * Notes:
 *
@@ -117,9 +117,9 @@ void ac_disableBandGap(void){
 * Function:    ac_enableInterrupt
 *
 * Description: Enables interrupt request for analog comparator 
-*			   module.
+*              module.
 *
-* Notes:
+* Notes:       This functions enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -127,7 +127,7 @@ void ac_disableBandGap(void){
 
 void ac_enableInterrupt(void){
 	
-	 if(!RBI(SREG,I_BIT))
+	if(!RBI(SREG,I_BIT))
 		ENABLE_GLOBAL_INTERRUPTS;
 	SBI(ACSR,ACIE);	
 	
@@ -138,9 +138,9 @@ void ac_enableInterrupt(void){
 * Function:    ac_disableInterrupt
 *
 * Description: Disables interrupt request for analog comparator 
-*			   module.
+*              module.
 *
-* Notes:
+* Notes:       This functions doesn't disable global interrupts.
 *
 * Returns:     None.
 *
@@ -157,7 +157,7 @@ void ac_disableInterrupt(void){
 * Function:    ac_setInterruptMode
 *
 * Description: Sets interrupt trigger mode for analog comparator 
-*			   module.
+*              module.
 *
 * Notes:
 *
@@ -175,14 +175,14 @@ void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode){
 
 /**********************************************************************
 *
-* Function:	   ac_setISRCallback
+* Function:    ac_setISRCallback
 *
 * Description: Sets interrupt callback function for analog comparator 
-*			   module.
+*              module.
 *
 * Notes:
 *
-* Returns:	   None.
+* Returns:     None.
 *
 **********************************************************************/
  
