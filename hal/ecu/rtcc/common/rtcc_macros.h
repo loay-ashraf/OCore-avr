@@ -5,11 +5,14 @@
  *  Author: Loay Ashraf
  */ 
 
-
 #ifndef RTCC_MACROS_H_
 #define RTCC_MACROS_H_
 
+#if (RTCC_CONTROLLER == RTCC_DS3231)
+
 #include "hal/ecu/rtcc/driver/DS3231/DS3231.h"
+
+#endif
 
 #if defined(DS3231_H_)
 

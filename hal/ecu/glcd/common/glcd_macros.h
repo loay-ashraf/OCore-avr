@@ -9,7 +9,11 @@
 #ifndef GLCD_MACROS_H_
 #define GLCD_MACROS_H_
 
+#if (GLCD_CONTROLLER == GLCD_ST7920)
+
 #include "hal/ecu/glcd/driver/ST7920/ST7920.h"
+
+#endif
 
 #if defined(ST7920_H_)
 

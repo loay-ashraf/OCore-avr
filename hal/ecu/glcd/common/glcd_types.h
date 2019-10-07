@@ -9,7 +9,6 @@
 #ifndef GLCD_TYPES_H_
 #define GLCD_TYPES_H_
 
-#include "glcd_config.h"
 #include "hal/mcu/sys/std_types.h"
 
 /*------------TYPEDEF SCROLL DIRECTION AND FONT ENUMS------------*/

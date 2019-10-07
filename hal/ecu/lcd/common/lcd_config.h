@@ -5,9 +5,14 @@
  *  Author: Loay Ashraf
  */ 
 
-
 #ifndef LCD_CONFIG_H_
 #define LCD_CONFIG_H_
+
+#include "hal/ecu/lcd/driver/lcd_driver.h"
+
+/*------------DEFINE LCD CONTROLLER------------*/
+
+#define LCD_CONTROLLER		LCD_HD44780
 
 /*------------DEFINE LCD DIMENSIONS------------*/
 

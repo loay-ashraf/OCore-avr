@@ -8,6 +8,14 @@
 #ifndef RTCC_CONFIG_H_
 #define RTCC_CONFIG_H_
 
+#include "hal/ecu/rtcc/driver/rtcc_driver.h"
+
+/*------------DEFINE RTCC CONTROLLER------------*/
+
+#define RTCC_CONTROLLER		RTCC_DS3231
+
+/*------------DEFINE RTCC MILLENNIUM AND CLOCK FORMAT------------*/
+
 #define RTCC_MILLENNIUM		2000
 #define RTCC_CLOCK_FORMAT	"%02d:%02d:%02d %s"
 

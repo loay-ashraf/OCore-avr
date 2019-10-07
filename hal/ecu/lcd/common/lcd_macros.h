@@ -9,7 +9,11 @@
 #ifndef LCD_MACROS_H_
 #define LCD_MACROS_H_
 
+#if (LCD_CONTROLLER == LCD_HD44780)
+
 #include "hal/ecu/lcd/driver/HD44780/HD44780.h"
+
+#endif
 
 #if defined(HD44780_H_)
 	

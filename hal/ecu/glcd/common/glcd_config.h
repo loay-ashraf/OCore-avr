@@ -8,6 +8,12 @@
 #ifndef GLCD_CONFIG_H_
 #define GLCD_CONFIG_H_
 
+#include "hal/ecu/glcd/driver/glcd_driver.h"
+
+/*------------DEFINE GLCD CONTROLLER------------*/
+
+#define GLCD_CONTROLLER		GLCD_ST7920
+
 /*------------DEFINE GLCD RESOLUTION------------*/
 
 #define GLCD_X_PIXELS		128
