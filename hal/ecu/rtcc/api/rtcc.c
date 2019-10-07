@@ -6,7 +6,6 @@
  */ 
 
 #include "rtcc.h"
-#include "hal/ecu/rtcc/common/rtcc_config.h"
 #include "hal/ecu/rtcc/common/rtcc_macros.h"
 #include <stdio.h>
 

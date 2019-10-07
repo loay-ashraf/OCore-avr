@@ -9,6 +9,7 @@
 #ifndef RTCC_H_
 #define RTCC_H_
 
+#include "hal/ecu/rtcc/common/rtcc_config.h"
 #include "hal/ecu/rtcc/common/rtcc_types.h"
 	
 void RTCC_init(void);
