@@ -1,56 +1,113 @@
-/** @file adc.c
- *  @brief includes function definitions
- *  @author Loay Ashraf
- *	@version 1.0.0
- *  @pre include ADC.h
- *  @bug no known bugs
- *  @see adc.h
- */
+/**********************************************************************
+*
+* File:			adc.c
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 12/01/2018
+*
+* Description:	contains function definitions for analog-digital
+*				converter module.
+*
+**********************************************************************/
 
-//------------INCLUDE DRIVER HEADER FILE------------//
+/*------------------------------INCLUDES-----------------------------*/
 
- #include "adc.h"
- #include "hal/mcu/hw/driver/gpio/gpio.h"
- #include "hal/mcu/io/io_macros.h"
- #include "hal/mcu/sys/delay.h"
- #include "hal/mcu/sys/interrupt.h"
+#include "adc.h"
+#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/mcu/io/io_macros.h"
+#include "hal/mcu/sys/delay.h"
+#include "hal/mcu/sys/interrupt.h"
  
- static ISRcallback_t g_adcISRCallback;
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+ 
+/**********************************************************************
+*
+* Variable:	   g_adcISRCallback
+*
+* Description: Holds address of interrupt callback function.
+*
+* Notes:
+*
+* Scope:	   adc.c.
+*
+**********************************************************************/
+ 
+static ISRcallback_t g_adcISRCallback;
 
-/** @brief initializes the ADC in single ended conversion mode
- *  @param Vref the reference voltage (AREF, AVCC or internal).
- *  @param Left_Adj result is left adjusted or right adjusted (FALSE for right, TRUE for left).
- *  @param Prescaler prescaler value for the ADC.
- *  @return none.
- */
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
 
- void adc_config(adcprescaler_t a_adcPrescaler, adcreference_t a_adcReference, bool_t a_leftAdjust){
+/**********************************************************************
+*
+* Function:	   adc_config
+*
+* Description: Configures the analog-digital converter module.
+*
+* Notes:
+*
+* Returns:	   None.
+*
+**********************************************************************/
+
+void adc_config(adcprescaler_t a_adcPrescaler, adcreference_t a_adcReference, bool_t a_leftAdjust){
 
 	SRI(ADMUX,(a_adcReference<<6));		// set the reference voltage bits
 	SRI(ADMUX,(a_leftAdjust<<5));		// set data adjustment bits
 
 	SRI(ADCSRA,a_adcPrescaler);			// set prescaler bits
 
- }
+}
  
- void adc_enable(void){
-	 
-	 SBI(ADCSRA,ADEN);					// enable the ADC
-	 
- }
+/**********************************************************************
+*
+* Function:	   adc_enable
+*
+* Description: Enables the analog-digital converter module.
+*
+* Notes:
+*
+* Returns:	   None.
+*
+**********************************************************************/
  
- void adc_disable(void){
+void adc_enable(void){
+	 
+	SBI(ADCSRA,ADEN);					// enable the ADC
+	 
+}
+ 
+/**********************************************************************
+*
+* Function:	   adc_disable
+*
+* Description: Disables the analog-digital converter module.
+*
+* Notes:
+*
+* Returns:	   None.
+*
+**********************************************************************/
+ 
+void adc_disable(void){
 	
 	CBI(ADCSRA,ADEN);					// disable the ADC
 	 
- }
+}
  
-/** @brief triggers instant conversion for the selected channel
- *  @param Channel the selected channel for the conversion.
- *  @return the conversion result (8-bit or 10-bit value).
- */
+/**********************************************************************
+*
+* Function:	   adc_read
+*
+* Description: Initiates analog-digital converter module 
+*			   conversion and reads back the result.
+*
+* Notes:
+*
+* Returns:	   value stored in ADC register.
+*
+**********************************************************************/
 
- uint16_t adc_read(adcchannel_t a_adcChannel){
+uint16_t adc_read(adcchannel_t a_adcChannel){
     
 	gpio_setPinDirection((ADC_PORT+a_adcChannel),IO_INPUT);
 	
@@ -68,45 +125,112 @@
 	DELAY_MS(1);
 	return ADC;							// return the value in the ADC Data register
 
- }
+}
  
- void adc_enableAutoTrigger(adcautotriggersource_t a_adcAutoTriggerSource){
-	 
-	 CRI(SFIOR,0xE0);
-	 SRI(SFIOR,a_adcAutoTriggerSource);
-	 
-	 SBI(ADCSRA,ADATE);
-	 
- }
+/**********************************************************************
+*
+* Function:	   adc_enableAutoTrigger
+*
+* Description: Enables auto triggering of analog-digital converter 
+*			   module.
+*
+* Notes:
+*
+* Returns:	   None.
+*
+**********************************************************************/
  
- void adc_disableAutoTrigger(void){
+void adc_enableAutoTrigger(adcautotriggersource_t a_adcAutoTriggerSource){
 	 
-	 CBI(ADCSRA,ADATE);
+	CRI(SFIOR,0xE0);
+	SRI(SFIOR,a_adcAutoTriggerSource);
 	 
- }
+	SBI(ADCSRA,ADATE);
+	 
+}
  
- void adc_enableInterrupt(void){
+/**********************************************************************
+*
+* Function:	   adc_enableAutoTrigger
+*
+* Description: Disables auto triggering of analog-digital 
+*			   converter module.
+*
+* Notes:
+*
+* Returns:	   None.
+*
+**********************************************************************/
+ 
+void adc_disableAutoTrigger(void){
 	 
-	 if(!RBI(SREG,I_BIT))
+	CBI(ADCSRA,ADATE);
+	 
+}
+ 
+/**********************************************************************
+*
+* Function:	   adc_enableInterrupt
+*
+* Description: Enables interrupt request for analog-digital 
+*			   converter module.
+*
+* Notes:	   This functions enables global interrupts if disabled.
+*
+* Returns:	   None.
+*
+**********************************************************************/
+ 
+void adc_enableInterrupt(void){
+	 
+	if(!RBI(SREG,I_BIT))
 		ENABLE_GLOBAL_INTERRUPTS;
-	 SBI(ADCSRA,ADIE);
+	SBI(ADCSRA,ADIE);
 	 
- }
+}
  
- void adc_disableInterrupt(void){
-	 
-	 CBI(ADCSRA,ADIE);
-	 
- }
+/**********************************************************************
+*
+* Function:	   adc_disableInterrupt
+*
+* Description: Disables interrupt request for analog-digital 
+*			   converter module.
+*
+* Notes:	   This functions doesn't disable global interrupts.
+*
+* Returns:	   None.
+*
+**********************************************************************/
  
- void adc_setISRCallback(ISRcallback_t a_ISRCallback){
+void adc_disableInterrupt(void){
+	 
+	CBI(ADCSRA,ADIE);
+	 
+}
+ 
+/**********************************************************************
+*
+* Function:	   adc_setISRCallback
+*
+* Description: Sets interrupt callback function for analog-digital 
+*			   converter module.
+*
+* Notes:
+*
+* Returns:	   None.
+*
+**********************************************************************/
+ 
+void adc_setISRCallback(ISRcallback_t a_ISRCallback){
 	 
 	 g_adcISRCallback = a_ISRCallback;
 	 
- }
+}
  
- ISR(ADC_vect){
+/*---------------------------------ISR-------------------------------*/
+ 
+ISR(ADC_vect){
 	 
-	 g_adcISRCallback();
+	g_adcISRCallback();
 	 
- }
+}
