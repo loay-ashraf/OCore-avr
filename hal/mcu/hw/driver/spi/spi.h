@@ -1,19 +1,30 @@
-/*
- * spi.h
- *
- * Created: 05/09/2019 12:25:46 AM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         spi.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/09/2019
+*
+* Description:	contains typedefs and function declarations for 
+*               serial peripheral interface module.
+*
+**********************************************************************/
 
 #ifndef SPI_H_
 #define SPI_H_
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "spi_config.h"
 #include "hal/mcu/io/io_defs.h"
 #include "hal/mcu/sys/std_types.h"
 
+/*--------------------------------ENUMS------------------------------*/
+
 typedef enum{SP_SLAVE0,SP_SLAVE1,SP_SLAVE2,SP_SLAVE3}spislave_t;
+
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 					
 void spi_enable(void);
 void spi_disable(void);

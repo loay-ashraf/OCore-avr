@@ -1,15 +1,50 @@
-/*
- * gpio.c
- *
- * Created: 3/31/2019 9:18:23 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         gpio.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 31/03/2019
+*
+* Description:	contains function definitions for gpio module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "gpio.h"
 #include "hal/mcu/io/io_macros.h"
 #include "hal/mcu/sys/interrupt.h"
 
-static ISRcallback_t g_interruptHandler[3];
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_gpioISRCallback
+*
+* Description: Holds addresses of interrupt callback functions.
+*
+* Notes:
+*
+* Scope:       gpio.c.
+*
+**********************************************************************/
+
+static ISRcallback_t g_gpioISRCallback[3];
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    gpio_setPinDirection
+*
+* Description: Sets data direction for specific pin.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void gpio_setPinDirection(pin_t a_pin, datadirection_t a_dataDirection){
 	
@@ -44,6 +79,18 @@ void gpio_setPinDirection(pin_t a_pin, datadirection_t a_dataDirection){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    gpio_setPortDirection
+*
+* Description: Sets data direction for specific port.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void gpio_setPortDirection(port_t a_port, portmask_t a_portMask, datadirection_t a_dataDirection){
 	
@@ -85,6 +132,18 @@ void gpio_setPortDirection(port_t a_port, portmask_t a_portMask, datadirection_t
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_enablePinPullUp
+*
+* Description: Enables internal pull-up resistors for specific pin.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_enablePinPullUp(pin_t a_pin){
 	
 	gpio_setPinDirection(a_pin,IO_INPUT);
@@ -92,12 +151,36 @@ void gpio_enablePinPullUp(pin_t a_pin){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_enablePortPullUp
+*
+* Description: Enables internal pull-up resistors for specific port.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_enablePortPullUp(port_t a_port, portmask_t a_portMask){
 	
 	gpio_setPortDirection(a_port,a_portMask,IO_INPUT);
 	gpio_setPort(a_port,a_portMask);
 	
 }
+
+/**********************************************************************
+*
+* Function:    gpio_setPin
+*
+* Description: Outputs HIGH logic level on specific pin.
+*
+* Notes:       Pin should be set as an output first.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void gpio_setPin(pin_t a_pin){
 	
@@ -112,6 +195,18 @@ void gpio_setPin(pin_t a_pin){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_clearPin
+*
+* Description: Outputs LOW logic level on specific pin.
+*
+* Notes:       Pin should be set as an output first.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_clearPin(pin_t a_pin){
 
 	if(a_pin < 8)
@@ -125,6 +220,19 @@ void gpio_clearPin(pin_t a_pin){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_togglePin
+*
+* Description: Toggles logic level on specific pin (LOW -> HIGH, 
+*              HIGH -> LOW).
+*
+* Notes:       Pin should be set as an output first.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_togglePin(pin_t a_pin){
 	
 	if(a_pin < 8)
@@ -137,6 +245,18 @@ void gpio_togglePin(pin_t a_pin){
 		TBI(PORTD,(a_pin-24));
 	
 }
+
+/**********************************************************************
+*
+* Function:    gpio_writePort
+*
+* Description: Writes specific value directly to PORTx register.
+*
+* Notes:       Port should be set as an output first.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void gpio_writePort(port_t a_port, ubyte_t a_value){
 	
@@ -158,6 +278,18 @@ void gpio_writePort(port_t a_port, ubyte_t a_value){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_setPort
+*
+* Description: Outputs HIGH logic level on specific port.
+*
+* Notes:       Port should be set as an output first.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_setPort(port_t a_port, portmask_t a_portMask){
 	
 	switch (a_port){
@@ -176,6 +308,18 @@ void gpio_setPort(port_t a_port, portmask_t a_portMask){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    gpio_clearPort
+*
+* Description: Outputs LOW logic level on specific port.
+*
+* Notes:       Port should be set as an output first.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void gpio_clearPort(port_t a_port, portmask_t a_portMask){
 	
@@ -196,6 +340,18 @@ void gpio_clearPort(port_t a_port, portmask_t a_portMask){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_readPin
+*
+* Description: Reads state of specific pin.
+*
+* Notes:       Pin should be set as an input first.
+*
+* Returns:     Pin state (HIGH or LOW).
+*
+**********************************************************************/
+
 pinstate_t gpio_readPin(pin_t a_pin){
 	
 	if(a_pin < 8)
@@ -210,6 +366,18 @@ pinstate_t gpio_readPin(pin_t a_pin){
 		return 0;
 	
 }
+
+/**********************************************************************
+*
+* Function:    gpio_readPort
+*
+* Description: Reads state of specific port.
+*
+* Notes:       Port should be set as an input first.
+*
+* Returns:     PINx register value.
+*
+**********************************************************************/
 
 ubyte_t gpio_readPort(port_t a_port){
 	
@@ -232,6 +400,18 @@ ubyte_t gpio_readPort(port_t a_port){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_enableInterrupt
+*
+* Description: Enables external interrupts (INT0,INT1,INT2).
+*
+* Notes:       This functions enables global interrupts if disabled.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_enableInterrupt(gpiointerrupt_t a_interrupt){
 	
 	if(!RBI(SREG,I_BIT))
@@ -252,6 +432,18 @@ void gpio_enableInterrupt(gpiointerrupt_t a_interrupt){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_disableInterrupt
+*
+* Description: Disables external interrupts (INT0,INT1,INT2).
+*
+* Notes:       This functions doesn't disable global interrupts.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_disableInterrupt(gpiointerrupt_t a_interrupt){
 	
 	switch(a_interrupt){
@@ -268,6 +460,19 @@ void gpio_disableInterrupt(gpiointerrupt_t a_interrupt){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    gpio_setInterruptMode
+*
+* Description: Sets interrupt trigger mode for specific external
+*              interrupt.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void gpio_setInterruptMode(gpiointerrupt_t a_interrupt, gpiointerruptmode_t a_interruptMode){
 	
@@ -341,6 +546,19 @@ void gpio_setInterruptMode(gpiointerrupt_t a_interrupt, gpiointerruptmode_t a_in
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_clearInterruptFlag
+*
+* Description: Clears interrupt flag for specific external
+*              interrupt.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_clearInterruptFlag(gpiointerrupt_t a_interrupt){
 	
 	switch(a_interrupt){
@@ -358,36 +576,51 @@ void gpio_clearInterruptFlag(gpiointerrupt_t a_interrupt){
 	
 }
 
+/**********************************************************************
+*
+* Function:    gpio_setISRCallback
+*
+* Description: Sets interrupt callback function for specific external
+*              interrupt.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void gpio_setISRCallback(gpiointerrupt_t a_interrupt, ISRcallback_t a_ISRCallback){
 	
 	switch(a_interrupt){
 		
-		case IO_INT0: g_interruptHandler[0] = a_ISRCallback;
+		case IO_INT0: g_gpioISRCallback[0] = a_ISRCallback;
 		break;
 		
-		case IO_INT1: g_interruptHandler[1] = a_ISRCallback;
+		case IO_INT1: g_gpioISRCallback[1] = a_ISRCallback;
 		break;
 		
-		case IO_INT2: g_interruptHandler[2] = a_ISRCallback;
+		case IO_INT2: g_gpioISRCallback[2] = a_ISRCallback;
 		break;
 		
 	}
 }
 
+/*---------------------------------ISR-------------------------------*/
+
 ISR(INT0_vect){
 	
-	g_interruptHandler[0]();
+	g_gpioISRCallback[0]();
 	
 }
 
 ISR(INT1_vect){
 	
-	g_interruptHandler[1]();
+	g_gpioISRCallback[1]();
 	
 }
 
 ISR(INT2_vect){
 	
-	g_interruptHandler[2]();
+	g_gpioISRCallback[2]();
 	
 }

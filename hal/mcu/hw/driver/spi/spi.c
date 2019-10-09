@@ -1,16 +1,52 @@
-/*
- * spi.c
- *
- * Created: 05/09/2019 12:25:35 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         spi.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/09/2019
+*
+* Description:	contains function definitions for serial peripheral 
+*               interface module.
+*
+**********************************************************************/ 
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "spi.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/io/io_macros.h"
 #include "hal/mcu/sys/interrupt.h"
 
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_spiISRCallback
+*
+* Description: Holds address of interrupt callback function.
+*
+* Notes:
+*
+* Scope:       spi.c.
+*
+**********************************************************************/
+
 static ISRcallback_t g_spiISRCallback;
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    spi_enable
+*
+* Description: Enables serial peripheral interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void spi_enable(void){
 	
@@ -87,11 +123,35 @@ void spi_enable(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    spi_disable
+*
+* Description: Disables serial peripheral interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void spi_disable(void){
 	
 	CBI(SPCR,SPE);
 	
 }
+
+/**********************************************************************
+*
+* Function:    spi_selectSlave
+*
+* Description: Selects a slave by pulling corresponding pin LOW.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void spi_selectSlave(spislave_t a_spiSlave){
 	
@@ -112,6 +172,18 @@ void spi_selectSlave(spislave_t a_spiSlave){
 	
 }
 
+/**********************************************************************
+*
+* Function:    spi_releaseSlave
+*
+* Description: Releases a slave by pulling corresponding pin HIGH.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void spi_releaseSlave(spislave_t a_spiSlave){
 	
 	switch (a_spiSlave){
@@ -131,6 +203,18 @@ void spi_releaseSlave(spislave_t a_spiSlave){
 	
 }
 
+/**********************************************************************
+*
+* Function:    spi_transmitByte
+*
+* Description: Transmits byte via serial peripheral interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void spi_transmitByte(ubyte_t a_byte){
 	
 	SPDR = a_byte;
@@ -138,12 +222,37 @@ void spi_transmitByte(ubyte_t a_byte){
 	
 }
 
+/**********************************************************************
+*
+* Function:    spi_receiveByte
+*
+* Description: Receives byte via serial peripheral interface module.
+*
+* Notes:
+*
+* Returns:     SPDR register value.
+*
+**********************************************************************/
+
 ubyte_t spi_receiveByte(void){
 	
 	while(!RBI(SPSR,SPIF));
 	return SPDR;
 	
 }
+
+/**********************************************************************
+*
+* Function:    spi_transreceive
+*
+* Description: Transmits and receives bytes simultaneously via
+*              serial peripheral interface module.
+*
+* Notes:
+*
+* Returns:     SPDR register value.
+*
+**********************************************************************/
 
 ubyte_t spi_transreceive(ubyte_t a_byte){
 	
@@ -153,6 +262,19 @@ ubyte_t spi_transreceive(ubyte_t a_byte){
 	
 }
 
+/**********************************************************************
+*
+* Function:    spi_enableInterrupt
+*
+* Description: Enables transfer complete interrupt request for 
+*              serial peripheral interface module.
+*
+* Notes:       This functions enables global interrupts if disabled.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void spi_enableInterrupt(void){
 	
 	if(!RBI(SREG,I_BIT))
@@ -161,17 +283,45 @@ void spi_enableInterrupt(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    spi_disableInterrupt
+*
+* Description: Disables transfer complete interrupt request for
+*              serial peripheral interface module.
+*
+* Notes:       This functions doesn't disable global interrupts.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void spi_disableInterrupt(void){
 	
 	CBI(SPCR,SPIE);
 	
 }
 
+/**********************************************************************
+*
+* Function:    spi_setISRCallback
+*
+* Description: Sets transfer complete interrupt callback function 
+*              for serial peripheral interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void spi_setISRCallback(ISRcallback_t a_spiISRCallback){
 	
 	g_spiISRCallback = a_spiISRCallback;
 	
 }
+
+/*---------------------------------ISR-------------------------------*/
 
 ISR(SPI_STC_vect){
 	

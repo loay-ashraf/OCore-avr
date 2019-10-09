@@ -1,13 +1,20 @@
-/*
- * spi_config.h
- *
- * Created: 05/09/2019 02:41:39 AM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         spi_config.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/09/2019
+*
+* Description:	contains definitions and configurations for 
+*               serial peripheral interface module.
+*
+**********************************************************************/
 
 #ifndef SPI_CONFIG_H_
 #define SPI_CONFIG_H_
+
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define SPI_MOSI_PIN	PB5_M
 #define SPI_MISO_PIN	PB6_M
@@ -20,9 +27,9 @@
 #define SPI_LSB_FRST	0
 #define SPI_DATA_MODE	3
 
-/************************************************************************/
-/* comment section if configured as slave                               */
-/************************************************************************/
+/******************************************/
+/* comment section if configured as slave */
+/******************************************/
 
 #define SPI_SLAVE0_PIN	PD0_M
 #define SPI_SLAVE1_PIN	PD1_M

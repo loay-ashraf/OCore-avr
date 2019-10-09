@@ -1,16 +1,52 @@
-/*
- * timer.c
- *
- * Created: 5/16/2019 4:36:36 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         timer.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 16/05/2019
+*
+* Description:	contains function definitions for 8-bit timer
+*               interface module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "timer.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/io/io_macros.h"
 #include "hal/mcu/sys/interrupt.h"
 
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_timerISRCallback
+*
+* Description: Holds addresses of interrupt callback functions.
+*
+* Notes:
+*
+* Scope:       timer.c.
+*
+**********************************************************************/
+
 static ISRcallback_t g_timerISRCallback[4];
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    timer_start
+*
+* Description: Starts 8-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void timer_start(timer_t a_timer,timerprescaler_t a_timerPrescaler){
 	
@@ -45,6 +81,18 @@ void timer_start(timer_t a_timer,timerprescaler_t a_timerPrescaler){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer_stop
+*
+* Description: Stops 8-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer_stop(timer_t a_timer){
 	
 	switch (a_timer){
@@ -68,6 +116,18 @@ void timer_stop(timer_t a_timer){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer_setMode
+*
+* Description: Sets operation mode for 8-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void timer_setMode(timer_t a_timer, timermode_t a_timerMode){
 	
@@ -94,6 +154,19 @@ void timer_setMode(timer_t a_timer, timermode_t a_timerMode){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer_setOCMode
+*
+* Description: Sets output compare pin operation mode for 
+*              8-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void timer_setOCMode(timer_t a_timer, timerocmode_t a_timerocmode){
 	
@@ -125,6 +198,19 @@ void timer_setOCMode(timer_t a_timer, timerocmode_t a_timerocmode){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer_setOCR
+*
+* Description: Sets output compare register value for
+*              8-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer_setOCR(timer_t a_timer, uint8_t a_ocr){
 	
 	switch (a_timer){
@@ -149,6 +235,18 @@ void timer_setOCR(timer_t a_timer, uint8_t a_ocr){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer_getTCNT
+*
+* Description: Gets counter value for 8-bit timer module.
+*
+* Notes:
+*
+* Returns:     TCNTx register value.
+*
+**********************************************************************/
+
 uint8_t timer_getTCNT(timer_t a_timer){
 	
 	switch (a_timer){
@@ -172,6 +270,19 @@ uint8_t timer_getTCNT(timer_t a_timer){
 		
 	}
 }
+
+/**********************************************************************
+*
+* Function:    timer_checkOverflow
+*
+* Description: Checks if counter overflow has occurred for 
+*              8-bit timer module.
+*
+* Notes:
+*
+* Returns:     Boolean value (TRUE or FALSE).
+*
+**********************************************************************/
 
 bool_t timer_checkOverflow(timer_t a_timer){
 	
@@ -216,6 +327,18 @@ bool_t timer_checkOverflow(timer_t a_timer){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer_enableInterrupt
+*
+* Description: Enables interrupt request for 8-bit timer module.
+*
+* Notes:       This functions enables global interrupts if disabled.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer_enableInterrupt(timer_t a_timer, timerinterrupt_t a_timerInterrupt){
 	
 	if(!RBI(SREG,I_BIT))
@@ -247,6 +370,18 @@ void timer_enableInterrupt(timer_t a_timer, timerinterrupt_t a_timerInterrupt){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer_disableInterrupt
+*
+* Description: Disables interrupt request for 8-bit timer module.
+*
+* Notes:       This functions doesn't disable global interrupts.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer_disableInterrupt(timer_t a_timer, timerinterrupt_t a_timerInterrupt){
 	
 	switch (a_timer){
@@ -271,6 +406,19 @@ void timer_disableInterrupt(timer_t a_timer, timerinterrupt_t a_timerInterrupt){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer_setISRCallback
+*
+* Description: Sets interrupt callback function for 8-bit 
+*              timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer_setISRCallback(timer_t a_timer, timerinterrupt_t a_timerInterrupt, ISRcallback_t a_ISRCallback){
 	
 	switch (a_timer){
@@ -294,6 +442,8 @@ void timer_setISRCallback(timer_t a_timer, timerinterrupt_t a_timerInterrupt, IS
 	}
 	
 }
+
+/*---------------------------------ISR-------------------------------*/
 
 ISR(TIMER0_OVF_vect){
 	
