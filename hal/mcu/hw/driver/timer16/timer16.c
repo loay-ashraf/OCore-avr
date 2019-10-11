@@ -1,16 +1,52 @@
-/*
- * timer16.c
- *
- * Created: 05/08/2019 03:13:39 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         timer16.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/08/2019
+*
+* Description:	contains function definitions for 16-bit timer
+*               module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "timer16.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/io/io_macros.h"
 #include "hal/mcu/sys/interrupt.h"
 
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_timer16ISRCallback
+*
+* Description: Holds addresses of interrupt callback functions.
+*
+* Notes:
+*
+* Scope:       timer16.c.
+*
+**********************************************************************/
+
 static ISRcallback_t g_timer16ISRCallback[10];
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    timer16_start
+*
+* Description: Starts 16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void timer16_start(timer16_t a_timer16,timer16prescaler_t a_timer16Prescaler){
 	
@@ -39,6 +75,18 @@ void timer16_start(timer16_t a_timer16,timer16prescaler_t a_timer16Prescaler){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer16_stop
+*
+* Description: Stops 16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_stop(timer16_t a_timer16){
 	
 	switch (a_timer16){
@@ -62,6 +110,19 @@ void timer16_stop(timer16_t a_timer16){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_setMode
+*
+* Description: Sets operation mode for 16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setMode(timer16_t a_timer16, timer16mode_t a_timer16Mode){
 	
 	
@@ -95,6 +156,19 @@ void timer16_setMode(timer16_t a_timer16, timer16mode_t a_timer16Mode){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer16_setOCAMode
+*
+* Description: Sets output compare pin (pin A) operation mode for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setOCAMode(timer16_t a_timer16, timer16ocmode_t a_timer16ocmode){
 	
 	switch (a_timer16){
@@ -125,6 +199,19 @@ void timer16_setOCAMode(timer16_t a_timer16, timer16ocmode_t a_timer16ocmode){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer16_setOCBMode
+*
+* Description: Sets output compare pin (pin B) operation mode for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setOCBMode(timer16_t a_timer16, timer16ocmode_t a_timer16ocmode){
 	
 	switch (a_timer16){
@@ -154,6 +241,19 @@ void timer16_setOCBMode(timer16_t a_timer16, timer16ocmode_t a_timer16ocmode){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_setOCCMode
+*
+* Description: Sets output compare pin (pin C) operation mode for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 /*
 void timer16_setOCCMode(timer16_t a_timer16, timer16ocmode_t a_timer16ocmode){
@@ -186,6 +286,19 @@ void timer16_setOCCMode(timer16_t a_timer16, timer16ocmode_t a_timer16ocmode){
 	
 }*/
 
+/**********************************************************************
+*
+* Function:    timer16_setICMode
+*
+* Description: Sets input capture pin operation mode for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setICMode(timer16_t a_timer16, timer16icmode_t a_timer16icmode){
 	
 	switch (a_timer16){
@@ -216,6 +329,19 @@ void timer16_setICMode(timer16_t a_timer16, timer16icmode_t a_timer16icmode){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer16_enableICNC
+*
+* Description: Enables input capture noise canceler for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_enableICNC(timer16_t a_timer16){
 	
 	switch (a_timer16){
@@ -239,6 +365,19 @@ void timer16_enableICNC(timer16_t a_timer16){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_disableICNC
+*
+* Description: Disables input capture noise canceler for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void timer16_disableICNC(timer16_t a_timer16){
 	
@@ -264,6 +403,19 @@ void timer16_disableICNC(timer16_t a_timer16){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer16_setOCRA
+*
+* Description: Sets output compare register (register A) value 
+*              for 16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setOCRA(timer16_t a_timer16, uint16_t a_ocr){
 	
 	switch (a_timer16){
@@ -288,6 +440,19 @@ void timer16_setOCRA(timer16_t a_timer16, uint16_t a_ocr){
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer16_setOCRB
+*
+* Description: Sets output compare register (register B) value
+*              for 16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setOCRB(timer16_t a_timer16, uint16_t a_ocr){
 	
 	switch (a_timer16){
@@ -311,6 +476,19 @@ void timer16_setOCRB(timer16_t a_timer16, uint16_t a_ocr){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_setOCRC
+*
+* Description: Sets output compare register (register C) value
+*              for 16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 /*
 void timer16_setOCRC(timer16_t a_timer16, uint16_t a_ocr){
@@ -337,6 +515,19 @@ void timer16_setOCRC(timer16_t a_timer16, uint16_t a_ocr){
 	
 }*/
 
+/**********************************************************************
+*
+* Function:    timer16_setICR
+*
+* Description: Sets input capture register value for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setICR(timer16_t a_timer16, uint16_t a_icr){
 	
 	switch (a_timer16){
@@ -360,6 +551,18 @@ void timer16_setICR(timer16_t a_timer16, uint16_t a_icr){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_getTCNT
+*
+* Description: Gets counter value for 16-bit timer module.
+*
+* Notes:
+*
+* Returns:     TCNTx register value.
+*
+**********************************************************************/
 
 uint16_t timer16_getTCNT(timer16_t a_timer16){
 	
@@ -385,6 +588,19 @@ uint16_t timer16_getTCNT(timer16_t a_timer16){
 	return 0;
 }
 
+/**********************************************************************
+*
+* Function:    timer16_getICR
+*
+* Description: Gets input capture register value for 
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     ICRx register value.
+*
+**********************************************************************/
+
 uint16_t timer16_getICR(timer16_t a_timer16){
 	
 	switch (a_timer16){
@@ -408,6 +624,19 @@ uint16_t timer16_getICR(timer16_t a_timer16){
 	}
 	return 0;	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_checkOverflow
+*
+* Description: Checks if counter overflow has occurred for
+*              16-bit timer module.
+*
+* Notes:
+*
+* Returns:     Boolean value (TRUE or FALSE).
+*
+**********************************************************************/
 
 bool_t timer16_checkOverflow(timer16_t a_timer16){
 	
@@ -451,6 +680,18 @@ bool_t timer16_checkOverflow(timer16_t a_timer16){
 	return 0;
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_enableInterrupt
+*
+* Description: Enables interrupt request for 16-bit timer module.
+*
+* Notes:       This functions enables global interrupts if disabled.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void timer16_enableInterrupt(timer16_t a_timer16, timer16interrupt_t a_timer16Interrupt){
 	
@@ -501,6 +742,18 @@ void timer16_enableInterrupt(timer16_t a_timer16, timer16interrupt_t a_timer16In
 	
 }
 
+/**********************************************************************
+*
+* Function:    timer16_disableInterrupt
+*
+* Description: Disables interrupt request for 16-bit timer module.
+*
+* Notes:       This functions doesn't disable global interrupts.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_disableInterrupt(timer16_t a_timer16, timer16interrupt_t a_timer16Interrupt){
 	
 	switch (a_timer16){
@@ -539,6 +792,20 @@ void timer16_disableInterrupt(timer16_t a_timer16, timer16interrupt_t a_timer16I
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    timer16_setISRCallback
+*
+* Description: Sets interrupt callback function for 16-bit
+*              timer module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void timer16_setISRCallback(timer16_t a_timer16, timer16interrupt_t a_timer16Interrupt, ISRcallback_t a_ISRCallback){
 	
 	switch (a_timer16){
@@ -568,6 +835,8 @@ void timer16_setISRCallback(timer16_t a_timer16, timer16interrupt_t a_timer16Int
 	}
 	
 }
+
+/*---------------------------------ISR-------------------------------*/
 
 ISR(TIMER1_OVF_vect){
 	

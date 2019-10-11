@@ -1,23 +1,26 @@
-/** @file USART.h
- *  @brief This driver supports interfacing any device that
- *	supports serial communication via USART interface; baud 
- *	rate, data frame, parity check and number of stop bits
- *	can be set according to each system
- *  @author Loay Ashraf
- *	@version 1.0.0
- *  @bug no known bugs
- *  @see micro_config.h
- */
+/**********************************************************************
+*
+* File:         usart.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/03/2018
+*
+* Description:	contains definitions, configurations, typedefs
+*               and function declarations for usart interface
+*               module.
+*
+**********************************************************************/
 
 #ifndef USART_H_
 #define USART_H_
 
-//------------INCLUDE MCU CONFIGURATION------------//
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "hal/mcu/io/io_defs.h"
 #include "hal/mcu/sys/std_types.h"
 
-//------------DEFINE CONFIGURATION PARAMETERS ABBREVIATIONS------------//
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define USART_RX_PIN		PD0_M
 #define USART_TX_PIN		PD1_M	
@@ -26,6 +29,8 @@
 #define USART_BUFFER_SIZE	16
 #define USART_TX_ERROR		"TXERR"
 #define USART_RX_ERROR		"RXERR"
+
+/*--------------------------------ENUMS------------------------------*/
 
 typedef enum{US_ASYNC,US_SYNC}usartmode_t;
 typedef enum{US_NORMAL,US_DOUBLE}usartspeed_t;
@@ -36,6 +41,8 @@ typedef enum{US_50=50,US_75=75,US_110=110,US_134=134,US_150=150,US_200=200,US_30
 			US_2400=2400,US_4800=4800,US_9600=9600,US_19200=19200,US_38400=38400,US_57600=57600,US_115200=115200}usartbaudrate_t;
 typedef enum{US_CR,US_LF,US_CRLF}usartlineterm_t;	
 typedef enum{US_RX=0x07,US_TX=0x06,US_DRE=0x05}usartinterrupt_t;		
+
+/*-------------------------------STRUCTS-----------------------------*/
 	
 typedef struct{
 	
@@ -47,7 +54,7 @@ typedef struct{
 	
 }usartconfig_t;			
 
-//------------FUNCTION PROTOTYPES------------//
+/*------------------------FUNCTION DECLARATIONS----------------------*/	
 
 void usart_config(usartconfig_t a_usartConfig);
 void usart_setBaudrate(usartbaudrate_t a_baudrate);

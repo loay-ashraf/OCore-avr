@@ -7,7 +7,7 @@
 * Date created: 16/05/2019
 *
 * Description:	contains function definitions for 8-bit timer
-*               interface module.
+*               module.
 *
 **********************************************************************/
 

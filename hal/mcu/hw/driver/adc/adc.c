@@ -41,7 +41,7 @@ static ISRcallback_t g_adcISRCallback;
 *
 * Function:    adc_config
 *
-* Description: Configures the analog-digital converter module.
+* Description: Configures analog-digital converter module.
 *
 * Notes:
 *
@@ -62,7 +62,7 @@ void adc_config(adcprescaler_t a_adcPrescaler, adcreference_t a_adcReference, bo
 *
 * Function:    adc_enable
 *
-* Description: Enables the analog-digital converter module.
+* Description: Enables analog-digital converter module.
 *
 * Notes:
 *
@@ -80,7 +80,7 @@ void adc_enable(void){
 *
 * Function:    adc_disable
 *
-* Description: Disables the analog-digital converter module.
+* Description: Disables analog-digital converter module.
 *
 * Notes:
 *

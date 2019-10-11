@@ -1,17 +1,26 @@
-/*
- * twi.h
- *
- * Created: 05/08/2019 09:38:07 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         twi.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/08/2019
+*
+* Description:	contains definitions and function declarations 
+*               for two-wire interface module.
+*
+**********************************************************************/
 
 #ifndef TWI_H_
 #define TWI_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include "twi_config.h"
 #include "hal/mcu/io/io_defs.h"
 #include "hal/mcu/sys/std_types.h"
+
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define ERROR			FALSE
 #define PASS			TRUE
@@ -24,6 +33,8 @@
 #define TX_ACK_MASTER	0x28
 #define RX_ACK_MASTER	0x50
 #define TX_ACK_SLAVE	0xC8
+
+/*------------------------FUNCTION DECLARATIONS----------------------*/	
 
 void twi_enable(void);
 void twi_disable(void);

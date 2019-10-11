@@ -7,7 +7,7 @@
 * Date created: 16/05/2019
 *
 * Description:	contains definitions, configurations, typedefs
-*               and function declarations for gpio module.
+*               and function declarations for 8-bit timer module.
 *
 **********************************************************************/
 

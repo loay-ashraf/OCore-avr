@@ -1,46 +1,83 @@
-/** @file USART.c
- *  @brief includes function definition
- *  @author Loay Ashraf
- *	@version 1.0.0
- *  @pre include USART.h
- *  @bug no known bugs
- *  @see USART.h
- */
+/**********************************************************************
+*
+* File:         usart.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/03/2018
+*
+* Description:	contains function definitions for usart interface 
+*               module.
+*
+**********************************************************************/
 
-//------------INCLUDE DRIVER HEADER FILE------------//
+/*------------------------------INCLUDES-----------------------------*/
 
- #include "usart.h"
- #include "hal/mcu/io/io_macros.h"
- #include "hal/mcu/sys/cpu_config.h"
- #include "hal/mcu/sys/interrupt.h"
+#include "usart.h"
+#include "hal/mcu/io/io_macros.h"
+#include "hal/mcu/sys/cpu_config.h"
+#include "hal/mcu/sys/interrupt.h"
  
-//------------DECLARE LOCAL VARIABLES------------//
+/*--------------------------GLOBAL VARIABLES-------------------------*/
 
-/** @var uint8_t mode_flag
- *  @brief indicates the current mode (Asynchronous or Synchronous)
- */
+/**********************************************************************
+*
+* Variable:    g_mode
+*
+* Description: Stores current mode of usart module (synchronous or
+*              asynchronous).
+*
+* Notes:
+*
+* Scope:       usart.c.
+*
+**********************************************************************/
 
-/** @var uint8_t u2x_flag
- *  @brief indicates the current speed (Normal speed or Double speed)
- */
+static usartmode_t g_mode;
 
-/** @var uint8_t ninth_bit_flag
- *  @brief indicates if there's a ninth bit in the data frame
- */
+/**********************************************************************
+*
+* Variable:    g_frameSize
+*
+* Description: Stores current data frame size.
+*
+* Notes:
+*
+* Scope:       usart.c.
+*
+**********************************************************************/
 
- static usartmode_t g_mode;
- static usartframsize_t g_frameSize;
- static ISRcallback_t g_usartISRCallback[3];
+static usartframsize_t g_frameSize;
 
- /** @brief initializes the USART interface
-  *  @param umode communication mode (Asynchronous or Synchronous).
-  *  @param u2x speed mode (Normal speed or Double speed).
-  *	 @param ch_size number of bits in the data frame.
-  *	 @param parity_bit parity check mode (Parity or No parity).
-  *	 @param stop_bit number of stop bits (one bit or two bits).
-  *  @return none.
-  */
- void usart_config(usartconfig_t a_usartConfig){
+/**********************************************************************
+*
+* Variable:    g_usartISRCallback
+*
+* Description: Holds addresses of interrupt callback functions.
+*
+* Notes:
+*
+* Scope:       usart.c.
+*
+**********************************************************************/
+
+static ISRcallback_t g_usartISRCallback[3];
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    usart_config
+*
+* Description: Configures usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void usart_config(usartconfig_t a_usartConfig){
     
 	g_mode = a_usartConfig.mode; 
 	g_frameSize = a_usartConfig.frameSize;
@@ -80,13 +117,21 @@
 	
 	}
 
- }
+}
 
-/** @brief sets the baud rate for the USART interface
- *  @param baudrate set baud rate in bits/sec.
- *  @return none.
- */
- void usart_setBaudrate(usartbaudrate_t a_baudrate){
+/**********************************************************************
+*
+* Function:    usart_setBaudrate
+*
+* Description: Sets baud rate (bits/sec) for usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void usart_setBaudrate(usartbaudrate_t a_baudrate){
    
 	uint16_t UBValue = 0;
    
@@ -111,28 +156,59 @@
    WRI(UBRRH,(uint8_t) (UBValue>>8));
    WRI(UBRRL,(uint8_t) UBValue);
 
- }
- 
- /** @brief enables the USART interface
-  *  @return none.
-  */
- void usart_enableTXRX(void){
+}
+
+/**********************************************************************
+*
+* Function:    usart_enableTXRX
+*
+* Description: Enables transmitter and receiver for 
+*              usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void usart_enableTXRX(void){
 
   SRI(UCSRB,((1<<TXEN)|(1<<RXEN)));		// enable receiver and transmitter buffers
 
- }
+}
+
+/**********************************************************************
+*
+* Function:    usart_disableTXRX
+*
+* Description: Disables transmitter and receiver for
+*              usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
  
- void usart_disableTXRX(void){
+void usart_disableTXRX(void){
 
 	 CRI(UCSRB,((1<<TXEN)|(1<<RXEN)));		// enable receiver and transmitter buffers
 
- }
+}
 
- /** @brief transmits 8-bit data 
-  *	 @param data 8-bit data to be transmitted.
-  *  @return none.
-  */
- void usart_transmitCharacter(char a_char){
+/**********************************************************************
+*
+* Function:    usart_transmitCharacter
+*
+* Description: Transmits string via usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void usart_transmitCharacter(char a_char){
 
 	while(!RBI(UCSRA,UDRE));			// wait for empty transmit buffer
 	
@@ -150,17 +226,25 @@
 		WRI(UDR,a_char);				// start transmission
 
 	}
- }
+}
 
- /** @brief transmits a string of 8-bit data 
-  *	 @param data pointer to the fist element of the string.
-  *  @return none.
-  */
- void usart_transmitString(const char * a_str, usartlineterm_t a_usartLineTerm){
+/**********************************************************************
+*
+* Function:    usart_transmitString
+*
+* Description: Transmits character via usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+ 
+void usart_transmitString(const char * a_str, usartlineterm_t a_usartLineTerm){
 
-   while(*a_str != '\0')
+	while(*a_str != '\0')
       
-	  usart_transmitCharacter(*a_str++);		// iterate through the array till the NULL terminator
+		usart_transmitCharacter(*a_str++);		// iterate through the array till the NULL terminator
 	
 	/*------------transmit line terminator-----------*/
 	
@@ -182,12 +266,21 @@
 	
 	}
 	
- }
+}
 
- /** @brief receives 8-bit data 
-  *  @return received 8-bit data.
-  */
- char usart_receiveCharacter(void){
+/**********************************************************************
+*
+* Function:    usart_receiveCharacter
+*
+* Description: Receives character via usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+char usart_receiveCharacter(void){
     
 	while(!RBI(UCSRA,RXC));			// Wait for incoming data
    
@@ -206,43 +299,52 @@
 
 		return ((resh<<8)|resl);	// return the combined 9-bit data
 	} 
- }
+}
  
- /** @brief receives a string of 8-bit data 
-  *  @return pointer to the fist element of the received string.
-  */
- char * usart_receiveString(usartlineterm_t a_usartLineTerm){
+/**********************************************************************
+*
+* Function:    usart_receiveString
+*
+* Description: Receives string via usart interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+char * usart_receiveString(usartlineterm_t a_usartLineTerm){
 	
-	 static char input[USART_BUFFER_SIZE];
-	 uint8_t tmp, index = 0;
+	static char input[USART_BUFFER_SIZE];
+	uint8_t tmp, index = 0;
 	 
-	 switch(a_usartLineTerm){
+	switch(a_usartLineTerm){
 		 
-		 case US_CR: {
+		case US_CR: {
 			 
-			 while ((tmp = usart_receiveCharacter()) != '\r'){
+			while ((tmp = usart_receiveCharacter()) != '\r'){
 				 
-				 input[index++] = tmp;				// iterate through the array till CR is received
-				 if(index == USART_BUFFER_SIZE)
+				input[index++] = tmp;				// iterate through the array till CR is received
+				if(index == USART_BUFFER_SIZE)
 					break;							// break loop if buffer size limit is reached
 				 
-			 }
+			}
 			 
-			 if(tmp == '\r'){
+			if(tmp == '\r'){
 					 
 				input[index] = '\0';				// terminate the array with NULL terminator
 				return input;						// return pointer to the first element of the array
 				 
 			}else{
 				 
-				 return USART_RX_ERROR;
+				return USART_RX_ERROR;
 				 
 			}
 			
-		 }
-		 break;
+		}
+		break;
 		 
-		 case US_LF: {
+		case US_LF: {
 			 
 			while ((tmp = usart_receiveCharacter()) != '\n'){
 				
@@ -266,74 +368,100 @@
 				
 			}
 		 
-		 }
-		 break;
+		}
+		break;
 		 
-		 case US_CRLF: {
+		case US_CRLF: {
 			 
-			 while ((tmp = usart_receiveCharacter()) != '\r'){
+			while ((tmp = usart_receiveCharacter()) != '\r'){
 				 
-				 input[index++] = tmp;				// iterate through the array till CR is received
-				 if(index == USART_BUFFER_SIZE)
-					 break;							// break loop if buffer size limit is reached
+				input[index++] = tmp;				// iterate through the array till CR is received
+				if(index == USART_BUFFER_SIZE)
+					break;							// break loop if buffer size limit is reached
 				 
-			 }
+			}
 			 
-			 if((tmp = usart_receiveCharacter()) == '\n'){
+			if((tmp = usart_receiveCharacter()) == '\n'){
 				 
-				 input[index] = '\0';				// terminate the array with NULL terminator
-				 return input;						// return pointer to the first element of the array
+				input[index] = '\0';				// terminate the array with NULL terminator
+				return input;						// return pointer to the first element of the array
 				 
 			}else{
 				 
-				 return USART_RX_ERROR;
+				return USART_RX_ERROR;
 				 
-			 }
+			}
 			 
-		 }
-		 break; 
+		}
+		break; 
 		 
-		 default: return "NULL";
-		 break;
-	 }
+		default: return "NULL";
+		break;
+	}
 
- }
+}
+
+/**********************************************************************
+*
+* Function:    usart_enableInterrupt
+*
+* Description: Enables interrupt request for usart interface module.
+*
+* Notes:       This functions enables global interrupts if disabled.
+*
+* Returns:     None.
+*
+**********************************************************************/
  
- void usart_enableInterrupt(usartinterrupt_t a_usartInterrupt){
+void usart_enableInterrupt(usartinterrupt_t a_usartInterrupt){
 	 
-	 if(!RBI(SREG,I_BIT))
+	if(!RBI(SREG,I_BIT))
 		ENABLE_GLOBAL_INTERRUPTS;
 		
 	SBI(UCSRB,a_usartInterrupt);	
 	 
- }
+}
+
+/**********************************************************************
+*
+* Function:    usart_disableInterrupt
+*
+* Description: Disables interrupt request for usart interface module.
+*
+* Notes:       This functions doesn't disable global interrupts.
+*
+* Returns:     None.
+*
+**********************************************************************/
  
- void usart_disableInterrupt(usartinterrupt_t a_usartInterrupt){
+void usart_disableInterrupt(usartinterrupt_t a_usartInterrupt){
 	 
-	 CBI(UCSRB,a_usartInterrupt);
+	CBI(UCSRB,a_usartInterrupt);
 	 
- }
+}
  
- void usart_setISRCallback(usartinterrupt_t a_usartInterrupt, ISRcallback_t a_ISRCallback){
+void usart_setISRCallback(usartinterrupt_t a_usartInterrupt, ISRcallback_t a_ISRCallback){
 	 
-	 g_usartISRCallback[a_usartInterrupt-5] = a_ISRCallback;
+	g_usartISRCallback[a_usartInterrupt-5] = a_ISRCallback;
 	 
- }
+}
  
- ISR(USART_UDRE_vect){
+/*---------------------------------ISR-------------------------------*/
+ 
+ISR(USART_UDRE_vect){
 	 
 	g_usartISRCallback[0](); 
 	 
- }
+}
  
- ISR(USART_TXC_vect){
+ISR(USART_TXC_vect){
 	 
 	g_usartISRCallback[1](); 
 	  
- }
+}
  
- ISR(USART_RXC_vect){
+ISR(USART_RXC_vect){
 	 
 	g_usartISRCallback[2]();
 	 
- }
+}

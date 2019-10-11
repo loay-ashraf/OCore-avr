@@ -7,7 +7,7 @@
 * Date created: 04/09/2019
 *
 * Description:	contains function definitions for analog comparator 
-*				module.
+*               module.
 *
 **********************************************************************/
 
@@ -40,7 +40,7 @@ static ISRcallback_t g_acISRCallback;
 *
 * Function:    ac_enable
 *
-* Description: Enables the analog comparator module.
+* Description: Enables analog comparator module.
 *
 * Notes:
 *
@@ -60,7 +60,7 @@ void ac_enable(void){
 *
 * Function:    ac_disable
 *
-* Description: Disables the analog comparator module.
+* Description: Disables analog comparator module.
 *
 * Notes:
 *

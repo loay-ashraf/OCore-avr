@@ -1,9 +1,17 @@
-/*
- * twi.c
- *
- * Created: 05/08/2019 09:37:55 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         twi.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/08/2019
+*
+* Description:	contains function definitions for two-wire 
+*               interface module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "twi.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
@@ -11,7 +19,35 @@
 #include "hal/mcu/sys/delay.h"
 #include "hal/mcu/sys/interrupt.h"
 
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_twiISRCallback
+*
+* Description: Holds address of interrupt callback function.
+*
+* Notes:
+*
+* Scope:       twi.c.
+*
+**********************************************************************/
+
 static ISRcallback_t g_twiISRCallback;
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    twi_enable
+*
+* Description: Enables two-wire interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void twi_enable(void){
 	
@@ -27,6 +63,18 @@ void twi_enable(void){
 
 }
 
+/**********************************************************************
+*
+* Function:    twi_disable
+*
+* Description: Disables two-wire interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void twi_disable(void){
 	
 	gpio_clearPin(TWI_SDA_PIN);
@@ -39,6 +87,18 @@ void twi_disable(void){
 	WRI(TWAR,0xFE);
 	
 }
+
+/**********************************************************************
+*
+* Function:    twi_transmitStart
+*
+* Description: Transmits START byte via two-wire interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 bool_t twi_transmitStart(ubyte_t a_address, bool_t a_readWrite){
 	
@@ -64,6 +124,18 @@ bool_t twi_transmitStart(ubyte_t a_address, bool_t a_readWrite){
 	}
 }
 
+/**********************************************************************
+*
+* Function:    twi_transmitStop
+*
+* Description: Transmits STOP byte via two-wire interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void twi_transmitStop(void){
 	
 	CBI(TWCR,TWEA);
@@ -74,6 +146,18 @@ void twi_transmitStop(void){
 	SBI(TWCR,TWEA);
 	
 }
+
+/**********************************************************************
+*
+* Function:    twi_transmitByte
+*
+* Description: Transmits data byte via two-wire interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 bool_t twi_transmitByte(ubyte_t a_data){
 	
@@ -93,6 +177,18 @@ bool_t twi_transmitByte(ubyte_t a_data){
 	}
 }
 
+/**********************************************************************
+*
+* Function:    twi_receiveByte
+*
+* Description: Receives data byte via two-wire interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 ubyte_t twi_receiveByte(void){
 	
 	if(twi_getStatus() == SLA_R_ACK || twi_getStatus() == RX_ACK_MASTER){
@@ -110,7 +206,20 @@ ubyte_t twi_receiveByte(void){
 		return ERROR;
 		
 	}
-}         
+}     
+
+/**********************************************************************
+*
+* Function:    twi_enableInterrupt
+*
+* Description: Enables interrupt request for two-wire interface
+*              module.
+*
+* Notes:       This functions enables global interrupts if disabled.
+*
+* Returns:     None.
+*
+**********************************************************************/    
 
 void twi_enableInterrupt(void){
 	
@@ -120,11 +229,37 @@ void twi_enableInterrupt(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    twi_disableInterrupt
+*
+* Description: Disables interrupt request for two-wire interface
+*              module.
+*
+* Notes:       This functions doesn't disable global interrupts.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void twi_disableInterrupt(void){
 
 	CBI(TWCR,TWIE);	
 	
 }
+
+/**********************************************************************
+*
+* Function:    twi_setISRCallback
+*
+* Description: Sets interrupt callback function for two-wire
+*              interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void twi_setISRCallback(ISRcallback_t a_twiISRCallback){
 	
@@ -132,10 +267,24 @@ void twi_setISRCallback(ISRcallback_t a_twiISRCallback){
 	
 }
 
+/**********************************************************************
+*
+* Function:    twi_getStatus
+*
+* Description: Gets current status of two-wire interface module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 ubyte_t twi_getStatus(void){
 	
 	return (RRI(TWSR)&0xF8);
 }
+
+/*---------------------------------ISR-------------------------------*/
 
 ISR(TWI_vect){
 	
