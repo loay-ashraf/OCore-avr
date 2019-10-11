@@ -185,7 +185,7 @@ bool_t twi_transmitByte(ubyte_t a_data){
 *
 * Notes:
 *
-* Returns:     None.
+* Returns:     TWDR register value.
 *
 **********************************************************************/
 
@@ -275,7 +275,7 @@ void twi_setISRCallback(ISRcallback_t a_twiISRCallback){
 *
 * Notes:
 *
-* Returns:     None.
+* Returns:     TWSR register masked value.
 *
 **********************************************************************/
 

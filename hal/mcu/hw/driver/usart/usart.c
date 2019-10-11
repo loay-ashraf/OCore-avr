@@ -276,7 +276,7 @@ void usart_transmitString(const char * a_str, usartlineterm_t a_usartLineTerm){
 *
 * Notes:
 *
-* Returns:     None.
+* Returns:     UDR register value.
 *
 **********************************************************************/
 
@@ -298,6 +298,7 @@ char usart_receiveCharacter(void){
 		resh = (resh>>1)&0x01;		// process the ninth bit
 
 		return ((resh<<8)|resl);	// return the combined 9-bit data
+		
 	} 
 }
  
@@ -309,7 +310,7 @@ char usart_receiveCharacter(void){
 *
 * Notes:
 *
-* Returns:     None.
+* Returns:     Array of received characters.
 *
 **********************************************************************/
 
