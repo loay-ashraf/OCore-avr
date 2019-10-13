@@ -1,15 +1,19 @@
-/*
- * cpu_config.h
- *
- * Created: 07/08/2019 11:01:52 AM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         cpu_config.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 07/08/2019
+*
+* Description:	contains CPU clock definitions (in HZ, KHZ and MHZ).
+*
+**********************************************************************/
 
 #ifndef CPU_CONFIG_H_
 #define CPU_CONFIG_H_
 
-//------------DEFINE CPU CLOCK FREQUENCY------------//
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #ifndef F_CPU
 #define F_CPU	16000000UL //16MHz Clock frequency

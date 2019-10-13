@@ -1,16 +1,27 @@
-/*
- * std_types.h
- *
- *  Created on: Dec 8, 2015
- *      Author: hussam_mostafa
- */
+/**********************************************************************
+*
+* File:         std_types.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 12/01/2018
+*
+* Description:	contains common data types.
+*
+**********************************************************************/
 
 #ifndef STD_TYPES_H_
 #define STD_TYPES_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include <stdint.h>
 
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
+
 #define NONE	0
+
+/*---------------------------STD DATA TYPES--------------------------*/
 
 typedef signed char byte_t;
 typedef signed short word_t;
@@ -19,7 +30,11 @@ typedef unsigned char ubyte_t;
 typedef unsigned short uword_t;
 typedef unsigned long udword_t;
 
+/*--------------------------------ENUMS------------------------------*/
+
 typedef enum{FALSE,TRUE}bool_t;
+
+/*--------------------------------UNIONS-----------------------------*/
 
 typedef union{
 	

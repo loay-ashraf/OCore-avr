@@ -1,15 +1,23 @@
-/*
- * sleep.h
- *
- * Created: 5/12/2019 5:34:59 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         sleep.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 12/05/2019
+*
+* Description:	contains CPU sleep instructions macros.
+*
+**********************************************************************/
 
 #ifndef SLEEP_H_
 #define SLEEP_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include <avr/sleep.h>
+
+/*-------------------------------MACROS------------------------------*/
 
 #define SET_SLEEP_MODE(MODE)	set_sleep_mode(MODE)
 #define SLEEP_MODE				sleep_mode()

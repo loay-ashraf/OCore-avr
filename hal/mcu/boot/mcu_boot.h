@@ -1,14 +1,20 @@
-/** @file mcu_boot.h
- *  @brief includes the MCU configuration parameters and required header files
- *  @author Hussam Mostafa
- *	@version 1.0.0
- *  @bug no known bugs
- */
+/**********************************************************************
+*
+* File:         mcu_boot.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/06/2019
+*
+* Description:	contains inclusions of needed modules during MCU 
+*               boot process.
+*
+**********************************************************************/
 
 #ifndef MCU_BOOT_H_
 #define MCU_BOOT_H_
 
-//------------INCLUDE ALL REQUIRED HEADER FILES------------//
+/*------------------------------INCLUDES-----------------------------*/
 
 /*
 #include "../sys/delay.h"

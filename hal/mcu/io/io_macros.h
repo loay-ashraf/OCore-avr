@@ -1,12 +1,20 @@
-/*
- * io_macros.h
- *
- * Created: 5/15/2019 1:41:34 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         io_macros.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 15/05/2019
+*
+* Description:	contains commonly used macros for accessing 
+*               and modifying registers and bit manipulation.
+*
+**********************************************************************/
 
 #ifndef IO_MACROS_H_
 #define IO_MACROS_H_
+
+/*-------------------------------MACROS------------------------------*/
 
 #define SBI(REG,BIT)	(REG|=_BV(BIT))
 #define CBI(REG,BIT)	(REG&=~_BV(BIT))

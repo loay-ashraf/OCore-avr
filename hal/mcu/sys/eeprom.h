@@ -1,15 +1,23 @@
-/*
- * eeprom.h
- *
- * Created: 5/15/2019 12:53:32 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         eeprom.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 15/05/2019
+*
+* Description:	contains EEPROM common operations macros.
+*
+**********************************************************************/
 
 #ifndef EEPROM_H_
 #define EEPROM_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include <avr/eeprom.h>
+
+/*-------------------------------MACROS------------------------------*/
 
 #define EEPROM_READ_BYTE(ADDR)				eeprom_read_byte(ADDR)
 #define EEPROM_READ_WORD(ADDR)				eeprom_read_word(ADDR)

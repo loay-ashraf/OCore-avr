@@ -112,7 +112,7 @@ float PWMIN_getFreqHZ(void){
 *
 * Notes:       This function is implemented to be recursive
 *              which makes this implementation a violation to 
-*              MISRA-C 2005 mandatory rules.
+*              MISRA-C 2004 mandatory rules.
 *              An alternative implementation is planned for future
 *              releases.
 *

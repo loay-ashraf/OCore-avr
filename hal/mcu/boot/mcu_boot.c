@@ -1,13 +1,38 @@
-/** @file mcu_boot.c
- *  @brief includes a function that is executed before main() during boot process
- *  @author Loay Ashraf
- *	@version 1.0.0
- *  @bug no known bugs
- */
+/**********************************************************************
+*
+* File:         mcu_boot.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 05/06/2019
+*
+* Description:	contains MCU initialization function definition.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "mcu_boot.h"
 
+/*------------------------FUNCTION PROTOTYPES------------------------*/
+
 /*void __attribute__((constructor)) mcu_boot();*/	// uncomment if need initialization before main
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    mcu_boot
+*
+* Description: Gets called before main() is called during MCU boot 
+*              process.
+*
+* Notes:       This function should contain calls to initialization 
+*              functions.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void mcu_boot(void){
 
