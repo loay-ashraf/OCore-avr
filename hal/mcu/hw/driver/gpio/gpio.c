@@ -406,7 +406,7 @@ ubyte_t gpio_readPort(port_t a_port){
 *
 * Description: Enables external interrupts (INT0,INT1,INT2).
 *
-* Notes:       This functions enables global interrupts if disabled.
+* Notes:       This function enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -438,7 +438,7 @@ void gpio_enableInterrupt(gpiointerrupt_t a_interrupt){
 *
 * Description: Disables external interrupts (INT0,INT1,INT2).
 *
-* Notes:       This functions doesn't disable global interrupts.
+* Notes:       This function doesn't disable global interrupts.
 *
 * Returns:     None.
 *

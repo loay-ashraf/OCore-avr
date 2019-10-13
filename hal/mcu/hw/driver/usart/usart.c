@@ -408,7 +408,7 @@ char * usart_receiveString(usartlineterm_t a_usartLineTerm){
 *
 * Description: Enables interrupt request for usart interface module.
 *
-* Notes:       This functions enables global interrupts if disabled.
+* Notes:       This function enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -429,7 +429,7 @@ void usart_enableInterrupt(usartinterrupt_t a_usartInterrupt){
 *
 * Description: Disables interrupt request for usart interface module.
 *
-* Notes:       This functions doesn't disable global interrupts.
+* Notes:       This function doesn't disable global interrupts.
 *
 * Returns:     None.
 *

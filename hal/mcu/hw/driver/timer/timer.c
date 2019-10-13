@@ -333,7 +333,7 @@ bool_t timer_checkOverflow(timer_t a_timer){
 *
 * Description: Enables interrupt request for 8-bit timer module.
 *
-* Notes:       This functions enables global interrupts if disabled.
+* Notes:       This function enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -376,7 +376,7 @@ void timer_enableInterrupt(timer_t a_timer, timerinterrupt_t a_timerInterrupt){
 *
 * Description: Disables interrupt request for 8-bit timer module.
 *
-* Notes:       This functions doesn't disable global interrupts.
+* Notes:       This function doesn't disable global interrupts.
 *
 * Returns:     None.
 *

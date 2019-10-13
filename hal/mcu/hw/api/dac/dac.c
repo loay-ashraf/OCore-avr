@@ -1,19 +1,62 @@
-/*
- * dac.c
- *
- * Created: 15/09/2019 10:38:06 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         dac.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 15/09/2019
+*
+* Description:	contains function definitions for digital-analog
+*               converter module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "dac.h"
+#include "dac_config.h"
 #include "hal/mcu/hw/driver/timer/timer.h"
 #include "hal/mcu/hw/driver/timer16/timer16.h"
-#include "hal/mcu/io/io_defs.h"
-#include "hal/mcu/sys/delay.h"
+#include "hal/mcu/sys/cpu_config.h"
+
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_isActivated
+*
+* Description: Stores current state of digital-analog converter
+*              channels (activated or not).
+*
+* Notes:
+*
+* Scope:       dac.c.
+*
+**********************************************************************/
 
 static bool_t g_isActivated[4];
 
+/*------------------------FUNCTION PROTOTYPES------------------------*/
+
 static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    dac_setDuty
+*
+* Description: Sets duty cycle of specific channel of digital-analog
+*              converter module.
+*
+* Notes:       This function enables 8-bit and 16-bit timers in 
+*              fast PWM mode.
+*              This function doesn't disable 8-bit or 16-bit timers
+*              when duty is set to zero. 
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void dac_setDuty(dacchannel_t a_dacChannel, uint8_t a_duty){
 	
@@ -123,6 +166,18 @@ void dac_setDuty(dacchannel_t a_dacChannel, uint8_t a_duty){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    map
+*
+* Description: Maps an integer value from a range to another one.
+*
+* Notes:
+*
+* Returns:     Mapped value (type: uint16_t).
+*
+**********************************************************************/
 
 static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
 	

@@ -1,21 +1,29 @@
-/*
- * pwm_in.h
- *
- * Created: 11/09/2019 12:37:40 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         pwmin.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 11/09/2019
+*
+* Description:	contains typedefs and function declarations for
+*               PWMIN module.
+*
+**********************************************************************/
 
 #ifndef PWM_IN_H_
 #define PWM_IN_H_
 
-/*------------INCLUDE MCU CONFIGURATION AND REQUIRED HEADER FILES------------*/
+/*------------------------------INCLUDES-----------------------------*/
 
-#include "pwmin_config.h"
 #include "hal/mcu/io/io_defs.h"
 #include "hal/mcu/sys/std_types.h"
 
+/*--------------------------------ENUMS------------------------------*/
+
 typedef enum{PWMIN_FALLING,PWMIN_RISING}pwminedge_t;
+
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 
 uint16_t PWMIN_getPulseWidth(pin_t a_pin, uint8_t Edge);
 float PWMIN_getFreqHZ(void);

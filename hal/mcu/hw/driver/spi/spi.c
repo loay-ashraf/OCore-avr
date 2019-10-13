@@ -269,7 +269,7 @@ ubyte_t spi_transreceive(ubyte_t a_byte){
 * Description: Enables transfer complete interrupt request for 
 *              serial peripheral interface module.
 *
-* Notes:       This functions enables global interrupts if disabled.
+* Notes:       This function enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -290,7 +290,7 @@ void spi_enableInterrupt(void){
 * Description: Disables transfer complete interrupt request for
 *              serial peripheral interface module.
 *
-* Notes:       This functions doesn't disable global interrupts.
+* Notes:       This function doesn't disable global interrupts.
 *
 * Returns:     None.
 *

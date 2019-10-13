@@ -1,15 +1,20 @@
-/*
- * dac_config.h
- *
- * Created: 15/09/2019 10:45:13 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         dac_config.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 15/09/2019
+*
+* Description:	contains definitions and configurations for
+*               digital-analog converter module.
+*
+**********************************************************************/
 
 #ifndef DAC_CONFIG_H_
 #define DAC_CONFIG_H_
 
-#include "../../../sys/cpu_config.h"
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define DAC_CH0_TIMER				TIMER0_M
 #define DAC_CH0_TIMER_MODE			T_FAST_PWM

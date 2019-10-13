@@ -175,7 +175,7 @@ void adc_disableAutoTrigger(void){
 * Description: Enables conversion complete interrupt request for
 *              analog-digital converter module.
 *
-* Notes:       This functions enables global interrupts if disabled.
+* Notes:       This function enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -196,7 +196,7 @@ void adc_enableInterrupt(void){
 * Description: Disables conversion complete interrupt request for 
 *              analog-digital converter module.
 *
-* Notes:       This functions doesn't disable global interrupts.
+* Notes:       This function doesn't disable global interrupts.
 *
 * Returns:     None.
 *

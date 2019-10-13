@@ -687,7 +687,7 @@ bool_t timer16_checkOverflow(timer16_t a_timer16){
 *
 * Description: Enables interrupt request for 16-bit timer module.
 *
-* Notes:       This functions enables global interrupts if disabled.
+* Notes:       This function enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -748,7 +748,7 @@ void timer16_enableInterrupt(timer16_t a_timer16, timer16interrupt_t a_timer16In
 *
 * Description: Disables interrupt request for 16-bit timer module.
 *
-* Notes:       This functions doesn't disable global interrupts.
+* Notes:       This function doesn't disable global interrupts.
 *
 * Returns:     None.
 *

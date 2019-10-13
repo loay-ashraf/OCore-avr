@@ -215,7 +215,7 @@ ubyte_t twi_receiveByte(void){
 * Description: Enables interrupt request for two-wire interface
 *              module.
 *
-* Notes:       This functions enables global interrupts if disabled.
+* Notes:       This function enables global interrupts if disabled.
 *
 * Returns:     None.
 *
@@ -236,7 +236,7 @@ void twi_enableInterrupt(void){
 * Description: Disables interrupt request for two-wire interface
 *              module.
 *
-* Notes:       This functions doesn't disable global interrupts.
+* Notes:       This function doesn't disable global interrupts.
 *
 * Returns:     None.
 *

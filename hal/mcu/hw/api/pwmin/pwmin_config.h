@@ -1,13 +1,20 @@
-/*
- * pwm_in_config.h
- *
- * Created: 11/09/2019 03:10:03 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         pwmin_config.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 11/09/2019
+*
+* Description:	contains definitions and configurations for
+*               PWMIN module.
+*
+**********************************************************************/
 
 #ifndef PWM_IN_CONFIG_H_
 #define PWM_IN_CONFIG_H_
+
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define PWMIN_PULSE_TIMER		TIMER2_M
 #define PWMIN_PULSE_TIMER_MODE	T_NORMAL
