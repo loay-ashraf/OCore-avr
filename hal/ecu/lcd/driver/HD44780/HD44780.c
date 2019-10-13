@@ -16,11 +16,11 @@ static lcdposition_t g_cursorPosition;
 static bool_t g_leftToRight;
 #endif
 
-static void resetDisplay(void);
-static void sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType);
-static ubyte_t readByte(void);
+static void _resetDisplay(void);
+static void _sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType);
+static ubyte_t _readByte(void);
 #if (HD44780_SW_CURSOR_SHIFT == 1)
-static void updateCursorPosition(lcddirection_t a_dir);
+static void _updateCursorPosition(lcddirection_t a_dir);
 #endif
 
 void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
@@ -45,7 +45,7 @@ void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorB
 	gpio_setPinDirection(HD44780_RS_PIN,IO_OUTPUT);
 	gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);					// set data port direction register
 	
-	resetDisplay();
+	_resetDisplay();
 	
 	#if (HD44780_DATA_MODE == 4)
 	
@@ -78,21 +78,21 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendByte((a_instruction>>4),HD44780_INSTRUCTION);
+			_sendByte((a_instruction>>4),HD44780_INSTRUCTION);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendByte(a_instruction,HD44780_INSTRUCTION);
+			_sendByte(a_instruction,HD44780_INSTRUCTION);
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendByte(a_instruction,HD44780_INSTRUCTION);
+			_sendByte(a_instruction,HD44780_INSTRUCTION);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendByte((a_instruction<<4),HD44780_INSTRUCTION);
+			_sendByte((a_instruction<<4),HD44780_INSTRUCTION);
 	
 		#endif
 	
@@ -100,7 +100,7 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 	
 		//------------SEND 8-BIT COMMAND------------//
 	
-		sendByte(a_instruction,HD44780_INSTRUCTION);
+		_sendByte(a_instruction,HD44780_INSTRUCTION);
 	
 	#endif
 	
@@ -201,7 +201,7 @@ lcdposition_t HD44780_shiftCursor(lcddirection_t a_dir){
 	
 	#if (HD44780_SW_CURSOR_SHIFT == 1)
 	
-		updateCursorPosition(a_dir);
+		_updateCursorPosition(a_dir);
 		
 		switch (a_dir){
 			
@@ -285,21 +285,21 @@ lcdposition_t HD44780_putc(char a_data){
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendByte((a_data>>4),HD44780_DATA);
+			_sendByte((a_data>>4),HD44780_DATA);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendByte(a_data,HD44780_DATA);
+			_sendByte(a_data,HD44780_DATA);
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			//------------SEND HIGH NIBBLE------------//
 	
-			sendByte(a_data,HD44780_DATA);
+			_sendByte(a_data,HD44780_DATA);
 
 			//------------SEND LOW NIBBLE------------//
 
-			sendByte((a_data<<4),HD44780_DATA);
+			_sendByte((a_data<<4),HD44780_DATA);
 	
 		#endif
 	
@@ -307,13 +307,13 @@ lcdposition_t HD44780_putc(char a_data){
 	
 		//------------SEND 8-BIT COMMAND------------//
 	
-		sendByte(a_data,HD44780_DATA);
+		_sendByte(a_data,HD44780_DATA);
 	
 	#endif
 	
 	#if (HD44780_SW_CURSOR_SHIFT == 1)
 	
-		updateCursorPosition((lcddirection_t)g_leftToRight);
+		_updateCursorPosition((lcddirection_t)g_leftToRight);
 		
 		if(g_leftToRight){
 			
@@ -349,21 +349,21 @@ char HD44780_getc(void){
 	
 			//------------READ HIGH NIBBLE------------//
 	
-			data |= (readByte()<<4);
+			data |= (_readByte()<<4);
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= readByte();
+			data |= _readByte();
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			//------------READ HIGH NIBBLE------------//
 	
-			data |= readByte();
+			data |= _readByte();
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= (readByte()>>4);
+			data |= (_readByte()>>4);
 	
 		#endif
 	
@@ -371,14 +371,14 @@ char HD44780_getc(void){
 	
 		//------------READ 8-BIT DATA------------//
 	
-		data |= readByte();
+		data |= _readByte();
 	
 	#endif
 
 	return data;
 }
 
-static void resetDisplay(void){
+static void _resetDisplay(void){
 	
 	#if (HD44780_DATA_MODE == 4)
 	
@@ -386,26 +386,26 @@ static void resetDisplay(void){
 	
 			/*------------RESET THE HD44780------------*/
 	
-			sendByte(0x03,HD44780_INSTRUCTION);
+			_sendByte(0x03,HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendByte(0x03,HD44780_INSTRUCTION);
+			_sendByte(0x03,HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendByte(0x03,HD44780_INSTRUCTION);
+			_sendByte(0x03,HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendByte(0x02,HD44780_INSTRUCTION);
+			_sendByte(0x02,HD44780_INSTRUCTION);
 			DELAY_MS(1);
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
 			/*------------RESET THE HD44780------------*/
 	
-			sendByte((0x03<<4),HD44780_INSTRUCTION);
+			_sendByte((0x03<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendByte((0x03<<4),HD44780_INSTRUCTION);
+			_sendByte((0x03<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendByte((0x03<<4),HD44780_INSTRUCTION);
+			_sendByte((0x03<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
-			sendByte((0x02<<4),HD44780_INSTRUCTION);
+			_sendByte((0x02<<4),HD44780_INSTRUCTION);
 			DELAY_MS(1);
 
 		#endif
@@ -414,18 +414,18 @@ static void resetDisplay(void){
 	
 		/*------------RESET THE HD44780------------*/
 	
-		sendByte(0x03,HD44780_INSTRUCTION);
+		_sendByte(0x03,HD44780_INSTRUCTION);
 		DELAY_MS(1);
-		sendByte(0x03,HD44780_INSTRUCTION);
+		_sendByte(0x03,HD44780_INSTRUCTION);
 		DELAY_MS(1);
-		sendByte(0x03,HD44780_INSTRUCTION);
+		_sendByte(0x03,HD44780_INSTRUCTION);
 		DELAY_MS(1);
 	
 	#endif
 	
 }
 
-static void sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType){
+static void _sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType){
 	
 	/*------------SEND A BYTE------------*/
 	
@@ -456,7 +456,7 @@ static void sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType){
 	
 }
 
-static ubyte_t readByte(void){
+static ubyte_t _readByte(void){
 	
 	#ifdef HD44780_RW_PIN
 	
@@ -489,7 +489,7 @@ static ubyte_t readByte(void){
 
 #if (HD44780_SW_CURSOR_SHIFT == 1)
 
-static void updateCursorPosition(lcddirection_t a_dir){
+static void _updateCursorPosition(lcddirection_t a_dir){
 	
 	switch (a_dir){
 		

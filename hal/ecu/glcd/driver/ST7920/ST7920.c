@@ -20,8 +20,8 @@ static uint8_t g_pixelX,g_pixelY;
 static glcdfont_t g_font;
 
 static void _resetDisplay(void);
-static void _sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType);
-static ubyte_t _readNibble(void);
+static void _sendByte(ubyte_t a_data, st7920transmissiontype_t a_transType);
+static ubyte_t _readByte(void);
 static void _putc(char a_char);
 static void _putw(uword_t a_word);
 #ifdef ST7920_RW_PIN
@@ -121,21 +121,21 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 	
 				//------------SEND HIGH NIBBLE------------//
 	
-				_sendNibble((a_instruction>>4),ST7920_INSTRUCTION);
+				_sendByte((a_instruction>>4),ST7920_INSTRUCTION);
 
 				//------------SEND LOW NIBBLE------------//
 
-				_sendNibble(a_instruction,ST7920_INSTRUCTION);
+				_sendByte(a_instruction,ST7920_INSTRUCTION);
 	
 			#elif (ST7920_DATA_PORT_MASK == 0xF0)
 	
 				//------------SEND HIGH NIBBLE------------//
 	
-				_sendNibble(a_instruction,ST7920_INSTRUCTION);
+				_sendByte(a_instruction,ST7920_INSTRUCTION);
 
 				//------------SEND LOW NIBBLE------------//
 
-				_sendNibble((a_instruction<<4),ST7920_INSTRUCTION);
+				_sendByte((a_instruction<<4),ST7920_INSTRUCTION);
 	
 			#endif
 	
@@ -143,13 +143,13 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 	
 			//------------SEND 8-BIT COMMAND------------//
 	
-			_sendNibble(a_instruction,ST7920_INSTRUCTION);
+			_sendByte(a_instruction,ST7920_INSTRUCTION);
 	
 		#endif
 	
 	#elif (ST7920_INTERFACE == 0)
 	
-		_sendNibble(a_instruction,ST7920_INSTRUCTION);
+		_sendByte(a_instruction,ST7920_INSTRUCTION);
 	
 	#endif
 	
@@ -281,21 +281,21 @@ char ST7920_getc(void){
 
 			//------------READ HIGH NIBBLE------------//
 
-			data |= (_readNibble()<<4);
+			data |= (_readByte()<<4);
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= _readNibble();
+			data |= _readByte();
 
 		#elif (ST7920_DATA_PORT_MASK == 0xF0)
 
 			//------------READ HIGH NIBBLE------------//
 
-			data |= _readNibble();
+			data |= _readByte();
 
 			//------------READ LOW NIBBLE------------//
 
-			data |= (_readNibble()>>4);
+			data |= (_readByte()>>4);
 
 		#endif
 
@@ -303,7 +303,7 @@ char ST7920_getc(void){
 
 		//------------READ 8-BIT DATA------------//
 
-		data |= _readNibble();
+		data |= _readByte();
 
 	#endif
 	
@@ -464,26 +464,26 @@ static void _resetDisplay(void){
 	
 				/*------------RESET THE ST7920------------*/
 	
-				_sendNibble(0x03,ST7920_INSTRUCTION);
+				_sendByte(0x03,ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				_sendNibble(0x03,ST7920_INSTRUCTION);
+				_sendByte(0x03,ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				_sendNibble(0x03,ST7920_INSTRUCTION);
+				_sendByte(0x03,ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				_sendNibble(0x02,ST7920_INSTRUCTION);
+				_sendByte(0x02,ST7920_INSTRUCTION);
 				DELAY_MS(1);
 	
 			#elif (ST7920_DATA_PORT_MASK == 0xF0)
 	
 				/*------------RESET THE ST7920------------*/
 	
-				_sendNibble((0x03<<4),ST7920_INSTRUCTION);
+				_sendByte((0x03<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				_sendNibble((0x03<<4),ST7920_INSTRUCTION);
+				_sendByte((0x03<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				_sendNibble((0x03<<4),ST7920_INSTRUCTION);
+				_sendByte((0x03<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
-				_sendNibble((0x02<<4),ST7920_INSTRUCTION);
+				_sendByte((0x02<<4),ST7920_INSTRUCTION);
 				DELAY_MS(1);
 
 			#endif
@@ -492,11 +492,11 @@ static void _resetDisplay(void){
 	
 			/*------------RESET THE ST7920------------*/
 	
-			_sendNibble(0x03,ST7920_INSTRUCTION);
+			_sendByte(0x03,ST7920_INSTRUCTION);
 			DELAY_MS(1);
-			_sendNibble(0x03,ST7920_INSTRUCTION);
+			_sendByte(0x03,ST7920_INSTRUCTION);
 			DELAY_MS(1);
-			_sendNibble(0x03,ST7920_INSTRUCTION);
+			_sendByte(0x03,ST7920_INSTRUCTION);
 			DELAY_MS(1);
 	
 		#endif
@@ -505,18 +505,18 @@ static void _resetDisplay(void){
 	
 		/*------------RESET THE ST7920------------*/
 	
-		_sendNibble(0x03,ST7920_INSTRUCTION);
+		_sendByte(0x03,ST7920_INSTRUCTION);
 		DELAY_MS(1);
-		_sendNibble(0x03,ST7920_INSTRUCTION);
+		_sendByte(0x03,ST7920_INSTRUCTION);
 		DELAY_MS(1);
-		_sendNibble(0x03,ST7920_INSTRUCTION);
+		_sendByte(0x03,ST7920_INSTRUCTION);
 		DELAY_MS(1);
 	
 	#endif
 	
 }
 
-static void _sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType){
+static void _sendByte(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	
 	#if (ST7920_INTERFACE == 1)
 	
@@ -563,7 +563,7 @@ static void _sendNibble(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	
 }
 
-static ubyte_t _readNibble(void){
+static ubyte_t _readByte(void){
 	
 	#ifdef ST7920_RW_PIN
 	
@@ -605,21 +605,21 @@ static void _putc(char a_char){
 	
 				//------------SEND HIGH NIBBLE------------//
 	
-				_sendNibble((a_char>>4),ST7920_DATA);
+				_sendByte((a_char>>4),ST7920_DATA);
 
 				//------------SEND LOW NIBBLE------------//
 
-				_sendNibble(a_char,ST7920_DATA);
+				_sendByte(a_char,ST7920_DATA);
 	
 			#elif (ST7920_DATA_PORT_MASK == 0xF0)
 	
 				//------------SEND HIGH NIBBLE------------//
 	
-				_sendNibble(a_char,ST7920_DATA);
+				_sendByte(a_char,ST7920_DATA);
 
 				//------------SEND LOW NIBBLE------------//
 
-				_sendNibble((a_char<<4),ST7920_DATA);
+				_sendByte((a_char<<4),ST7920_DATA);
 	
 			#endif
 	
@@ -627,13 +627,13 @@ static void _putc(char a_char){
 	
 			//------------SEND 8-BIT DATA------------//
 	
-			_sendNibble(a_char,ST7920_DATA);
+			_sendByte(a_char,ST7920_DATA);
 	
 		#endif
 	
 	#elif (ST7920_INTERFACE == 0)
 	
-		_sendNibble(a_char,ST7920_DATA);
+		_sendByte(a_char,ST7920_DATA);
 	
 	#endif
 	
