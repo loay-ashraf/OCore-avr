@@ -1,25 +1,29 @@
-/** @file Keypad.h
- *  @brief This driver supports interfacing of parallel interface character
- *	LCD (both 16x2 and 20x4); this file includes function prototypes for LCD.c
- *  @author Loay Ashraf
- *	@version 1.0.0
- *  @pre include delay.h and stdlib.h in micro_config.h
- *  @bug no known bugs
- *	@warning data mode has to be selected here
- *  @see micro_config.h
- */
+/**********************************************************************
+*
+* File:         keypad.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 15/01/2018
+*
+* Description:	contains typedefs and function declarations for
+*               matrix keypad module.
+*
+**********************************************************************/
 
 #ifndef KEYPAD_H_
 #define KEYPAD_H_
 
-//------------INCLUDE MCU CONFIGURATION------------//
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "keypad_config.h"
 #include "hal/mcu/sys/std_types.h"
 
+/*--------------------------FUNCTION POINTERS------------------------*/
+
 typedef void (*keyhandler_t) (char);
 
-//------------FUNCTION PROTOTYPES------------//
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 
 void Keypad_init(void);
 void Keypad_setKeyMap(char a_keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS]);
