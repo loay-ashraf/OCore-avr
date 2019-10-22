@@ -1,4 +1,4 @@
-# ATmega16/32 Library Collection
+# ATmega16/32 Library Set
 AVR library collection based on layered architecture with full integration of FreeRTOS kernel for makers and hobbyists.
 
 ## Getting Started
