@@ -1,20 +1,87 @@
-/*
- * servo.c
- *
- * Created: 07/09/2019 12:54:48 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         servo.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 12/03/2019
+*
+* Description:	contains function definitions for servo motor
+*               module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "servo.h"
 #include "hal/mcu/hw/driver/timer16/timer16.h"
 #include "hal/mcu/sys/delay.h"
 
-static uint16_t g_servoSpeed[2];
-static uint16_t g_servoDelay[2];
-static uint8_t g_servoPosition[2];
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_servoSpeed
+*
+* Description: Stores current speed for each of servo motor
+*              module channels.
+*
+* Notes:
+*
+* Scope:       servo.c.
+*
+**********************************************************************/
+
+static uint16_t g_servoSpeed[SERVO_CHANNELS_NUMBER];
+
+/**********************************************************************
+*
+* Variable:    g_servoDelay
+*
+* Description: Stores current delay required to achieve current speed 
+*              for each of servo motor module channels.
+*
+* Notes:
+*
+* Scope:       servo.c.
+*
+**********************************************************************/
+
+static uint16_t g_servoDelay[SERVO_CHANNELS_NUMBER];
+
+/**********************************************************************
+*
+* Variable:    g_servoPosition
+*
+* Description: Stores current shaft position (in degrees) for each 
+*              of servo motor module channels.
+*
+* Notes:
+*
+* Scope:       servo.c.
+*
+**********************************************************************/
+
+static uint8_t g_servoPosition[SERVO_CHANNELS_NUMBER];
+
+/*------------------------FUNCTION PROTOTYPES------------------------*/
 
 static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
 static void delayVar(uint16_t a_ms);
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    Servo_enable
+*
+* Description: Enables servo motor module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void Servo_enable(void){
 	
@@ -24,11 +91,35 @@ void Servo_enable(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    Servo_disable
+*
+* Description: Disables servo motor module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void Servo_disable(void){
 	
 	timer16_stop(SERVO_TIMER);
 	
 }
+
+/**********************************************************************
+*
+* Function:    Servo_activateChannel
+*
+* Description: Activates servo motor module channel.
+*
+* Notes:       This function activates 16-bit TIMER0 module.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpeed, uint8_t a_initialPosition){
 	
@@ -75,6 +166,18 @@ void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpee
 	
 }
 
+/**********************************************************************
+*
+* Function:    Servo_deactivateChannel
+*
+* Description: Deactivates servo motor module channel.
+*
+* Notes:       This function doesn't deactivate 16-bit TIMER0 module.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void Servo_deactivateChannel(servochannel_t a_servoChannel){
 	
 	switch (a_servoChannel){
@@ -98,6 +201,18 @@ void Servo_deactivateChannel(servochannel_t a_servoChannel){
 	
 }
 
+/**********************************************************************
+*
+* Function:    Servo_setSpeed
+*
+* Description: Sets speed (in deg/sec) for servo motor module channel.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void Servo_setSpeed(servochannel_t a_servoChannel, uint16_t a_speed){
 		
 	if(a_speed > SERVO_SPEED_MAX)
@@ -107,6 +222,19 @@ void Servo_setSpeed(servochannel_t a_servoChannel, uint16_t a_speed){
 	g_servoDelay[a_servoChannel] = (1.0/a_speed)*1000;
 	
 }
+
+/**********************************************************************
+*
+* Function:    Servo_setPositionDirect
+*
+* Description: Moves shaft at maximum possible speed to desired 
+*              position for servo motor module channel.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
 	
@@ -140,6 +268,19 @@ void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    Servo_setPositionGrad
+*
+* Description: Moves shaft at current speed to desired position 
+*              for servo motor module channel.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 	
@@ -222,6 +363,18 @@ void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 	
 }
 
+/**********************************************************************
+*
+* Function:    map
+*
+* Description: Maps an integer value from a range to another one.
+*
+* Notes:
+*
+* Returns:     Mapped value (type: uint16_t).
+*
+**********************************************************************/
+
 static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
 	
 	if(a_input < a_inputMin)
@@ -234,6 +387,18 @@ static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, u
 	
 	return output;
 }
+
+/**********************************************************************
+*
+* Function:    delayVar
+*
+* Description: Halts CPU cycles for a number of milliseconds.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 static void delayVar(uint16_t a_ms){
 	

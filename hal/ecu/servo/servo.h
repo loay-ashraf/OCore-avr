@@ -1,18 +1,29 @@
-/*
- * servo.h
- *
- * Created: 07/09/2019 12:55:12 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         servo.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 12/03/2019
+*
+* Description:	contains typedefs and function declarations for
+*               servo motor module.
+*
+**********************************************************************/
 
 #ifndef SERVO_H_
 #define SERVO_H_
 
-/*#include "../../config/ecu_depend.h"*/
+/*------------------------------INCLUDES-----------------------------*/
+
 #include "servo_config.h"
 #include "hal/mcu/sys/std_types.h"
 
+/*--------------------------------ENUMS------------------------------*/
+
 typedef enum{SER_CH0,SER_CH1}servochannel_t;
+	
+/*------------------------FUNCTION DECLARATIONS----------------------*/	
 
 void Servo_enable(void);
 void Servo_disable(void);
