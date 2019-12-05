@@ -53,7 +53,7 @@ The mcu layer contains:
 
 ## <a name="projectlayout"></a>Project Layout
 ```
-└───ATmega16-32-Library-Collection
+└───ATmega16-32-Library-Set
     ├───app
     │   ├───config
     │   └───examples
