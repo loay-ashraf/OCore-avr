@@ -13,7 +13,7 @@ You'll also need git to be installed on your machine.
 
 ### Installing
 You'll need to do the following:
-- clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/ATmega16-32-Library-Collection.git`
+- clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/ATmega16-32-Library-Set.git`
 - create new project in your IDE.
 - add your project root directory to compiler include path (in project toolchain settings).
 - add the three main folders from cloned repo folder to the project: `app`, `hal`, `rtos`. 
@@ -53,7 +53,7 @@ The mcu layer contains:
 
 ## <a name="projectlayout"></a>Project Layout
 ```
-└───ATmega16-32-Library-Collection
+└───ATmega16-32-Library-Set
     ├───app
     │   ├───config
     │   └───examples
