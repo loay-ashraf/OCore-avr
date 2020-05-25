@@ -5,7 +5,7 @@
  *  Author: Loay Ashraf
  */ 
 
-#include "../include/examples.h"
+#include "app/examples/include/examples.h"
 #include "hal/ecu/lcd/api/lcd.h"
 #include "hal/ecu/keypad/keypad.h"
 #include "hal/mcu/hw/driver/usart/usart.h"
