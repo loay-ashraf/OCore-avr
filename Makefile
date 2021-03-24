@@ -37,8 +37,8 @@
 
 MCU = atmega16
 FORMAT = ihex
-TARGET = ATmega16 Library Set
-SRC_DIR = ATmega16-32-Library-Set/
+TARGET = ATmega16-Library-Set
+SRC_DIR = ./
 SRC = $(shell find $(SRC_DIR) -name *.cpp -or -name *.c -or -name *.s)
 ASRC =
 OPT = s
@@ -62,7 +62,7 @@ CSTANDARD = -std=gnu99
 CDEFS =
 
 # Place -I options here
-CINCS = -I ATmega16-32-Library-Set/
+CINCS = -I ./
 
 
 CDEBUG = -g$(DEBUG)
