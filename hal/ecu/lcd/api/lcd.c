@@ -45,6 +45,7 @@ static void restoreCursorConfig(void);
 static void resetTextDirectionConfig(void);
 static void saveTextDirectionConfig(bool_t a_leftToRight);
 static void restoreTextDirectionConfig(void);
+static void shiftCursorPosition(lcddirection_t a_dir);
 static void saveCursorPosition(uint8_t a_row, uint8_t a_column);	
 static void restoreCursorPosition(lcddirection_t a_dir, uint8_t a_offset, uint8_t a_width);
 static void setCursorPositionUpdateFlag(void);
@@ -59,7 +60,7 @@ static void clearCursorPositionUpdateFlag(void);
 	
 	setCursorPositionUpdateFlag();
 	setFrameBufferUpdateFlag();
-	
+		
 	LCD_INIT(a_backlightON,a_cursorVisible,a_cursorBlinking,a_leftToRight);
 	
  }
@@ -161,9 +162,7 @@ static void clearCursorPositionUpdateFlag(void);
 	
 	// update cursor position
 	
-	if(g_LCD.statusRegister.cursorpositionupdate)
-	
-		saveCursorPosition(a_row,a_col);
+	saveCursorPosition(a_row,a_col);		
 	
 	LCD_SET_CURSOR_POSITION(a_row,a_col);
 	
@@ -171,19 +170,17 @@ static void clearCursorPositionUpdateFlag(void);
  
  lcdposition_t LCD_getCursorPosition(void){
 	 
-	 return g_LCD.cursorPosition;
+	 return g_LCD.primaryCursorPosition;
 	 
  }
  
  void LCD_shiftCursor(lcddirection_t a_dir){
-	 
-	if(g_LCD.statusRegister.cursorpositionupdate)
-			
-		g_LCD.cursorPosition = LCD_SHIFT_CURSOR(a_dir);
-			
-	else
-			
-		LCD_SHIFT_CURSOR(a_dir);
+	
+	shiftCursorPosition(a_dir);
+	
+	if(!(a_dir == LCD_UP || a_dir == LCD_DOWN || (a_dir == LCD_RIGHT && g_LCD.primaryCursorPosition.column == 0) || (a_dir == LCD_LEFT && g_LCD.primaryCursorPosition.column == LCD_COLUMNS-1)))
+	
+		LCD_SHIFT_CURSOR(a_dir);	 
 			
  }
 
@@ -270,8 +267,7 @@ static void clearCursorPositionUpdateFlag(void);
  
  void LCD_scrollDisplayNative(lcddirection_t a_dir){
 	 
-	if(a_dir == LCD_LEFT || a_dir == LCD_RIGHT)
-		LCD_SCROLL_DISPLAY(a_dir);
+	LCD_SCROLL_DISPLAY(a_dir);
 	 
  }
  
@@ -317,11 +313,11 @@ static void clearCursorPositionUpdateFlag(void);
 		
 		if(a_data == LCD_CCHAR0)
 			
-			g_LCD.frameBuffer[g_LCD.cursorPosition.row][g_LCD.cursorPosition.column] = '\n';
+			g_LCD.frameBuffer[g_LCD.primaryCursorPosition.row][g_LCD.primaryCursorPosition.column] = '\n';
 			
 		else
 		
-			g_LCD.frameBuffer[g_LCD.cursorPosition.row][g_LCD.cursorPosition.column] = a_data;
+			g_LCD.frameBuffer[g_LCD.primaryCursorPosition.row][g_LCD.primaryCursorPosition.column] = a_data;
 	
 	}
 	
@@ -330,15 +326,11 @@ static void clearCursorPositionUpdateFlag(void);
 	if(a_data == '\n')
 		
 		a_data = LCD_CCHAR0;
+		
+	LCD_PUTC(a_data);
 	
-	if(g_LCD.statusRegister.cursorpositionupdate)
-		
-		g_LCD.cursorPosition = LCD_PUTC(a_data);
-		
-	else
-		
-		LCD_PUTC(a_data);	
-	
+	shiftCursorPosition((lcddirection_t)g_LCD.statusRegister.leftToRight);
+			
 }
 
  void LCD_puts(const char * a_data){
@@ -380,7 +372,7 @@ static void clearCursorPositionUpdateFlag(void);
  
  char LCD_getc(void){
 
-	return LCD_READ_CHAR;
+	return LCD_GETC;
  }
  
  char * LCD_gets(uint8_t a_row, uint8_t a_width){
@@ -456,7 +448,7 @@ static void clearCursorPositionUpdateFlag(void);
 	 
  }
  
- void shiftBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width){
+ static void shiftBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width){
 	  
 	ubyte_t rows;
 	  
@@ -523,7 +515,7 @@ static void clearCursorPositionUpdateFlag(void);
     }
  }
  
- void scrollBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width){
+ static void scrollBuffer(lcddirection_t a_direction, uint8_t a_offset, uint8_t a_width){
 	 
 	ubyte_t rows = 0;
 	
@@ -595,46 +587,143 @@ static void clearCursorPositionUpdateFlag(void);
  
  static void resetCursorConfig(void){
 	 
-	 LCD_CONFIG_CURSOR(FALSE,FALSE);
+	LCD_CONFIG_CURSOR(FALSE,FALSE);
 	 
  }
  
  static void saveCursorConfig(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 	 
-	 g_LCD.statusRegister.value &= ~0x03;
-	 g_LCD.statusRegister.cursorvisible = a_cursorVisible;
-	 g_LCD.statusRegister.cursorblinking = a_cursorBlinking;
+	g_LCD.statusRegister.value &= ~0x03;
+	g_LCD.statusRegister.cursorvisible = a_cursorVisible;
+	g_LCD.statusRegister.cursorblinking = a_cursorBlinking;
 	 
  }
  
  static void restoreCursorConfig(void){
 	 
-	 LCD_CONFIG_CURSOR(g_LCD.statusRegister.cursorvisible,g_LCD.statusRegister.cursorblinking);
+	LCD_CONFIG_CURSOR(g_LCD.statusRegister.cursorvisible,g_LCD.statusRegister.cursorblinking);
 	 
  }
  
-  static void resetTextDirectionConfig(void){
+ static void resetTextDirectionConfig(void){
 	  
-	  LCD_CONFIG_TEXT_DIRECTION(TRUE);
+	LCD_CONFIG_TEXT_DIRECTION(TRUE);
 	  
-  }
+ }
   
-  static void saveTextDirectionConfig(bool_t a_leftToRight){
+ static void saveTextDirectionConfig(bool_t a_leftToRight){
 	  
-	  g_LCD.statusRegister.leftToRight = a_leftToRight;
+	g_LCD.statusRegister.leftToRight = a_leftToRight;
 	  
-  }
+ }
   
-  static void restoreTextDirectionConfig(void){
+ static void restoreTextDirectionConfig(void){
 	  
-	  LCD_CONFIG_TEXT_DIRECTION(g_LCD.statusRegister.leftToRight);
+	LCD_CONFIG_TEXT_DIRECTION(g_LCD.statusRegister.leftToRight);
 	  
-  }
+ }
+ 
+ static void shiftCursorPosition(lcddirection_t a_dir){
+	
+	lcdposition_t cursorPosition;
+	
+	if(g_LCD.statusRegister.cursorpositionupdate)
+		
+		cursorPosition = g_LCD.primaryCursorPosition;
+		
+	else
+	
+		cursorPosition = g_LCD.secondaryCursorPosition;	
+	 
+	switch (a_dir){
+		 
+		case LCD_LEFT: {
+			 
+			if(cursorPosition.column == 0){
+				 
+				cursorPosition.column = LCD_COLUMNS-1;
+				 
+				if(cursorPosition.row == 0)
+					cursorPosition.row = LCD_ROWS-1;
+				else
+					cursorPosition.row--;
+				 
+			}else{
+				 
+					cursorPosition.column--;
+				 
+			}
+			 
+		}
+		break;
+		 
+		case LCD_RIGHT: {
+			 
+			if(cursorPosition.column == LCD_COLUMNS-1){
+				 
+				cursorPosition.column = 0;
+				 
+				if(cursorPosition.row == LCD_ROWS-1)
+					cursorPosition.row = 0;
+				else
+					cursorPosition.row++;
+				 
+			}else{
+				 
+					cursorPosition.column++;
+				 
+			}
+			 
+		}
+		break;
+		 
+		case LCD_UP: {
+			 
+			if(cursorPosition.row == 0)
+				cursorPosition.row = LCD_ROWS-1;
+			else
+				cursorPosition.row--;
+			 
+		}
+		break;
+		 
+		case LCD_DOWN: {
+			 
+			if(cursorPosition.row == LCD_ROWS-1)
+				cursorPosition.row = 0;
+			else
+				cursorPosition.row++;
+			 
+		}
+		break;
+		 
+		default: break;
+		 
+	}
+	
+	if(a_dir == LCD_UP || a_dir == LCD_DOWN || (a_dir == LCD_RIGHT && cursorPosition.column == 0) || (a_dir == LCD_LEFT && cursorPosition.column == LCD_COLUMNS-1))
+		
+		LCD_setCursorPosition(cursorPosition.row,cursorPosition.column);
+		
+	else
+	
+		saveCursorPosition(cursorPosition.row,cursorPosition.column);	
+	
+ }
  
  static void saveCursorPosition(uint8_t a_row, uint8_t a_column){
+	
+	if(g_LCD.statusRegister.cursorpositionupdate){
 	 
-	g_LCD.cursorPosition.row = a_row;
-	g_LCD.cursorPosition.column = a_column;
+		g_LCD.primaryCursorPosition.row = a_row;
+		g_LCD.primaryCursorPosition.column = a_column;
+		
+	}else{
+	
+		g_LCD.secondaryCursorPosition.row = a_row;
+		g_LCD.secondaryCursorPosition.column = a_column;
+		
+	}
 	 
  }
  
@@ -644,16 +733,16 @@ static void clearCursorPositionUpdateFlag(void);
 		
 		case LCD_UP: {
 		
-			if(g_LCD.cursorPosition.column >= a_offset && g_LCD.cursorPosition.column < (a_offset+a_width)){
+			if(g_LCD.primaryCursorPosition.column >= a_offset && g_LCD.primaryCursorPosition.column < (a_offset+a_width)){
 			
-				if(g_LCD.cursorPosition.row == 0)
-					LCD_setCursorPosition(LCD_ROWS-1,g_LCD.cursorPosition.column);
+				if(g_LCD.primaryCursorPosition.row == 0)
+					LCD_setCursorPosition(LCD_ROWS-1,g_LCD.primaryCursorPosition.column);
 				else
-					LCD_setCursorPosition(g_LCD.cursorPosition.row-1,g_LCD.cursorPosition.column);
+					LCD_setCursorPosition(g_LCD.primaryCursorPosition.row-1,g_LCD.primaryCursorPosition.column);
 		
 			}else{
 		
-				LCD_setCursorPosition(g_LCD.cursorPosition.row,g_LCD.cursorPosition.column);
+				LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,g_LCD.primaryCursorPosition.column);
 		
 			}
 		}
@@ -661,16 +750,16 @@ static void clearCursorPositionUpdateFlag(void);
 	
 		case LCD_DOWN: {
 		
-			if(g_LCD.cursorPosition.column >= a_offset && g_LCD.cursorPosition.column < (a_offset+a_width)){
+			if(g_LCD.primaryCursorPosition.column >= a_offset && g_LCD.primaryCursorPosition.column < (a_offset+a_width)){
 			
-				if(g_LCD.cursorPosition.row == LCD_ROWS-1)
-				LCD_setCursorPosition(0,g_LCD.cursorPosition.column);
+				if(g_LCD.primaryCursorPosition.row == LCD_ROWS-1)
+				LCD_setCursorPosition(0,g_LCD.primaryCursorPosition.column);
 				else
-				LCD_setCursorPosition(g_LCD.cursorPosition.row+1,g_LCD.cursorPosition.column);
+				LCD_setCursorPosition(g_LCD.primaryCursorPosition.row+1,g_LCD.primaryCursorPosition.column);
 			
 			}else{
 		
-				LCD_setCursorPosition(g_LCD.cursorPosition.row,g_LCD.cursorPosition.column);
+				LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,g_LCD.primaryCursorPosition.column);
 		
 			}
 		}
@@ -678,16 +767,16 @@ static void clearCursorPositionUpdateFlag(void);
 
 		case LCD_LEFT: {
 		
-			if(g_LCD.cursorPosition.row >= a_offset && g_LCD.cursorPosition.row < (a_offset+a_width)){	
+			if(g_LCD.primaryCursorPosition.row >= a_offset && g_LCD.primaryCursorPosition.row < (a_offset+a_width)){	
 			
-				if(g_LCD.cursorPosition.column == 0)
-					LCD_setCursorPosition(g_LCD.cursorPosition.row,LCD_COLUMNS-1);
+				if(g_LCD.primaryCursorPosition.column == 0)
+					LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,LCD_COLUMNS-1);
 				else
-					LCD_setCursorPosition(g_LCD.cursorPosition.row,g_LCD.cursorPosition.column-1);
+					LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,g_LCD.primaryCursorPosition.column-1);
 				
 			}else{
 			
-				LCD_setCursorPosition(g_LCD.cursorPosition.row,g_LCD.cursorPosition.column);
+				LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,g_LCD.primaryCursorPosition.column);
 			
 			}
 		}
@@ -695,16 +784,16 @@ static void clearCursorPositionUpdateFlag(void);
 
 		case LCD_RIGHT: {
 		
-			if(g_LCD.cursorPosition.row >= a_offset && g_LCD.cursorPosition.row < (a_offset+a_width)){
+			if(g_LCD.primaryCursorPosition.row >= a_offset && g_LCD.primaryCursorPosition.row < (a_offset+a_width)){
 			
-				if(g_LCD.cursorPosition.column == LCD_COLUMNS-1)
-					LCD_setCursorPosition(g_LCD.cursorPosition.row,0);
+				if(g_LCD.primaryCursorPosition.column == LCD_COLUMNS-1)
+					LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,0);
 				else
-					LCD_setCursorPosition(g_LCD.cursorPosition.row,g_LCD.cursorPosition.column+1);
+					LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,g_LCD.primaryCursorPosition.column+1);
 		
 			}else{
 			
-				LCD_setCursorPosition(g_LCD.cursorPosition.row,g_LCD.cursorPosition.column);
+				LCD_setCursorPosition(g_LCD.primaryCursorPosition.row,g_LCD.primaryCursorPosition.column);
 			
 			}
 		}

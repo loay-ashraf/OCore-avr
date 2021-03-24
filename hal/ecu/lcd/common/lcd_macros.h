@@ -28,7 +28,7 @@
 	#define LCD_SCROLL_DISPLAY(DIR)						HD44780_scrollDisplay(DIR)
 	#define LCD_DEFINE_CUSTOM_CHARACTER(INDEX,ARRAY)	HD44780_defineCustomCharacter(INDEX,ARRAY)
 	#define LCD_PUTC(DATA)								HD44780_putc(DATA)
-	#define LCD_READ_CHAR								HD44780_getc()
+	#define LCD_GETC									HD44780_getc()
 
 #endif
 

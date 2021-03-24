@@ -29,8 +29,4 @@
 
 #define HD44780_BL_MODE			1		// 1 for non-inverted mode and 0 for inverted mode
 
-/*------------CONFIGURE SOFTWARE COREECTION OF CURSOR POSITION------------*/
-
-#define HD44780_SW_CURSOR_SHIFT	1
-
 #endif /* HD44780_CONFIG_H_ */

@@ -45,7 +45,8 @@ typedef struct{
 typedef struct{
 	
 	char frameBuffer[LCD_ROWS][LCD_COLUMNS+1];
-	lcdposition_t cursorPosition;
+	lcdposition_t primaryCursorPosition;
+	lcdposition_t secondaryCursorPosition;
 	lcdstatusregister_t statusRegister;
 	
 }lcd_t;

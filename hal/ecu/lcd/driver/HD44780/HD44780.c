@@ -11,21 +11,11 @@
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/sys/delay.h"
 
-#if (HD44780_SW_CURSOR_SHIFT == 1)
-static lcdposition_t g_cursorPosition;
-static bool_t g_leftToRight;
-#endif
-
 static void _resetDisplay(void);
 static void _sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType);
 static ubyte_t _readByte(void);
-#if (HD44780_SW_CURSOR_SHIFT == 1)
-static void _updateCursorPosition(lcddirection_t a_dir);
-#endif
 
 void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
-	
-	g_leftToRight = a_leftToRight;
 	
 	#ifdef HD44780_BL_PIN
 	
@@ -108,9 +98,6 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 
 void HD44780_clearDisplay(void){
 	
-	g_cursorPosition.row = 0;
-	g_cursorPosition.column = 0;
-	
 	HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);			// clear display command
 
 }
@@ -152,12 +139,6 @@ void HD44780_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 }
 
 void HD44780_configTextDirection(bool_t a_leftToRight){
-	
-	#if (HD44780_SW_CURSOR_SHIFT == 1)
-		
-		g_leftToRight = a_leftToRight;
-		
-	#endif
 		
 	HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));			// configure text direction
 	
@@ -165,21 +146,8 @@ void HD44780_configTextDirection(bool_t a_leftToRight){
 
 void HD44780_setCursorPosition(uint8_t a_row, uint8_t a_col){
 	
-	#if (HD44780_SW_CURSOR_SHIFT == 1)
-	
-		if(a_row >= LCD_ROWS)		// check row
-			a_row = LCD_ROWS-1;
-	
-		if(a_col >= LCD_COLUMNS)	// check column
-			a_col = LCD_COLUMNS-1;
-			
-		if(g_cursorPosition.row != a_row)
-			g_cursorPosition.row = a_row;
-		
-		if(g_cursorPosition.column != a_col)
-			g_cursorPosition.column = a_col;	
-	
-	#endif
+	if(a_col >= LCD_COLUMNS)	// check column
+		a_col = 0;
 	
 	switch(a_row){
 
@@ -197,69 +165,19 @@ void HD44780_setCursorPosition(uint8_t a_row, uint8_t a_col){
 	}
 }
 
-lcdposition_t HD44780_shiftCursor(lcddirection_t a_dir){
+void HD44780_shiftCursor(lcddirection_t a_dir){
 	
-	#if (HD44780_SW_CURSOR_SHIFT == 1)
+	if(a_dir == LCD_LEFT || a_dir == LCD_RIGHT)
 	
-		_updateCursorPosition(a_dir);
-		
-		switch (a_dir){
-			
-			case LCD_LEFT: {
-				
-				if(g_cursorPosition.column == LCD_COLUMNS-1)
-				
-					HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
-				
-				else
-				
-					HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
-				
-				
-			}
-			break;
-			
-			case LCD_RIGHT: {
-				
-				if(g_cursorPosition.column == 0)
-				
-					HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
-				
-				else
-				
-					HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
-				
-			}
-			break;
-			
-			case LCD_UP:
-			case LCD_DOWN: {
-				
-				HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
-				
-			}
-			break;
-			
-			default: break;
-		}
-		
-		return g_cursorPosition;
-		
-	#elif (HD44780_SW_CURSOR_SHIFT == 0)	
-		
-		if(a_dir == LCD_LEFT || a_dir == LCD_RIGHT)
-		
-			HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
-		
-		return (lcdposition_t) {.row = 0, .column = 0};
-		
-	#endif	
+		HD44780_sendInstruction(HD44780_SHIFT_CURSOR|(a_dir<<2));
 	
 }
 
-void HD44780_scrollDisplay(bool_t a_dir){
+void HD44780_scrollDisplay(lcddirection_t a_dir){
 	
-	HD44780_sendInstruction(HD44780_SCROLL_DISPLAY|(a_dir<<2));
+	if(a_dir == LCD_LEFT || a_dir == LCD_RIGHT)
+	
+		HD44780_sendInstruction(HD44780_SCROLL_DISPLAY|(a_dir<<2));
 	
 }
 
@@ -277,7 +195,7 @@ void HD44780_defineCustomCharacter(lcdcustomcharacter_t a_characterIndex, ubyte_
 	
 }
 
-lcdposition_t HD44780_putc(char a_data){
+void HD44780_putc(char a_data){
 	
 	#if (HD44780_DATA_MODE == 4)
 	
@@ -308,32 +226,6 @@ lcdposition_t HD44780_putc(char a_data){
 		//------------SEND 8-BIT COMMAND------------//
 	
 		_sendByte(a_data,HD44780_DATA);
-	
-	#endif
-	
-	#if (HD44780_SW_CURSOR_SHIFT == 1)
-	
-		_updateCursorPosition((lcddirection_t)g_leftToRight);
-		
-		if(g_leftToRight){
-			
-			if(g_cursorPosition.column == 0)
-			
-				HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
-			
-		}else{
-			
-			if(g_cursorPosition.column == LCD_COLUMNS-1)
-			
-				HD44780_setCursorPosition(g_cursorPosition.row,g_cursorPosition.column);
-			
-		}
-	
-		return g_cursorPosition;
-			
-	#elif (HD44780_SW_CURSOR_SHIFT == 0)	
-	
-		return (lcdposition_t) {.row = 0, .column = 0};	
 	
 	#endif
 	
@@ -486,76 +378,3 @@ static ubyte_t _readByte(void){
 		
 	#endif	
 }
-
-#if (HD44780_SW_CURSOR_SHIFT == 1)
-
-static void _updateCursorPosition(lcddirection_t a_dir){
-	
-	switch (a_dir){
-		
-		case LCD_LEFT: {
-			
-			if(g_cursorPosition.column == 0){
-				
-				g_cursorPosition.column = LCD_COLUMNS-1;
-				
-				if(g_cursorPosition.row == 0)
-					g_cursorPosition.row = LCD_ROWS-1;
-				else
-					g_cursorPosition.row--;
-				
-			}else{
-				
-				g_cursorPosition.column--;
-				
-			}
-			
-		}
-		break;
-		
-		case LCD_RIGHT: {
-			
-			if(g_cursorPosition.column == LCD_COLUMNS-1){
-				
-				g_cursorPosition.column = 0;
-				
-				if(g_cursorPosition.row == LCD_ROWS-1)
-					g_cursorPosition.row = 0;
-				else
-					g_cursorPosition.row++;
-				
-			}else{
-				
-				g_cursorPosition.column++;
-				
-			}
-			
-		}
-		break;
-		
-		case LCD_UP: {
-			
-			if(g_cursorPosition.row == 0)
-				g_cursorPosition.row = LCD_ROWS-1;
-			else
-				g_cursorPosition.row--;
-			
-		}
-		break;
-		
-		case LCD_DOWN: {
-			
-			if(g_cursorPosition.row == LCD_ROWS-1)
-				g_cursorPosition.row = 0;
-			else
-				g_cursorPosition.row++;
-			
-		}
-		break;
-		
-		default: break;
-		
-	}
-}
-
-#endif
