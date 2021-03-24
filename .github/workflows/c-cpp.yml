@@ -1,0 +1,38 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+  
+    - uses: actions/checkout@master
+    - name: Configure  
+      run:  sudo apt-get install gcc-avr binutils-avr gdb-avr avr-libc avrdude
+    - name: Build  
+      run:  sudo make
+    - name: Archive HEX artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: HEX
+        path: build/ATmega16 Library Set.hex 
+    - name: Archive EEP artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: EEP
+        path: build/ATmega16 Library Set.eep  
+    - name: Archive ELF artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: ELF
+        path: build/ATmega16 Library Set.elf
+    - name: Archive Map artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: MAP
+        path: build/ATmega16 Library Set.map
+    - name: Clean
+      run:  sudo make clean  
