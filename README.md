@@ -1,4 +1,4 @@
-# ATmega16/32 Library Set
+# ATmega16/32 Library Set     [![C/C++ CI](https://github.com/loay-ashraf/ATmega16-32-Library-Set/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/loay-ashraf/ATmega16-32-Library-Set/actions/workflows/c-cpp.yml)
 AVR library set based on layered architecture with full integration of FreeRTOS kernel for makers and hobbyists.
 
 ## Getting Started
