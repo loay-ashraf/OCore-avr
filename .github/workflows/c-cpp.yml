@@ -18,21 +18,21 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: HEX
-        path: build/ATmega16 Library Set.hex 
+        path: build/ATmega16-Library-Set.hex 
     - name: Archive EEP artifact
       uses: actions/upload-artifact@v1
       with:
         name: EEP
-        path: build/ATmega16 Library Set.eep  
+        path: build/ATmega16-Library-Set.eep  
     - name: Archive ELF artifact
       uses: actions/upload-artifact@v1
       with:
         name: ELF
-        path: build/ATmega16 Library Set.elf
+        path: build/ATmega16-Library-Set.elf
     - name: Archive Map artifact
       uses: actions/upload-artifact@v1
       with:
         name: MAP
-        path: build/ATmega16 Library Set.map
+        path: build/ATmega16-Library-Set.map
     - name: Clean
       run:  sudo make clean  
