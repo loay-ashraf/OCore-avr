@@ -23,7 +23,7 @@
 
 typedef enum{SER_CH0,SER_CH1}servochannel_t;
 	
-/*------------------------FUNCTION DECLARATIONS----------------------*/	
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 
 void Servo_enable(void);
 void Servo_disable(void);

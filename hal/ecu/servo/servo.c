@@ -66,8 +66,8 @@ static uint8_t g_servoPosition[SERVO_CHANNELS_NUMBER];
 
 /*------------------------FUNCTION PROTOTYPES------------------------*/
 
-static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
-static void delayVar(uint16_t a_ms);
+static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
+static void _delayVar(uint16_t a_ms);
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/
 
@@ -115,7 +115,7 @@ void Servo_disable(void){
 *
 * Description: Activates servo motor module channel.
 *
-* Notes:       This function activates 16-bit TIMER0 module.
+* Notes:       This function activates 16-bit TIMER1 module.
 *
 * Returns:     None.
 *
@@ -135,7 +135,7 @@ void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpee
 			else if(a_initialPosition > SERVO_CH0_POSITION_MAX)
 				a_initialPosition = SERVO_CH0_POSITION_MAX;
 			
-			timer16_setOCRA(SERVO_TIMER,map(a_initialPosition,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+			timer16_setOCRA(SERVO_TIMER,_map(a_initialPosition,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
 			timer16_setOCAMode(SERVO_TIMER,SERVO_TIMER_OCMODE);
 			g_servoSpeed[SER_CH0] = a_initialSpeed;
 			g_servoDelay[SER_CH0] = (1.0/a_initialSpeed)*1000;
@@ -154,7 +154,7 @@ void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpee
 			else if(a_initialPosition > SERVO_CH1_POSITION_MAX)
 				a_initialPosition = SERVO_CH1_POSITION_MAX;
 			
-			timer16_setOCRB(SERVO_TIMER,map(a_initialPosition,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+			timer16_setOCRB(SERVO_TIMER,_map(a_initialPosition,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
 			timer16_setOCBMode(SERVO_TIMER,SERVO_TIMER_OCMODE);	
 			g_servoSpeed[SER_CH1] = a_initialSpeed;
 			g_servoDelay[SER_CH1] = (1.0/a_initialSpeed)*1000;
@@ -172,7 +172,7 @@ void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpee
 *
 * Description: Deactivates servo motor module channel.
 *
-* Notes:       This function doesn't deactivate 16-bit TIMER0 module.
+* Notes:       This function doesn't deactivate 16-bit TIMER1 module.
 *
 * Returns:     None.
 *
@@ -248,7 +248,7 @@ void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
 				a_position = SERVO_CH0_POSITION_MAX;
 			
 			g_servoPosition[SER_CH0] = a_position;
-			timer16_setOCRA(SERVO_TIMER,map(a_position,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+			timer16_setOCRA(SERVO_TIMER,_map(a_position,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
 			
 		}
 		break;
@@ -261,7 +261,7 @@ void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
 				a_position = SERVO_CH1_POSITION_MAX;
 			
 			g_servoPosition[SER_CH1] = a_position;
-			timer16_setOCRB(SERVO_TIMER,map(a_position,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+			timer16_setOCRB(SERVO_TIMER,_map(a_position,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
 		
 		}
 		break;
@@ -305,7 +305,7 @@ void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 				
 				while(numSteps--){
 					
-					delayVar(g_servoDelay[SER_CH0]-delayOffset);	
+					_delayVar(g_servoDelay[SER_CH0]-delayOffset);	
 					Servo_setPositionDirect(SER_CH0,g_servoPosition[SER_CH0]+1);
 					
 				}
@@ -314,7 +314,7 @@ void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 		
 				while(numSteps++ < 0){
 						
-				    delayVar(g_servoDelay[SER_CH0]-delayOffset);
+				    _delayVar(g_servoDelay[SER_CH0]-delayOffset);
 					Servo_setPositionDirect(SER_CH0,g_servoPosition[SER_CH0]-1);
 						
 				}	
@@ -342,7 +342,7 @@ void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 				
 				while(numSteps--){
 					
-					delayVar(g_servoDelay[SER_CH1]-delayOffset);
+					_delayVar(g_servoDelay[SER_CH1]-delayOffset);
 					Servo_setPositionDirect(SER_CH1,g_servoPosition[SER_CH1]+1);
 					
 				}
@@ -351,7 +351,7 @@ void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 				
 				while(numSteps++ < 0){
 					
-					delayVar(g_servoDelay[SER_CH1]-delayOffset);
+					_delayVar(g_servoDelay[SER_CH1]-delayOffset);
 					Servo_setPositionDirect(SER_CH1,g_servoPosition[SER_CH1]-1);
 					
 				}
@@ -365,7 +365,7 @@ void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 
 /**********************************************************************
 *
-* Function:    map
+* Function:    _map
 *
 * Description: Maps an integer value from a range to another one.
 *
@@ -375,7 +375,7 @@ void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
 *
 **********************************************************************/
 
-static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
+static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
 	
 	if(a_input < a_inputMin)
 		a_input = a_inputMin;
@@ -390,7 +390,7 @@ static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, u
 
 /**********************************************************************
 *
-* Function:    delayVar
+* Function:    _delayVar
 *
 * Description: Halts CPU cycles for a number of milliseconds.
 *
@@ -400,7 +400,7 @@ static uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, u
 *
 **********************************************************************/
 
-static void delayVar(uint16_t a_ms){
+static void _delayVar(uint16_t a_ms){
 	
 	while(a_ms--)
 		DELAY_MS(1);

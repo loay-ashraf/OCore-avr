@@ -27,7 +27,7 @@ typedef void (*keyhandler_t) (char);
 
 void Keypad_init(void);
 void Keypad_setKeyMap(char a_keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS]);
-bool_t Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scanFrequency);
+void Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scanFrequency);
 void Keypad_disablePeriodicScan(void);
 char Keypad_scan(void);
 

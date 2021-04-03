@@ -24,7 +24,7 @@
 *
 * Variable:    g_keyMap
 *
-* Description: Stores the key map of connected keypad as 2D array
+* Description: Stores the key map of connected keypad as 2D array.
 *
 * Notes:
 *
@@ -38,7 +38,7 @@ static char g_keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS];
 *
 * Variable:    g_keyHandlerCallback
 *
-* Description: Holds addresses of key handler callback function.
+* Description: Holds address of key handler callback function.
 *
 * Notes:
 *
@@ -50,7 +50,7 @@ static keyhandler_t g_keyHandlerCallback;
 
 /*------------------------FUNCTION PROTOTYPES------------------------*/
  
-static void periodicScanISR(void);
+static void _periodicScanISR(void);
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/
 
@@ -58,7 +58,7 @@ static void periodicScanISR(void);
 *
 * Function:    Keypad_init
 *
-* Description: Initiates matrix keypad module.
+* Description: Initializes matrix keypad module.
 *
 * Notes:
 *
@@ -118,22 +118,20 @@ void Keypad_setKeyMap(char a_keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS]){
 *
 * Notes:       This function enables global interrupts if disabled.
 *
-* Returns:     Boolean value (TRUE or FALSE).
+* Returns:     None.
 *
 **********************************************************************/
  
-bool_t Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scanFrequency){
+void Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scanFrequency){
 	  
 	g_keyHandlerCallback = a_keyHandlerCallback;
 	uint16_t ICR1Value = F_CPU/(64*a_scanFrequency);
 	  
 	timer16_setMode(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_MODE);
 	timer16_enableInterrupt(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
-	timer16_setISRCallback(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT,&periodicScanISR);
+	timer16_setISRCallback(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT,&_periodicScanISR);
 	timer16_setICR(KEYPAD_SCAN_TIMER,ICR1Value);
 	timer16_start(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_PRE);
-	  
-	return TRUE;
 	
 }
 
@@ -165,7 +163,8 @@ void Keypad_disablePeriodicScan(void){
 *
 * Notes:
 *
-* Returns:     Pressed key value ('\0' if no key is pressed).
+* Returns:     Pressed key value ('\0' if no key is pressed) 
+*              (type: char).
 *
 **********************************************************************/
 
@@ -235,7 +234,7 @@ char Keypad_scan(void){
 
 /**********************************************************************
 *
-* Function:    periodicScanISR
+* Function:    _periodicScanISR
 *
 * Description: Initiates matrix keypad scan and calls 
 *              g_keyHandlerCallback function at a defined rate (frequency).
@@ -246,7 +245,7 @@ char Keypad_scan(void){
 *
 **********************************************************************/
  
-static void periodicScanISR(void){
+static void _periodicScanISR(void){
 	 
 	char key = Keypad_scan();
 	 
