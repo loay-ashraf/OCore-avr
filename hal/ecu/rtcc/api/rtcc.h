@@ -1,16 +1,24 @@
-/*
- * rtcc.h
- *
- * Created: 07/08/2019 12:27:51 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         rtcc.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 07/08/2019
+*
+* Description:	contains function declarations for RTCC module.
+*
+**********************************************************************/
 
 #ifndef RTCC_H_
 #define RTCC_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include "hal/ecu/rtcc/common/rtcc_config.h"
 #include "hal/ecu/rtcc/common/rtcc_types.h"
+
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 	
 void RTCC_init(void);
 void RTCC_enable(void);
@@ -23,7 +31,5 @@ rtcccalendar_t RTCC_getCalendar(void);
 void RTCC_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig);
 void RTCC_enableAlarm(rtccalarm_t a_alarm);
 void RTCC_disableAlarm(rtccalarm_t a_alarm);
-float RTCC_getTempCelsius(void);
-float RTCC_getTempFahrenheit(void);
 
 #endif /* RTCC_H_ */

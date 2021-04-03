@@ -1,12 +1,20 @@
-/*
- * DS3231_config.h
- *
- * Created: 04/10/2019 07:15:29 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         DS3231_config.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 04/10/2019
+*
+* Description:	contains definitions and configurations for 
+*               DS3231 controller module.
+*
+**********************************************************************/
 
 #ifndef DS3231_CONFIG_H_
 #define DS3231_CONFIG_H_
+
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define DS3231_ADDRESS			0b01101000
 #define DS3231_ALARM_INT		IO_INT0

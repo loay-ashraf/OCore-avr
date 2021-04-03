@@ -1,19 +1,71 @@
-/*
- * DS3231.c
- *
- * Created: 04/10/2019 07:15:44 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         DS3231.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 04/10/2019
+*
+* Description:	contains function definitions for DS3231 controller
+*               module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "DS3231.h"
 #include "DS3231_config.h"
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/hw/driver/twi/twi.h"
 
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_clockMode
+*
+* Description: Stores current clock mode for DS3231 controller module.
+*
+* Notes:
+*
+* Scope:       DS3231.c.
+*
+**********************************************************************/
+
 static rtccclockmode_t g_clockMode;
+
+/**********************************************************************
+*
+* Variable:    g_alarmHandlerCallback
+*
+* Description: Holds addresses of alarm handler callback functions.
+*
+* Notes:
+*
+* Scope:       DS3231.c.
+*
+**********************************************************************/
+
 static ISRcallback_t g_alarmHandlerCallback[2];
 
-static void alarmISR(void);
+/*------------------------FUNCTION PROTOTYPES------------------------*/
+
+static void _alarmISR(void);
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    DS3231_init
+*
+* Description: Initializes D3231 controller module.
+*
+* Notes:       This function is called only when using new DS3231
+*              controller module.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void DS3231_init(void){
 	
@@ -22,15 +74,38 @@ void DS3231_init(void){
 	twi_transmitByte(0x07);
 	twi_transmitByte(0x00);
 	twi_transmitStop();
-	twi_enable();
 	
 }
+
+/**********************************************************************
+*
+* Function:    DS3231_enable
+*
+* Description: Enables DS3231 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void DS3231_enable(void){
 	
 	twi_enable();
 	
 }
+
+/**********************************************************************
+*
+* Function:    DS3231_setClockMode
+*
+* Description: Sets clock mode (12H/24H) for DS3231 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void DS3231_setClockMode(rtccclockmode_t a_clockMode){
 	
@@ -59,6 +134,18 @@ void DS3231_setClockMode(rtccclockmode_t a_clockMode){
 	
 }
 
+/**********************************************************************
+*
+* Function:    DS3231_setClock
+*
+* Description: Sets clock for DS3231 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void DS3231_setClock(rtccclock_t a_clock){
 	
 	twi_transmitStart(DS3231_ADDRESS,WRITE);
@@ -82,6 +169,18 @@ void DS3231_setClock(rtccclock_t a_clock){
 	twi_transmitStop();
 	
 }
+
+/**********************************************************************
+*
+* Function:    DS3231_setCalendar
+*
+* Description: Sets calendar for DS3231 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void DS3231_setCalendar(rtcccalendar_t a_calendar){
 	
@@ -115,6 +214,18 @@ void DS3231_setCalendar(rtcccalendar_t a_calendar){
 	
 }
 
+/**********************************************************************
+*
+* Function:    DS3231_getClock
+*
+* Description: Gets clock from DS3231 controller module.
+*
+* Notes:
+*
+* Returns:     Current clock (type: rtccclock_t).
+*
+**********************************************************************/
+
 rtccclock_t DS3231_getClock(void){
 	
 	rtccclock_t clock;
@@ -143,6 +254,18 @@ rtccclock_t DS3231_getClock(void){
 	
 	return clock;
 }
+
+/**********************************************************************
+*
+* Function:    DS3231_getCalendar
+*
+* Description: Gets calendar from DS3231 controller module.
+*
+* Notes:
+*
+* Returns:     Current calendar (type: rtcccalendar_t).
+*
+**********************************************************************/
 
 rtcccalendar_t DS3231_getCalendar(void){
 	
@@ -181,6 +304,18 @@ rtcccalendar_t DS3231_getCalendar(void){
 	
 	return calendar;
 }
+
+/**********************************************************************
+*
+* Function:    DS3231_setAlarm
+*
+* Description: Sets alarm for DS3231 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void DS3231_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig){
 	
@@ -256,6 +391,18 @@ void DS3231_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig){
 	
 }
 
+/**********************************************************************
+*
+* Function:    DS3231_enableAlarm
+*
+* Description: Enables alarm for DS3231 controller module.
+*
+* Notes:       This function enables global interrupts if disabled.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void DS3231_enableAlarm(rtccalarm_t a_alarm){
 	
 	ubyte_t ctrlReg;
@@ -282,10 +429,22 @@ void DS3231_enableAlarm(rtccalarm_t a_alarm){
 	
 	gpio_enablePinPullUp(DS3231_ALARM_INT_PIN);
 	gpio_setInterruptMode(DS3231_ALARM_INT,DS3231_ALARM_INT_MODE);
-	gpio_setISRCallback(DS3231_ALARM_INT,&alarmISR);
+	gpio_setISRCallback(DS3231_ALARM_INT,&_alarmISR);
 	gpio_enableInterrupt(DS3231_ALARM_INT);
 	
 }
+
+/**********************************************************************
+*
+* Function:    DS3231_disableAlarm
+*
+* Description: Disables alarm for DS3231 controller module.
+*
+* Notes:       This function doesn't disable global interrupts.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void DS3231_disableAlarm(rtccalarm_t a_alarm){
 	
@@ -315,6 +474,19 @@ void DS3231_disableAlarm(rtccalarm_t a_alarm){
 	
 }
 
+/**********************************************************************
+*
+* Function:    DS3231_getTempCelsius
+*
+* Description: Gets temperature in Celsius from DS3231 controller
+*              module.
+*
+* Notes:
+*
+* Returns:     Current temperature in Celsius (type: float).
+*
+**********************************************************************/
+
 float DS3231_getTempCelsius(void){
 	
 	uint8_t temp_i,temp_d;
@@ -328,10 +500,19 @@ float DS3231_getTempCelsius(void){
 	return (float)(temp_i+(temp_d/100.0));
 	
 }
-/**
-* does nothing
+
+/**********************************************************************
 *
-*/
+* Function:    DS3231_getTempFahrenheit
+*
+* Description: Gets temperature in Fahrenheit from DS3231 controller
+*              module.
+*
+* Notes:
+*
+* Returns:     Current temperature in Fahrenheit (type: float).
+*
+**********************************************************************/
 
 float DS3231_getTempFahrenheit(void){
 	
@@ -339,7 +520,20 @@ float DS3231_getTempFahrenheit(void){
 	
 }
 
-static void alarmISR(void){
+/**********************************************************************
+*
+* Function:    _alarmISR
+*
+* Description: Checks which alarm is triggered and calls corresponding
+*              g_alarmHandlerCallback function.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+static void _alarmISR(void){
 	
 	ubyte_t csReg;
 	

@@ -1,15 +1,24 @@
-/*
- * DS3231.h
- *
- * Created: 04/10/2019 07:15:13 AM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         DS3231.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 04/10/2019
+*
+* Description:	contains function declarations for DS3231
+*               controller module.
+*
+**********************************************************************/
 
 #ifndef DS3231_H_
 #define DS3231_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include "hal/ecu/rtcc/common/rtcc_types.h"
+
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 
 void DS3231_init(void);
 void DS3231_enable(void);

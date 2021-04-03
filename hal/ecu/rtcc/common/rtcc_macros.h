@@ -1,18 +1,28 @@
-/*
- * rtcc_macros.h
- *
- * Created: 04/10/2019 07:13:14 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         rtcc_macros.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 04/10/2019
+*
+* Description:	contains function-like adpater macros for
+*               RTCC module.
+*
+**********************************************************************/
 
 #ifndef RTCC_MACROS_H_
 #define RTCC_MACROS_H_
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #if (RTCC_CONTROLLER == RTCC_DS3231)
 
 #include "hal/ecu/rtcc/driver/DS3231/DS3231.h"
 
 #endif
+
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #if defined(DS3231_H_)
 
