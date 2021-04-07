@@ -1,19 +1,27 @@
-/*
- * lcd_macros.h
- *
- * Created: 23/09/2019 06:02:11 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         lcd_macros.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 23/09/2019
+*
+* Description:	contains function-like adpater macros for LCD module.
+*
+**********************************************************************/
 
 #ifndef LCD_MACROS_H_
 #define LCD_MACROS_H_
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #if (LCD_CONTROLLER == LCD_HD44780)
 
 #include "hal/ecu/lcd/driver/HD44780/HD44780.h"
 
 #endif
+
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #if defined(HD44780_H_)
 	

@@ -1,17 +1,24 @@
-/*
- * HD44780.h
- *
- * Created: 23/09/2019 05:13:26 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         HD44780.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 23/09/2019
+*
+* Description:	contains definitions, typedefs and function 
+*               declarations for HD44780 controller module.
+*
+**********************************************************************/
 
 #ifndef HD44780_H_
 #define HD44780_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include "hal/ecu/lcd/common/lcd_types.h"
 
-/*------------DEFINE HD44780 COMMANDS------------*/
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define HD44780_4BIT_MODE		0x28
 #define HD44780_8BIT_MODE		0x38
@@ -20,15 +27,16 @@
 #define HD44780_CLEAR_DISPLAY	0x01
 #define HD44780_SCROLL_DISPLAY	0x18
 #define HD44780_SHIFT_CURSOR	0x10
-
-/*------------DEFINE HD44780 ROW ADDRESSES------------*/
-
 #define HD44780_ROW_ZERO		0x80
 #define HD44780_ROW_ONE			0xC0
 #define HD44780_ROW_TWO			0x94
 #define HD44780_ROW_THREE		0xD4
 
+/*--------------------------------ENUMS------------------------------*/
+
 typedef enum{HD44780_INSTRUCTION,HD44780_DATA}hd44780transmissiontype_t;
+
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 
 void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight);
 void HD44780_sendInstruction(ubyte_t a_instruction);

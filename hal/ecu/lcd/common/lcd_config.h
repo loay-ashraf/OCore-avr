@@ -1,26 +1,27 @@
-/*
- * lcd_config.h
- *
- * Created: 09/09/2019 07:14:45 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         lcd_config.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 09/09/2019
+*
+* Description:	contains definitions and configurations for LCD module.
+*
+**********************************************************************/
 
 #ifndef LCD_CONFIG_H_
 #define LCD_CONFIG_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include "hal/ecu/lcd/driver/lcd_driver.h"
 
-/*------------DEFINE LCD CONTROLLER------------*/
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define LCD_CONTROLLER		LCD_HD44780
-
-/*------------DEFINE LCD DIMENSIONS------------*/
-
 #define LCD_ROWS			4
 #define LCD_COLUMNS			20
-
-/*------------DEFINE BUFFER AND FRACTION SIZE------------*/
-
 #define LCD_BUFFER_SIZE		20
 #define LCD_FRACTION_SIZE	3
 

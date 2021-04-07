@@ -1,9 +1,17 @@
-/*
- * HD44780.c
- *
- * Created: 23/09/2019 05:13:56 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         HD44780.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 23/09/2019
+*
+* Description:	contains function definitions for HD44780 controller
+*               module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "HD44780.h"
 #include "HD44780_config.h"
@@ -11,9 +19,25 @@
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/sys/delay.h"
 
+/*------------------------FUNCTION PROTOTYPES------------------------*/
+
 static void _resetDisplay(void);
 static void _sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType);
 static ubyte_t _readByte(void);
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    HD44780_init
+*
+* Description: Initializes HD44780 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight){
 	
@@ -31,34 +55,46 @@ void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorB
 	
 	#endif
 	
-	gpio_setPinDirection(HD44780_EN_PIN,IO_OUTPUT);												// set control port direction register
+	gpio_setPinDirection(HD44780_EN_PIN,IO_OUTPUT);												/* set control port direction register */
 	gpio_setPinDirection(HD44780_RS_PIN,IO_OUTPUT);
-	gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);					// set data port direction register
+	gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);					/* set data port direction register */
 	
 	_resetDisplay();
 	
 	#if (HD44780_DATA_MODE == 4)
 	
-		//------------CONFIGURE HD44780 BEHAVIOUR------------//
+		/*------------CONFIGURE HD44780 BEHAVIOUR------------*/
 	
-		HD44780_sendInstruction(HD44780_4BIT_MODE);												// 4-bit interface, 2-line mode, 5x8 dots format
-		HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-		HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);											// clear display
-		HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));							// no display shift
+		HD44780_sendInstruction(HD44780_4BIT_MODE);												/* 4-bit interface, 2-line mode, 5x8 dots format */
+		HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		/* display ON, cursor OFF, blink OFF */
+		HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);											/* clear display */
+		HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));							/* no display shift */
 	
 	#elif (HD44780_DATA_MODE == 8)
 	
-		//------------CONFIGURE HD44780 BEHAVIOUR------------//
+		/*------------CONFIGURE HD44780 BEHAVIOUR------------*/
 	
-		HD44780_sendInstruction(HD44780_8BIT_MODE);												// 8-bit interface, 2-line mode, 5x8 dots format
-		HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// display ON, cursor OFF, blink OFF
-		HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);											// clear display
-		HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));							// no display shift
+		HD44780_sendInstruction(HD44780_8BIT_MODE);												/* 8-bit interface, 2-line mode, 5x8 dots format */
+		HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		/* display ON, cursor OFF, blink OFF */
+		HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);											/* clear display */
+		HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));							/* no display shift */
 		
 	#endif
 	
 	
 }
+
+/**********************************************************************
+*
+* Function:    HD44780_sendInstruction
+*
+* Description: Sends instructions to HD44780 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void HD44780_sendInstruction(ubyte_t a_instruction){
 	
@@ -66,21 +102,21 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 	
 		#if (HD44780_DATA_PORT_MASK == 0x0F)
 	
-			//------------SEND HIGH NIBBLE------------//
+			/*------------SEND HIGH NIBBLE------------*/
 	
 			_sendByte((a_instruction>>4),HD44780_INSTRUCTION);
 
-			//------------SEND LOW NIBBLE------------//
+			/*------------SEND LOW NIBBLE------------*/
 
 			_sendByte(a_instruction,HD44780_INSTRUCTION);
 	
 		#elif (HD44780_DATA_PORT_MASK == 0xF0)
 	
-			//------------SEND HIGH NIBBLE------------//
+			/*------------SEND HIGH NIBBLE------------*/
 	
 			_sendByte(a_instruction,HD44780_INSTRUCTION);
 
-			//------------SEND LOW NIBBLE------------//
+			/*------------SEND LOW NIBBLE------------*/
 
 			_sendByte((a_instruction<<4),HD44780_INSTRUCTION);
 	
@@ -88,7 +124,7 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 	
 	#elif (HD44780_DATA_MODE == 8)
 	
-		//------------SEND 8-BIT COMMAND------------//
+		/*------------SEND 8-BIT COMMAND------------*/
 	
 		_sendByte(a_instruction,HD44780_INSTRUCTION);
 	
@@ -96,11 +132,35 @@ void HD44780_sendInstruction(ubyte_t a_instruction){
 	
 }
 
+/**********************************************************************
+*
+* Function:    HD44780_clearDisplay
+*
+* Description: Clears display of HD44780 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void HD44780_clearDisplay(void){
 	
-	HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);			// clear display command
+	HD44780_sendInstruction(HD44780_CLEAR_DISPLAY);			/* clear display command */
 
 }
+
+/**********************************************************************
+*
+* Function:    HD44780_configBacklight
+*
+* Description: Configures backlight of HD44780 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void HD44780_configBacklight(bool_t a_backlightON){
 	
@@ -132,38 +192,90 @@ void HD44780_configBacklight(bool_t a_backlightON){
 	
 }
 
+/**********************************************************************
+*
+* Function:    HD44780_configCursor
+*
+* Description: Configures cursor (visible/blinking) of HD44780 
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void HD44780_configCursor(bool_t a_cursorVisible, bool_t a_cursorBlinking){
 
-	HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);		// configure cursor
+	HD44780_sendInstruction(HD44780_DISPLAY_ON|(a_cursorVisible<<1)|a_cursorBlinking);
 
 }
+
+/**********************************************************************
+*
+* Function:    HD44780_configTextDirection
+*
+* Description: Configures text direction (L->R/R->L) of HD44780 
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void HD44780_configTextDirection(bool_t a_leftToRight){
 		
-	HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));			// configure text direction
+	HD44780_sendInstruction(HD44780_ENTRY_MODE|(a_leftToRight<<1));
 	
 }
 
+/**********************************************************************
+*
+* Function:    HD44780_setCursorPosition
+*
+* Description: Sets cursor position (row & column) of HD44780 
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void HD44780_setCursorPosition(uint8_t a_row, uint8_t a_col){
 	
-	if(a_col >= LCD_COLUMNS)	// check column
+	if(a_col >= LCD_COLUMNS)										/* check column */
 		a_col = 0;
 	
 	switch(a_row){
 
-		case 0: HD44780_sendInstruction(HD44780_ROW_ZERO+a_col);	// first row
+		case 0: HD44780_sendInstruction(HD44780_ROW_ZERO+a_col);	/* first row */
 		break;
-		case 1: HD44780_sendInstruction(HD44780_ROW_ONE+a_col);		// second row
+		case 1: HD44780_sendInstruction(HD44780_ROW_ONE+a_col);		/* second row */
 		break;
-		case 2: HD44780_sendInstruction(HD44780_ROW_TWO+a_col);		// third row
+		case 2: HD44780_sendInstruction(HD44780_ROW_TWO+a_col);		/* third row */
 		break;
-		case 3: HD44780_sendInstruction(HD44780_ROW_THREE+a_col);	// fourth row
+		case 3: HD44780_sendInstruction(HD44780_ROW_THREE+a_col);	/* fourth row */
 		break;
-		default: HD44780_sendInstruction(HD44780_ROW_ZERO+a_col);	// default is first row
+		default: HD44780_sendInstruction(HD44780_ROW_ZERO+a_col);	/* default is first row */
 		break;
 
 	}
 }
+
+/**********************************************************************
+*
+* Function:    HD44780_shiftCursor
+*
+* Description: Shifts cursor position in specific direction of HD44780
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void HD44780_shiftCursor(lcddirection_t a_dir){
 	
@@ -173,6 +285,19 @@ void HD44780_shiftCursor(lcddirection_t a_dir){
 	
 }
 
+/**********************************************************************
+*
+* Function:    HD44780_scrollDisplay
+*
+* Description: Scrolls display in specific direction of HD44780
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void HD44780_scrollDisplay(lcddirection_t a_dir){
 	
 	if(a_dir == LCD_LEFT || a_dir == LCD_RIGHT)
@@ -180,6 +305,18 @@ void HD44780_scrollDisplay(lcddirection_t a_dir){
 		HD44780_sendInstruction(HD44780_SCROLL_DISPLAY|(a_dir<<2));
 	
 }
+
+/**********************************************************************
+*
+* Function:    HD44780_defineCustomCharacter
+*
+* Description: Defines custom character for HD44780 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void HD44780_defineCustomCharacter(lcdcustomcharacter_t a_characterIndex, ubyte_t a_characterArray[8]){
 	
@@ -194,6 +331,18 @@ void HD44780_defineCustomCharacter(lcdcustomcharacter_t a_characterIndex, ubyte_
 	HD44780_putc(a_characterArray[7]);
 	
 }
+
+/**********************************************************************
+*
+* Function:    HD44780_putc
+*
+* Description: Prints character to display of HD44780 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void HD44780_putc(char a_data){
 	
@@ -230,6 +379,18 @@ void HD44780_putc(char a_data){
 	#endif
 	
 }
+
+/**********************************************************************
+*
+* Function:    HD44780_getc
+*
+* Description: Reads character from display of HD44780 controller module.
+*
+* Notes:
+*
+* Returns:     Character at current cursor position (type: char).
+*
+**********************************************************************/
 
 char HD44780_getc(void){
 	
@@ -269,6 +430,19 @@ char HD44780_getc(void){
 
 	return data;
 }
+
+/**********************************************************************
+*
+* Function:    _resetDisplay
+*
+* Description: Sends clear display instruction to HD44780
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 static void _resetDisplay(void){
 	
@@ -317,36 +491,60 @@ static void _resetDisplay(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    _sendByte
+*
+* Description: Sends byte to HD44780 controller module.      
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 static void _sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType){
 	
 	/*------------SEND A BYTE------------*/
 	
 	if(a_transType == HD44780_INSTRUCTION){
 		
-		gpio_setPin(HD44780_EN_PIN);								// enable HD44780 interface for new data (EN signal), Command register is selected
+		gpio_setPin(HD44780_EN_PIN);											/* enable HD44780 interface for new data (EN signal), Command register is selected */
 		DELAY_US(800);
-		gpio_setPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		// send a nibble of command
+		gpio_setPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		/* send a nibble of command */
 		DELAY_US(800);
-		gpio_clearPin(HD44780_EN_PIN);							// clear control port
+		gpio_clearPin(HD44780_EN_PIN);											/* clear control port */
 		DELAY_US(200);
-		gpio_clearPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		// clear data port
+		gpio_clearPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));	/* clear data port */
 		
 	}else if(a_transType == HD44780_DATA){
 		
-		gpio_setPin(HD44780_RS_PIN);								// select Data register (RS signal)
+		gpio_setPin(HD44780_RS_PIN);											/* select Data register (RS signal) */
 		DELAY_US(800);
-		gpio_setPin(HD44780_EN_PIN);								// enable HD44780 interface for new data (EN signal)
+		gpio_setPin(HD44780_EN_PIN);											/* enable HD44780 interface for new data (EN signal) */
 		DELAY_US(800);
-		gpio_setPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		// send a nibble of data
+		gpio_setPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		/* send a nibble of data */
 		DELAY_US(800);
-		gpio_clearPin(HD44780_EN_PIN);			// clear EN pin
-		gpio_clearPin(HD44780_RS_PIN);			// clear RS pin
+		gpio_clearPin(HD44780_EN_PIN);											/* clear EN pin */
+		gpio_clearPin(HD44780_RS_PIN);											/* clear RS pin */
 		DELAY_US(200);
-		gpio_clearPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		// clear data port
+		gpio_clearPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));	/* clear data port */
 		
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    _readByte
+*
+* Description: Receives byte from HD44780 controller module.      
+*
+* Notes:
+*
+* Returns:     Data byte (type: ubyte_t).
+*
+**********************************************************************/
 
 static ubyte_t _readByte(void){
 	

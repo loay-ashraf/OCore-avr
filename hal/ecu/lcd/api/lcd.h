@@ -1,23 +1,23 @@
-/** @file LCD.h
- *  @brief This driver supports interfacing of parallel interface character
- *	LCD (both 16x2 and 20x4); this file includes function prototypes for LCD.c
- *  @author Loay Ashraf
- *	@version 1.0.0
- *  @pre include delay.h and stdlib.h in micro_config.h
- *  @bug no known bugs
- *	@warning data mode has to be selected here
- *  @see micro_config.h
- */
-
+/**********************************************************************
+*
+* File:         lcd.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 15/01/2018
+*
+* Description:	contains function declarations for LCD module.
+*
+**********************************************************************/
 
 #ifndef LCD_H_
 #define LCD_H_
 
-/*------------INCLUDE REQUIRED HEADER FILES------------*/
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "hal/ecu/lcd/common/lcd_types.h"
 
-/*------------FUNCTION DECLARATIONS------------*/
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 
 void LCD_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorBlinking, bool_t a_leftToRight);
 void LCD_sendInstruction(ubyte_t a_instruction);
