@@ -1,20 +1,24 @@
-/*
- * glcd.h
- *
- * Created: 09/09/2019 07:04:31 AM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         glcd.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 09/09/2019
+*
+* Description:	contains function declarations for GLCD module.
+*
+**********************************************************************/
 
 #ifndef GLCD_H_
 #define GLCD_H_
 
-/*------------INCLUDE MCU CONFIGURATION AND REQUIRED HEADER FILES------------*/
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "hal/ecu/glcd/common/glcd_config.h"
 #include "hal/ecu/glcd/common/glcd_types.h"
 
-/*------------FUNCTION DECLARATIONS------------*/
+/*------------------------FUNCTION DECLARATIONS----------------------*/
 
 void GLCD_init(bool_t a_backlightON);
 void GLCD_sendInstruction(ubyte_t a_instruction);

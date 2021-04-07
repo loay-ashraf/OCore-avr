@@ -1,19 +1,27 @@
-/*
- * glcd_macros.h
- *
- * Created: 25/09/2019 07:38:24 PM
- *  Author: Loay Ashraf
- */ 
-
+/**********************************************************************
+*
+* File:         glcd_macros.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 25/09/2019
+*
+* Description:	contains function-like adpater macros for GLCD module.
+*
+**********************************************************************/
 
 #ifndef GLCD_MACROS_H_
 #define GLCD_MACROS_H_
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #if (GLCD_CONTROLLER == GLCD_ST7920)
 
 #include "hal/ecu/glcd/driver/ST7920/ST7920.h"
 
 #endif
+
+/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #if defined(ST7920_H_)
 
@@ -35,7 +43,5 @@
 	#define GLCD_PUT_IMAGE_ROM(IMAGE_ARRAY)								ST7920_putImageROM(IMAGE_ARRAY)
 
 #endif
-
-
 
 #endif /* GLCD_MACROS_H_ */

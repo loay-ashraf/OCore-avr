@@ -1,15 +1,37 @@
-/*
- * ST7920_fonts.h
- *
- * Created: 28/09/2019 05:59:01 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         ST7920_fonts.h
+*
+* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 28/09/2019
+*
+* Description:	contains fonts used for ST7920 controller module.
+*
+**********************************************************************/
 
 #ifndef ST7920_FONTS_H_
 #define ST7920_FONTS_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
 #include "hal/mcu/sys/std_types.h"
 #include <avr/pgmspace.h>
+
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    font_5x8
+*
+* Description: 5x8 font array used to print text to display for
+*              ST7920 controller module.
+*
+* Notes:       This variable is stored in ROM (flash memory).
+*
+* Scope:       Program.
+*
+**********************************************************************/
 
 const ubyte_t font_5x8[95][8] PROGMEM = {
 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, //Space 0

@@ -1,9 +1,17 @@
-/*
- * ST7920.c
- *
- * Created: 25/09/2019 07:37:20 PM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         ST7920.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 25/09/2019
+*
+* Description:	contains function definitions for ST7920 controller
+*               module.
+*
+**********************************************************************/
+
+/*------------------------------INCLUDES-----------------------------*/
 
 #include "ST7920.h"
 #include "ST7920_config.h"
@@ -16,8 +24,51 @@
 #include <math.h>
 #include <stdlib.h>
 
-static uint8_t g_pixelX,g_pixelY;
+/*--------------------------GLOBAL VARIABLES-------------------------*/
+
+/**********************************************************************
+*
+* Variable:    g_pixelX
+*
+* Description: Stores current pixel position along X-axis.
+*
+* Notes:
+*
+* Scope:       ST7920.c.
+*
+**********************************************************************/
+
+static uint8_t g_pixelX;
+
+/**********************************************************************
+*
+* Variable:    g_pixelY
+*
+* Description: Stores current pixel position along Y-axis.
+*
+* Notes:
+*
+* Scope:       ST7920.c.
+*
+**********************************************************************/
+
+static uint8_t g_pixelY;
+
+/**********************************************************************
+*
+* Variable:    g_font
+*
+* Description: Stores current used font.
+*
+* Notes:
+*
+* Scope:       ST7920.c.
+*
+**********************************************************************/
+
 static glcdfont_t g_font;
+
+/*------------------------FUNCTION PROTOTYPES------------------------*/
 
 static void _resetDisplay(void);
 static void _sendByte(ubyte_t a_data, st7920transmissiontype_t a_transType);
@@ -29,6 +80,20 @@ static uword_t _getw(void);
 #endif
 static void _enableGraphics(void);
 static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
+
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    ST7920_init
+*
+* Description: Initializes ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_init(bool_t a_backlightON){
 	
@@ -61,7 +126,7 @@ void ST7920_init(bool_t a_backlightON){
 		#endif
 		
 		gpio_setPinDirection(ST7920_EN_PIN,IO_OUTPUT);								
-		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);		// set data port direction register
+		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);		/* set data port direction register */
 	
 	#elif (ST7920_INTERFACE == 0)
 	
@@ -76,30 +141,32 @@ void ST7920_init(bool_t a_backlightON){
 	
 		#if (ST7920_DATA_MODE == 4)
 	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
-			ST7920_sendInstruction(ST7920_4BIT_MODE);									// 4-bit interface, 2-line mode, 5x8 dots format
-			ST7920_sendInstruction(ST7920_DISPLAY_ON);									// display ON, cursor OFF, blink OFF
-			ST7920_sendInstruction(ST7920_ENTRY_MODE);								// cursor moves to the right, no display shift
-			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);								// clear display
+			/*------------CONFIGURE ST7920 BEHAVIOUR------------*/
+
+			ST7920_sendInstruction(ST7920_4BIT_MODE);								/* 4-bit interface, 2-line mode, 5x8 dots format */
+			ST7920_sendInstruction(ST7920_DISPLAY_ON);								/* display ON, cursor OFF, blink OFF */
+			ST7920_sendInstruction(ST7920_ENTRY_MODE);								/* cursor moves to the right, no display shift */
+			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);							/* clear display */
 	
 		#elif (ST7920_DATA_MODE == 8)
 	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
+			/*------------CONFIGURE ST7920 BEHAVIOUR------------*/
 	
-			ST7920_sendInstruction(ST7920_8BIT_MODE);									// 8-bit interface, 2-line mode, 5x8 dots format
-			ST7920_sendInstruction(ST7920_DISPLAY_ON);									// display ON, cursor OFF, blink OFF
-			ST7920_sendInstruction(ST7920_ENTRY_MODE);								// cursor moves to the right, no display shift
-			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);								// clear display
+			ST7920_sendInstruction(ST7920_8BIT_MODE);								/* 8-bit interface, 2-line mode, 5x8 dots format */
+			ST7920_sendInstruction(ST7920_DISPLAY_ON);								/* display ON, cursor OFF, blink OFF */
+			ST7920_sendInstruction(ST7920_ENTRY_MODE);								/* cursor moves to the right, no display shift */
+			ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);							/* clear display */
 	
 		#endif
 	
 	#elif (ST7920_INTERFACE == 0)
 	
-		//------------CONFIGURE ST7920 BEHAVIOUR------------//
-		ST7920_sendInstruction(ST7920_8BIT_MODE);										// 8-bit interface, 2-line mode, 5x8 dots format
-		ST7920_sendInstruction(ST7920_DISPLAY_ON);										// display ON, cursor OFF, blink OFF
-		ST7920_sendInstruction(ST7920_ENTRY_MODE);									// cursor moves to the right, no display shift
-		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);									// clear display
+		/*------------CONFIGURE ST7920 BEHAVIOUR------------*/
+
+		ST7920_sendInstruction(ST7920_8BIT_MODE);									/* 8-bit interface, 2-line mode, 5x8 dots format */
+		ST7920_sendInstruction(ST7920_DISPLAY_ON);									/* display ON, cursor OFF, blink OFF */
+		ST7920_sendInstruction(ST7920_ENTRY_MODE);									/* cursor moves to the right, no display shift */
+		ST7920_sendInstruction(ST7920_CLEAR_DISPLAY);								/* clear display */
 	
 	#endif
 	
@@ -107,9 +174,21 @@ void ST7920_init(bool_t a_backlightON){
 	
 	_enableGraphics();
 	
-	g_font = GLCD_5X8;
+	g_font = GLCD_5X8;			/* by default use 5x8 font */
 	
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_sendInstruction
+*
+* Description: Sends instructions to ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_sendInstruction(ubyte_t a_instruction){
 	
@@ -119,21 +198,21 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 	
 			#if (ST7920_DATA_PORT_MASK == 0x0F)
 	
-				//------------SEND HIGH NIBBLE------------//
+				/*------------SEND HIGH NIBBLE------------*/
 	
 				_sendByte((a_instruction>>4),ST7920_INSTRUCTION);
 
-				//------------SEND LOW NIBBLE------------//
+				/*------------SEND LOW NIBBLE------------*/
 
 				_sendByte(a_instruction,ST7920_INSTRUCTION);
 	
 			#elif (ST7920_DATA_PORT_MASK == 0xF0)
 	
-				//------------SEND HIGH NIBBLE------------//
+				/*------------SEND HIGH NIBBLE------------*/
 	
 				_sendByte(a_instruction,ST7920_INSTRUCTION);
 
-				//------------SEND LOW NIBBLE------------//
+				/*------------SEND LOW NIBBLE------------*/
 
 				_sendByte((a_instruction<<4),ST7920_INSTRUCTION);
 	
@@ -141,7 +220,7 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 	
 		#elif (ST7920_DATA_MODE == 8)
 	
-			//------------SEND 8-BIT COMMAND------------//
+			/*------------SEND 8-BIT COMMAND------------*/
 	
 			_sendByte(a_instruction,ST7920_INSTRUCTION);
 	
@@ -155,11 +234,35 @@ void ST7920_sendInstruction(ubyte_t a_instruction){
 	
 }
 
+/**********************************************************************
+*
+* Function:    ST7920_clearDisplay
+*
+* Description: Clears display of ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void ST7920_clearDisplay(void){
 
-	ST7920_fillDisplay(0);		// clear display command
+	ST7920_fillDisplay(0);		/* clear display command */
 	
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_configBacklight
+*
+* Description: Configures backlight of ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_configBacklight(bool_t a_backlightON){
 	
@@ -191,6 +294,18 @@ void ST7920_configBacklight(bool_t a_backlightON){
 	
 }
 
+/**********************************************************************
+*
+* Function:    ST7920_setCursorPosition
+*
+* Description: Sets cursor position (X & Y) of ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void ST7920_setCursorPosition(uint8_t a_x, uint8_t a_y){
 	
 	if(a_y > GLCD_Y_PIXELS-1)
@@ -217,11 +332,36 @@ void ST7920_setCursorPosition(uint8_t a_x, uint8_t a_y){
 	
 }
 
+/**********************************************************************
+*
+* Function:    ST7920_setFont
+*
+* Description: Sets text font for ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void ST7920_setFont(glcdfont_t a_font){
 	
 	g_font = a_font;
 	
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_scrollDisplay
+*
+* Description: Scrolls display in specific direction of ST7920
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_scrollDisplay(glcddirection_t a_direction){
 	
@@ -230,6 +370,18 @@ void ST7920_scrollDisplay(glcddirection_t a_direction){
 		ST7920_sendInstruction(ST7920_SCROLL_DISPLAY|(a_direction<<2));
 	
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_putc
+*
+* Description: Prints character to display of ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_putc(char a_char){
 	
@@ -248,6 +400,18 @@ void ST7920_putc(char a_char){
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_puts
+*
+* Description: Prints string to display of ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_puts(const char * a_data){
 	
@@ -271,6 +435,18 @@ void ST7920_puts(const char * a_data){
 	
 }
 
+/**********************************************************************
+*
+* Function:    ST7920_getc
+*
+* Description: Reads character from display of ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     Character at current cursor position (type: char).
+*
+**********************************************************************/
+
 char ST7920_getc(void){
 
 	char data = 0;
@@ -279,21 +455,21 @@ char ST7920_getc(void){
 
 		#if (ST7920_DATA_PORT_MASK == 0x0F)
 
-			//------------READ HIGH NIBBLE------------//
+			/*------------READ HIGH NIBBLE------------*/
 
 			data |= (_readByte()<<4);
 
-			//------------READ LOW NIBBLE------------//
+			/*------------READ LOW NIBBLE------------*/
 
 			data |= _readByte();
 
 		#elif (ST7920_DATA_PORT_MASK == 0xF0)
 
-			//------------READ HIGH NIBBLE------------//
+			/*------------READ HIGH NIBBLE------------*/
 
 			data |= _readByte();
 
-			//------------READ LOW NIBBLE------------//
+			/*------------READ LOW NIBBLE------------*/
 
 			data |= (_readByte()>>4);
 
@@ -301,7 +477,7 @@ char ST7920_getc(void){
 
 	#elif (ST7920_DATA_MODE == 8)
 
-		//------------READ 8-BIT DATA------------//
+		/*------------READ 8-BIT DATA------------*/
 
 		data |= _readByte();
 
@@ -310,6 +486,19 @@ char ST7920_getc(void){
 	return data;
 
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_drawPixel
+*
+* Description: Draws pixel at current cursor position (X & Y) on display
+*              of ST7920 controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_drawPixel(uint8_t a_x, uint8_t a_y){
 	
@@ -329,6 +518,19 @@ void ST7920_drawPixel(uint8_t a_x, uint8_t a_y){
 	#endif	
 		 
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_drawVerticalBar
+*
+* Description: Draws vertical bar on display of ST7920 controller
+*              module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
@@ -365,6 +567,19 @@ void ST7920_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t 
 	
 }
 
+/**********************************************************************
+*
+* Function:    ST7920_drawHorizontalBar
+*
+* Description: Draws horizontal bar on display of ST7920 controller
+*              module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void ST7920_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
 	int8_t x,y;
@@ -399,6 +614,18 @@ void ST7920_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_
 	
 }
 
+/**********************************************************************
+*
+* Function:    ST7920_fillDisplay
+*
+* Description: Fills display of ST7920 controller module.       
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void ST7920_fillDisplay(ubyte_t a_pattern){
 	
 	uint8_t x,y;
@@ -416,6 +643,19 @@ void ST7920_fillDisplay(ubyte_t a_pattern){
 	}	
 }
 
+/**********************************************************************
+*
+* Function:    ST7920_putImageRAM
+*
+* Description: Draws bitmap image on display of ST7920 controller 
+*              module.
+*
+* Notes:       This function accepts bitmap images stored in RAM.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void ST7920_putImageRAM(const ubyte_t * a_image){
 	
 	uint8_t x,y;
@@ -432,6 +672,19 @@ void ST7920_putImageRAM(const ubyte_t * a_image){
 		}
 	}
 }
+
+/**********************************************************************
+*
+* Function:    ST7920_putImageROM
+*
+* Description: Draws bitmap image on display of ST7920 controller 
+*              module.
+*
+* Notes:       This function accepts bitmap images stored in ROM.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void ST7920_putImageROM(const ubyte_t * a_image){
 	
@@ -453,6 +706,19 @@ void ST7920_putImageROM(const ubyte_t * a_image){
 		}
 	}
 }
+
+/**********************************************************************
+*
+* Function:    _resetDisplay
+*
+* Description: Sends clear display instruction to ST7920
+*              controller module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 static void _resetDisplay(void){
 	
@@ -516,52 +782,76 @@ static void _resetDisplay(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    _sendByte
+*
+* Description: Sends byte to ST7920 controller module.      
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 static void _sendByte(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	
 	#if (ST7920_INTERFACE == 1)
 	
-		//------------SEND A NIBBLE------------//
+		/*------------SEND A BYTE------------*/
 	
 		if(a_transType == ST7920_INSTRUCTION){
 		
-			gpio_setPin(ST7920_EN_PIN);								// enable ST7920 interface for new data (EN signal), Command register is selected
+			gpio_setPin(ST7920_EN_PIN);												/* enable ST7920 interface for new data (EN signal), Command register is selected */
 			DELAY_US(800);
-			gpio_setPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		// send a nibble of command
+			gpio_setPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* send a nibble of command */
 			DELAY_US(800);
-			gpio_clearPin(ST7920_EN_PIN);							// clear control port
+			gpio_clearPin(ST7920_EN_PIN);											/* clear control port */
 			DELAY_US(200);
-			gpio_clearPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		// clear data port
+			gpio_clearPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* clear data port */
 			DELAY_US(200);
 		
 		}else if(a_transType == ST7920_DATA){
 		
-			gpio_setPin(ST7920_RS_PIN);								// select Data register (RS signal)
+			gpio_setPin(ST7920_RS_PIN);												/* select Data register (RS signal) */
 			DELAY_US(800);
-			gpio_setPin(ST7920_EN_PIN);								// enable ST7920 interface for new data (EN signal)
+			gpio_setPin(ST7920_EN_PIN);												/* enable ST7920 interface for new data (EN signal) */
 			DELAY_US(800);
-			gpio_setPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		// send a nibble of data
+			gpio_setPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* send a nibble of data */
 			DELAY_US(800);
-			gpio_clearPin(ST7920_EN_PIN);			// clear EN pin
-			gpio_clearPin(ST7920_RS_PIN);			// clear RS pin
+			gpio_clearPin(ST7920_EN_PIN);											/* clear EN pin */
+			gpio_clearPin(ST7920_RS_PIN);											/* clear RS pin */
 			DELAY_US(200);
-			gpio_clearPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		// clear data port
+			gpio_clearPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* clear data port */
 			DELAY_US(200);
 		
 		}
 	
 	#elif (ST7920_INTERFACE == 0)
 	
-		gpio_setPin(ST7920_RS_PIN);								// select ST7920 chip (SS signal)
+		gpio_setPin(ST7920_RS_PIN);													/* select ST7920 chip (SS signal) */
 		DELAY_US(350);
 		spi_transmitByte(a_transType? 0xFA : 0xF8);
 		spi_transmitByte(a_data&0xF0);
 		spi_transmitByte((a_data<<4)&0xF0);
 		DELAY_US(350);
-		gpio_clearPin(ST7920_RS_PIN);								// release ST7920 chip (SS signal)
+		gpio_clearPin(ST7920_RS_PIN);												/* release ST7920 chip (SS signal) */
 	
 	#endif
 	
 }
+
+/**********************************************************************
+*
+* Function:    _readByte
+*
+* Description: Receives byte from ST7920 controller module.      
+*
+* Notes:
+*
+* Returns:     Data byte (type: ubyte_t).
+*
+**********************************************************************/
 
 static ubyte_t _readByte(void){
 	
@@ -571,16 +861,16 @@ static ubyte_t _readByte(void){
 	
 		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_INPUT);
 	
-		gpio_setPin(ST7920_RS_PIN);										// select Data register (RS signal)
-		gpio_setPin(ST7920_RW_PIN);										// select Read mode (RW signal)
+		gpio_setPin(ST7920_RS_PIN);											/* select Data register (RS signal) */
+		gpio_setPin(ST7920_RW_PIN);											/* select Read mode (RW signal) */
 		DELAY_US(800);
-		gpio_setPin(ST7920_EN_PIN);										// enable ST7920 interface for new data (EN signal)
+		gpio_setPin(ST7920_EN_PIN);											/* enable ST7920 interface for new data (EN signal) */
 		DELAY_US(800);
-		data = (gpio_readPort(ST7920_DATA_PORT)&ST7920_DATA_PORT_MASK);		// read nibble of data
+		data = (gpio_readPort(ST7920_DATA_PORT)&ST7920_DATA_PORT_MASK);		/* read nibble of data */
 		DELAY_US(800);
-		gpio_clearPin(ST7920_EN_PIN);										// clear EN pin
-		gpio_clearPin(ST7920_RW_PIN);										// clear RW pin
-		gpio_clearPin(ST7920_RS_PIN);										// clear RS pin
+		gpio_clearPin(ST7920_EN_PIN);										/* clear EN pin */
+		gpio_clearPin(ST7920_RW_PIN);										/* clear RW pin */
+		gpio_clearPin(ST7920_RS_PIN);										/* clear RS pin */
 		DELAY_US(200);
 	
 		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);
@@ -595,6 +885,18 @@ static ubyte_t _readByte(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    _putc
+*
+* Description: Sends 8-bit data to ST7920 controller module.      
+*
+* Notes:       This function is used to draw pixels on display.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 static void _putc(char a_char){
 	
 	#if (ST7920_INTERFACE == 1)
@@ -603,21 +905,21 @@ static void _putc(char a_char){
 	
 			#if (ST7920_DATA_PORT_MASK == 0x0F)
 	
-				//------------SEND HIGH NIBBLE------------//
+				/*------------SEND HIGH NIBBLE------------*/
 	
 				_sendByte((a_char>>4),ST7920_DATA);
 
-				//------------SEND LOW NIBBLE------------//
+				/*------------SEND LOW NIBBLE------------*/
 
 				_sendByte(a_char,ST7920_DATA);
 	
 			#elif (ST7920_DATA_PORT_MASK == 0xF0)
 	
-				//------------SEND HIGH NIBBLE------------//
+				/*------------SEND HIGH NIBBLE------------*/
 	
 				_sendByte(a_char,ST7920_DATA);
 
-				//------------SEND LOW NIBBLE------------//
+				/*------------SEND LOW NIBBLE------------*/
 
 				_sendByte((a_char<<4),ST7920_DATA);
 	
@@ -625,7 +927,7 @@ static void _putc(char a_char){
 	
 		#elif (ST7920_DATA_MODE == 8)
 	
-			//------------SEND 8-BIT DATA------------//
+			/*------------SEND 8-BIT DATA------------*/
 	
 			_sendByte(a_char,ST7920_DATA);
 	
@@ -639,6 +941,18 @@ static void _putc(char a_char){
 	
 }
 
+/**********************************************************************
+*
+* Function:    _putw
+*
+* Description: Sends 16-bit data to ST7920 controller module.      
+*
+* Notes:       This function is used to draw pixels on display.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 static void _putw(uword_t a_word){
 	
 	_putc((a_word>>8)&0xFF);
@@ -646,12 +960,24 @@ static void _putw(uword_t a_word){
 	
 }
 
+/**********************************************************************
+*
+* Function:    _getw
+*
+* Description: Receives 16-bit data from ST7920 controller module.      
+*
+* Notes:       This function is used to read pixels from display.
+*
+* Returns:     Data word (type: uword_t).
+*
+**********************************************************************/
+
 #ifdef ST7920_RW_PIN
 static uword_t _getw(void){
 	
 	ubyte_t byte = 0;
 	uword_t word = 0;
-	byte = ST7920_getc();		// dummy read
+	byte = ST7920_getc();		/* dummy read */
 	byte = ST7920_getc();
 	word |= ((byte<<8)&0xFF00);
 	byte = ST7920_getc();
@@ -662,6 +988,18 @@ static uword_t _getw(void){
 }
 #endif
 
+/**********************************************************************
+*
+* Function:    _enableGraphics
+*
+* Description: Enables graphics mode for ST7920 controller module.      
+*
+* Notes:       This function should be called after initialization.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 static void _enableGraphics(void){
 	
 	DELAY_MS(1);
@@ -670,7 +1008,8 @@ static void _enableGraphics(void){
 	
 		#if (ST7920_DATA_MODE == 4)
 	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
+			/*------------CONFIGURE ST7920 BEHAVIOUR------------*/
+
 			ST7920_sendInstruction(ST7920_4BIT_MODE);
 			DELAY_MS(1);
 			ST7920_sendInstruction(ST7920_4BIT_MODE|ST7920_EXT_INSTRUCTION);
@@ -681,7 +1020,7 @@ static void _enableGraphics(void){
 	
 		#elif (ST7920_DATA_MODE == 8)
 	
-			//------------CONFIGURE ST7920 BEHAVIOUR------------//
+			/*------------CONFIGURE ST7920 BEHAVIOUR------------*/
 	
 			ST7920_sendInstruction(ST7920_8BIT_MODE);
 			DELAY_MS(1);
@@ -708,6 +1047,18 @@ static void _enableGraphics(void){
 	ST7920_clearDisplay();
 	
 }
+
+/**********************************************************************
+*
+* Function:    _map
+*
+* Description: Maps an integer value from a range to another one.
+*
+* Notes:
+*
+* Returns:     Mapped value (type: uint16_t).
+*
+**********************************************************************/
 
 static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
 	

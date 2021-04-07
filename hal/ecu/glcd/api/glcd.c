@@ -1,11 +1,16 @@
-/*
- * glcd.c
- *
- * Created: 09/09/2019 07:04:18 AM
- *  Author: Loay Ashraf
- */ 
+/**********************************************************************
+*
+* File:         glcd.c
+*
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
+*
+* Date created: 09/09/2019
+*
+* Description:	contains function definitions for GLCD module.
+*
+**********************************************************************/
 
-/*------------INCLUDE DRIVER HEADER FILE------------*/
+/*------------------------------INCLUDES-----------------------------*/
 
  #include "glcd.h"
  #include "hal/ecu/glcd/common/glcd_macros.h"
@@ -13,68 +18,202 @@
  #include <stdlib.h>
  #include <stdio.h>
 
- void GLCD_init(bool_t a_backlightON){
+/*-----------------------FUNCTION DEFINITIONS------------------------*/
+
+/**********************************************************************
+*
+* Function:    GLCD_init
+*
+* Description: Initializes GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void GLCD_init(bool_t a_backlightON){
 	
 	GLCD_INIT(a_backlightON);
 	
- }
+}
 
- void GLCD_sendInstruction(ubyte_t a_instruction){
+/**********************************************************************
+*
+* Function:    GLCD_sendInstruction
+*
+* Description: Sends instructions to GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void GLCD_sendInstruction(ubyte_t a_instruction){
 	
 	GLCD_SEND_INSTRUCTION(a_instruction);
    
- }
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_clearDisplay
+*
+* Description: Clears display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
  
- void GLCD_clearDisplay(void){
+void GLCD_clearDisplay(void){
 	
 	GLCD_CLEAR_DISLAY;
 
- }
- 
- void GLCD_configBacklight(bool_t a_backlightON){
-	 
-	 GLCD_CONFIG_BACKLIGHT(a_backlightON);
-	 
- }
+}
 
- void GLCD_setCursorPosition(uint8_t a_x, uint8_t a_y){
+/**********************************************************************
+*
+* Function:    GLCD_configBacklight
+*
+* Description: Configures backlight of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+ 
+void GLCD_configBacklight(bool_t a_backlightON){
+	 
+	GLCD_CONFIG_BACKLIGHT(a_backlightON);
+	 
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_setCursorPosition
+*
+* Description: Sets cursor position (X & Y) of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void GLCD_setCursorPosition(uint8_t a_x, uint8_t a_y){
 		
 	GLCD_SET_CURSOR_POSITION(a_x,a_y);
 		
- }
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_setFont
+*
+* Description: Sets text font for GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
  
- void GLCD_setFont(glcdfont_t a_font){
+void GLCD_setFont(glcdfont_t a_font){
 	 
 	GLCD_SET_FONT(a_font);
 	 
- }
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_scrollDisplay
+*
+* Description: Scrolls display in specific direction of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
  
- void GLCD_scrollDisplay(glcddirection_t a_direction){
+void GLCD_scrollDisplay(glcddirection_t a_direction){
 	 
-	 GLCD_SCROLL_DISPLAY(a_direction);
+	GLCD_SCROLL_DISPLAY(a_direction);
 	 
- }
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_putc
+*
+* Description: Prints character to display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 	
- void GLCD_putc(char a_char){
+void GLCD_putc(char a_char){
 	
 	GLCD_PUTC(a_char);
 	
- }
+}
 
- void GLCD_putw(uword_t a_word){
+/**********************************************************************
+*
+* Function:    GLCD_putw
+*
+* Description: Prints word-sized value to display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void GLCD_putw(uword_t a_word){
 	
 	GLCD_putc((a_word>>8)&0xFF);
 	GLCD_putc(a_word&0xFF);
 	
- }
+}
 
- void GLCD_puts(const char * a_data){
+/**********************************************************************
+*
+* Function:    GLCD_puts
+*
+* Description: Prints string to display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void GLCD_puts(const char * a_data){
 		
 	GLCD_PUTS(a_data);
 	
- }
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_puti
+*
+* Description: Prints integer number to display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
  
- void GLCD_puti(udword_t a_data, glcdnumberbase_t a_numberBase){
+void GLCD_puti(udword_t a_data, glcdnumberbase_t a_numberBase){
 	 
 	char buffer[GLCD_BUFFER_SIZE];
 	itoa(a_data,buffer,a_numberBase);
@@ -86,23 +225,59 @@
 		
 	GLCD_puts(buffer);
 	 
- }
- 
- void GLCD_putf(float a_data){
-	 
-	 char buffer[GLCD_BUFFER_SIZE];
-	 dtostrf(a_data, 0, GLCD_FRACTION_SIZE, buffer);
-	 GLCD_puts(buffer);
-	 
- }
+}
 
- void GLCD_putp(void * a_ptr){
+/**********************************************************************
+*
+* Function:    GLCD_putf
+*
+* Description: Prints float number to display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+ 
+void GLCD_putf(float a_data){
 	 
-	 char buffer[8];
-	 sprintf(buffer,"%p",a_ptr);
-	 GLCD_puts(buffer);
+	char buffer[GLCD_BUFFER_SIZE];
+	dtostrf(a_data, 0, GLCD_FRACTION_SIZE, buffer);
+	GLCD_puts(buffer);
 	 
- }
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_putp
+*
+* Description: Prints pointer value to display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
+void GLCD_putp(void * a_ptr){
+	 
+	char buffer[8];
+	sprintf(buffer,"%p",a_ptr);
+	GLCD_puts(buffer);
+	 
+}
+
+/**********************************************************************
+*
+* Function:    GLCD_getc
+*
+* Description: Reads character from display of GLCD module.
+*
+* Notes:
+*
+* Returns:     Character at current cursor position (type: char).
+*
+**********************************************************************/
  
 char GLCD_getc(void){
 
@@ -110,11 +285,23 @@ char GLCD_getc(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    GLCD_getw
+*
+* Description: Reads word-sized value from display of GLCD module.
+*
+* Notes:
+*
+* Returns:     Word at current cursor position (type: uword_t).
+*
+**********************************************************************/
+
 uword_t GLCD_getw(void){
 	
 	ubyte_t byte = 0;
 	uword_t word = 0;
-	byte = GLCD_GETC;		// dummy read
+	byte = GLCD_GETC;		/* dummy read */
 	byte = GLCD_GETC;
 	word |= ((byte<<8)&0xFF00);
 	byte = GLCD_GETC;
@@ -124,11 +311,36 @@ uword_t GLCD_getw(void){
 	
 }
 
+/**********************************************************************
+*
+* Function:    GLCD_drawPixel
+*
+* Description: Draws pixel at current cursor position (X & Y) on display
+*              of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void GLCD_drawPixel(uint8_t a_x, uint8_t a_y){
 	
 	GLCD_DRAW_PIXEL(a_x,a_y);
 	
 }
+
+/**********************************************************************
+*
+* Function:    GLCD_drawLine
+*
+* Description: Draws line on display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void GLCD_drawLine(uint8_t a_startX, uint8_t a_startY, uint8_t a_endX, uint8_t a_endY){
 	
@@ -156,27 +368,45 @@ void GLCD_drawLine(uint8_t a_startX, uint8_t a_startY, uint8_t a_endX, uint8_t a
 	}else{
 		
 		int16_t x,y;
-		float m,c;
+		float m,c;
+
 		m = (float)(a_endY-a_startY)/(float)(a_endX-a_startX);
-		c = a_startY-(m*a_startX);		
+		c = a_startY-(m*a_startX);
+		
 		if(dX > 0){
 			
-			for(x=a_startX;x<=a_endX;x++){
+			for(x=a_startX;x<=a_endX;x++){
+
 				y = round((m*x)+c);
-				GLCD_drawPixel(x,y);
+				GLCD_drawPixel(x,y);
+
 			}
 			
 		}else if(dX < 0){
 			
-			for(x=a_startX;x>=a_endX;x--){
+			for(x=a_startX;x>=a_endX;x--){
+
 				y = round((m*x)+c);
-				GLCD_drawPixel(x,y);
+				GLCD_drawPixel(x,y);
+
 			}
 			
 		}
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    GLCD_drawBox
+*
+* Description: Draws box on display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void GLCD_drawBox(uint8_t a_startX, uint8_t a_startY, uint8_t a_width, uint8_t a_length){
 	
@@ -186,6 +416,18 @@ void GLCD_drawBox(uint8_t a_startX, uint8_t a_startY, uint8_t a_width, uint8_t a
 	GLCD_drawLine(a_startX,a_startY+a_length-1,a_startX,a_startY);
 	
 }
+
+/**********************************************************************
+*
+* Function:    GLCD_drawFilledBox
+*
+* Description: Draws filled box on display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void GLCD_drawFilledBox(uint8_t a_startX, uint8_t a_startY, uint8_t a_width, uint8_t a_length){
 	
@@ -199,6 +441,18 @@ void GLCD_drawFilledBox(uint8_t a_startX, uint8_t a_startY, uint8_t a_width, uin
 	}
 	
 }
+
+/**********************************************************************
+*
+* Function:    GLCD_drawCircle
+*
+* Description: Draws circle on display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void GLCD_drawCircle(uint8_t a_centerX, uint8_t a_centerY, uint8_t a_radius){
 	
@@ -230,14 +484,12 @@ void GLCD_drawCircle(uint8_t a_centerX, uint8_t a_centerY, uint8_t a_radius){
 	 
 	 while (y >= x){
 		 
-		 // for each pixel we will
-		 // draw all eight pixels
+		 /* for each pixel we will draw all eight pixels */
 		 
 		 x++;
 		 
-		 // check for decision parameter
-		 // and correspondingly
-		 // update d, x, y
+		 /* check for decision parameter and correspondingly update d, x, y */
+
 		 if (d > 0){
 			 
 			 y--;
@@ -260,11 +512,35 @@ void GLCD_drawCircle(uint8_t a_centerX, uint8_t a_centerY, uint8_t a_radius){
 	
 }
 
+/**********************************************************************
+*
+* Function:    GLCD_drawVerticalBar
+*
+* Description: Draws vertical bar on display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void GLCD_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
 	GLCD_DRAW_VERTICAL_BAR(a_barIndex,a_value,a_minValue,a_maxValue);
 	
 }
+
+/**********************************************************************
+*
+* Function:    GLCD_drawHorizontalBar
+*
+* Description: Draws horizontal bar on display of GLCD module.
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void GLCD_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
@@ -272,17 +548,53 @@ void GLCD_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t 
 	
 }
 
+/**********************************************************************
+*
+* Function:    GLCD_fillDisplay
+*
+* Description: Fills display of GLCD module.       
+*
+* Notes:
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void GLCD_fillDisplay(ubyte_t a_pattern){
 	
 	GLCD_FILL_DISPLAY(a_pattern);
 	
 }
 
+/**********************************************************************
+*
+* Function:    GLCD_putImageRAM
+*
+* Description: Draws bitmap image on display of GLCD module.
+*
+* Notes:       This function accepts bitmap images stored in RAM.
+*
+* Returns:     None.
+*
+**********************************************************************/
+
 void GLCD_putImageRAM(const ubyte_t * a_image){
 	
 	GLCD_PUT_IMAGE_RAM(a_image);
 	
 }
+
+/**********************************************************************
+*
+* Function:    GLCD_putImageROM
+*
+* Description: Draws bitmap image on display of GLCD module.
+*
+* Notes:       This function accepts bitmap images stored in ROM.
+*
+* Returns:     None.
+*
+**********************************************************************/
 
 void GLCD_putImageROM(const ubyte_t * a_image){
 	
