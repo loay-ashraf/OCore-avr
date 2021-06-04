@@ -37,7 +37,7 @@
 
 MCU = atmega16
 FORMAT = ihex
-TARGET = ATmega16-Library-Set
+TARGET = ESFS
 SRC_DIR = ./
 SRC = $(shell find $(SRC_DIR) -name *.cpp -or -name *.c -or -name *.s)
 ASRC =
@@ -67,9 +67,9 @@ CINCS = -I ./
 
 CDEBUG = -g$(DEBUG)
 CWARN = -Wall -Wstrict-prototypes
-CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections
 #CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
-CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CSTANDARD) $(CEXTRA)
+CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CTUNING) $(CSTANDARD) $(CEXTRA)
 
 
 #ASFLAGS = -Wa,-adhlns=$(<:.S=.lst)
@@ -158,7 +158,7 @@ LST = $(ASRC:.S=.lst) $(SRC:.c=.lst)
 
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
-ALL_CFLAGS = -mmcu=$(MCU) $(CFLAGS)
+ALL_CFLAGS = -mmcu=$(MCU) -DF_CPU=$(FCPU) $(CFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -x assembler-with-cpp $(ASFLAGS)
 
 
