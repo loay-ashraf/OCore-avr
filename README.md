@@ -21,7 +21,7 @@ You'll need to do the following:
 - remove unwanted modules simply by removing their folders in the rtos, ecu and mcu layer - see [Project Layout](#projectlayout).
 - after removing unwanted modules from the project, rebuild the project to check that no errors are thrown by the preprocessor or the linker.
 
-Notice: for those who use Eclipse IDE, you must add the following line in linker's "other arguments" field: `-Wl,--gc-sections`
+Notice: if using Eclipse IDE, you must add the following line in linker's "other arguments" field: `-Wl,--gc-sections`
 
 ## <a name="projectcontents"></a>Project Contents
 The project contains the following software layers:
