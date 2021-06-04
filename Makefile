@@ -36,6 +36,7 @@
 
 
 MCU = atmega16
+FCPU = 16000000UL
 FORMAT = ihex
 TARGET = ESFS
 SRC_DIR = ./
@@ -107,7 +108,7 @@ MATH_LIB = -lm
 
 EXTMEMOPTS =
 
-LDMAP = -Wl,-Map=build/$(TARGET).map,--cref
+LDMAP = -Wl,-Map=build/$(TARGET).map -Wl,--gc-sections,--cref
 LDFLAGS = $(EXTMEMOPTS) $(LDMAP) $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 
 
@@ -159,7 +160,7 @@ LST = $(ASRC:.S=.lst) $(SRC:.c=.lst)
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
 ALL_CFLAGS = -mmcu=$(MCU) -DF_CPU=$(FCPU) $(CFLAGS)
-ALL_ASFLAGS = -mmcu=$(MCU) -x assembler-with-cpp $(ASFLAGS)
+ALL_ASFLAGS = -mmcu=$(MCU) -DF_CPU=$(FCPU) -x assembler-with-cpp $(ASFLAGS)
 
 
 # Default target.
