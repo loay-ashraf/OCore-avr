@@ -20,7 +20,8 @@ You'll need to do the following:
 - scale down the layers according to the size of your application by removing unwanted modules (if you are using RTOS, modify the following file: `rtos_config.h`) - see [Project Contents](#projectcontents).
 - remove unwanted modules simply by removing their folders in the rtos, ecu and mcu layer - see [Project Layout](#projectlayout).
 - after removing unwanted modules from the project, rebuild the project to check that no errors are thrown by the preprocessor or the linker.
-Important Notice: for those who use Eclipse IDE, you must add the following line in linker's "other arguments" field: `-Wl,--gc-sections`
+
+Notice: for those who use Eclipse IDE, you must add the following line in linker's "other arguments" field: `-Wl,--gc-sections`
 
 ## <a name="projectcontents"></a>Project Contents
 The project contains the following software layers:
