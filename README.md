@@ -1,5 +1,5 @@
-# ATmega16/32 Library Set     [![C/C++ CI](https://github.com/loay-ashraf/ATmega16-32-Library-Set/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/loay-ashraf/ATmega16-32-Library-Set/actions/workflows/c-cpp.yml)
-AVR library set based on layered architecture with full integration of FreeRTOS kernel for makers and hobbyists.
+# Embedded Systems Firmware Stack     [![C/C++ CI](https://github.com/loay-ashraf/ATmega16-32-Library-Set/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/loay-ashraf/ESFS/actions/workflows/c-cpp.yml)
+Firmware stack for embedded devices based on layered architecture with full integration of FreeRTOS kernel.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -7,19 +7,20 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 You'll need one of the following tools installed on your machine:
 - Atmel Studio 7 - https://www.microchip.com/mplab/avr-support/atmel-studio-7
-- Eclipse CDT with AVR plugin - https://www.eclipse.org/cdt/
+- Eclipse Embedded CDT with AVR plugin - https://eclipse-embed-cdt.github.io | http://avr-eclipse.sourceforge.net/wiki/index.php/Plugin_Download
 
 You'll also need git to be installed on your machine.
 
 ### Installing
 You'll need to do the following:
-- clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/ATmega16-32-Library-Set.git`
+- clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/ESFS.git`
 - create new project in your IDE.
 - add your project root directory to compiler include path (in project toolchain settings).
 - add the three main folders from cloned repo folder to the project: `app`, `hal`, `rtos`. 
 - scale down the layers according to the size of your application by removing unwanted modules (if you are using RTOS, modify the following file: `rtos_config.h`) - see [Project Contents](#projectcontents).
 - remove unwanted modules simply by removing their folders in the rtos, ecu and mcu layer - see [Project Layout](#projectlayout).
 - after removing unwanted modules from the project, rebuild the project to check that no errors are thrown by the preprocessor or the linker.
+Important Notice: for those who use Eclipse IDE, you must add the following line in linker's "other arguments" field: `-Wl,--gc-sections`
 
 ## <a name="projectcontents"></a>Project Contents
 The project contains the following software layers:
@@ -53,7 +54,7 @@ The mcu layer contains:
 
 ## <a name="projectlayout"></a>Project Layout
 ```
-└───ATmega16-32-Library-Set
+└───ESFS
     ├───app
     │   ├───config
     │   └───examples
@@ -103,12 +104,13 @@ The mcu layer contains:
         └───source
 ```
 ## Built With
-- Atmel Studio 7 - The official AVR IDE
-- AVR-gcc V5.4 - C compiler
-- GNU Make - auto-generated makefile
+- Atmel Studio 7 - The official AVR IDE (for the AVR parts of the code)
+- Eclipse Embedded CDT - 2021 - 03
+- avr-gcc V5.4 - GNU AVR C compiler
+- Make - auto-generated makefile
 
 ## Tested With
-ATmega16 running @ 16MHZ
+ATmega16 running at 16MHZ (external crystal oscillator)
 
 ## Authors
 Loay Ashraf - <loay.ashraf.96@gmail.com>
