@@ -57,28 +57,34 @@ The mcu layer contains:
 ```
 └───ESFS
     ├───app
-    │   ├───config
-    │   └───examples
-    │       ├───include
-    │       └───source
+    │       ├───config
+    │       └───examples
+    │           ├───include
+    │           └───source
     ├───hal
     │   ├───ecu
+    │   │   ├───distance
+    │   │   │   └───ultrasonic
+    │   │   │       ├───api
+    │   │   │       ├───common
+    │   │   │       └───driver
+    │   │   │           └───HC-SR04
     │   │   ├───glcd
     │   │   │   ├───api
-    │   │   │   ├───common   
+    │   │   │   ├───common
     │   │   │   └───driver
     │   │   │       └───ST7920
     │   │   ├───keypad
     │   │   ├───lcd
     │   │   │   ├───api
-    │   │   │   ├───common     
+    │   │   │   ├───common
     │   │   │   └───driver
     │   │   │       └───HD44780
     │   │   ├───rtcc
     │   │   │   ├───api
-    │   │   │   ├───common     
+    │   │   │   ├───common
     │   │   │   └───driver
-    │   │   │       └───DS3231    
+    │   │   │       └───DS3231
     │   │   └───servo
     │   └───mcu
     │       ├───boot
@@ -99,10 +105,13 @@ The mcu layer contains:
     │       │       └───wdt
     │       ├───io
     │       └───sys
-    └───rtos
-        ├───config
+    ├───rtos
+    │   ├───config
+    │   ├───include
+    │   └───source
+    └───service
         ├───include
-        └───source
+        └───src
 ```
 ## Built With
 - Atmel Studio 7 - The official AVR IDE (for the AVR parts of the code)
