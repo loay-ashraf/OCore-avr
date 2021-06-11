@@ -34,7 +34,7 @@ The RTOS layer contains:
 - complmentary APIs like tasks, coroutines, queue, etc.
 
 The Service layer contains:
-- common functions like `map()`
+- common functions like `map`
 - common header files like `std_types.h`
 
 The ecu layer contains:
