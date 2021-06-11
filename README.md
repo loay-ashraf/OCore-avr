@@ -26,11 +26,16 @@ Notice: if using Eclipse IDE, you must add the following line in linker's "other
 ## <a name="projectcontents"></a>Project Contents
 The project contains the following software layers:
 - RTOS layer
+- Service Layer
 - Hardware Abstraction Layer (HAL) which is then divided into: mcu layer and ecu layer
 
 The RTOS layer contains:
 - FreeRTOS kernel V10.2.1
 - complmentary APIs like tasks, coroutines, queue, etc.
+
+The Service layer contains:
+- common functions like `map()`
+- common header files like `std_types.h`
 
 The ecu layer contains:
 - Character LCD API/driver - HD44780 controller
@@ -57,10 +62,10 @@ The mcu layer contains:
 ```
 └───ESFS
     ├───app
-    │       ├───config
-    │       └───examples
-    │           ├───include
-    │           └───source
+    │   ├───config
+    │   └───examples
+    │       ├───include
+    │       └───source
     ├───hal
     │   ├───ecu
     │   │   ├───distance
