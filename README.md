@@ -38,6 +38,7 @@ The Service layer contains:
 - common header files like `std_types.h`
 
 The ecu layer contains:
+- Distance APIs/drivers - Ultrasonic HC-SR04
 - Character LCD API/driver - HD44780 controller
 - Graphical LCD API/driver - ST7920 controller
 - Keypad matrix API/driver
