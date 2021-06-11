@@ -20,6 +20,7 @@
 #include "hal/mcu/hw/driver/gpio/gpio.h"
 #include "hal/mcu/hw/driver/spi/spi.h"
 #include "hal/mcu/sys/delay.h"
+#include "service/include/map.h"
 #include <avr/pgmspace.h>
 #include <math.h>
 #include <stdlib.h>
@@ -79,7 +80,6 @@ static void _putw(uword_t a_word);
 static uword_t _getw(void);
 #endif
 static void _enableGraphics(void);
-static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/
 
@@ -535,7 +535,7 @@ void ST7920_drawPixel(uint8_t a_x, uint8_t a_y){
 void ST7920_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
 	int8_t counter;
-	uint8_t stopY = (45-_map(a_value,a_minValue,a_maxValue,0,45))+18;
+	uint8_t stopY = (45-map(a_value,a_minValue,a_maxValue,0,45))+18;
 	char buffer[5];
 	
 	for(counter=63;counter>=stopY;counter--){
@@ -583,7 +583,7 @@ void ST7920_drawVerticalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t 
 void ST7920_drawHorizontalBar(glcdbarindex_t a_barIndex, uint8_t a_value, uint8_t a_minValue, uint8_t a_maxValue){
 	
 	int8_t x,y;
-	uint8_t stopX = _map(a_value,a_minValue,a_maxValue,0,5);
+	uint8_t stopX = map(a_value,a_minValue,a_maxValue,0,5);
 	uint8_t stopY = (a_barIndex*16)+15;
 	char buffer[5];
 	
@@ -1046,29 +1046,4 @@ static void _enableGraphics(void){
 	
 	ST7920_clearDisplay();
 	
-}
-
-/**********************************************************************
-*
-* Function:    _map
-*
-* Description: Maps an integer value from a range to another one.
-*
-* Notes:
-*
-* Returns:     Mapped value (type: uint16_t).
-*
-**********************************************************************/
-
-static uint16_t _map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax){
-	
-	if(a_input < a_inputMin)
-		a_input = a_inputMin;
-	else if(a_input > a_inputMax)
-		a_input = a_inputMax;
-	
-	float slope = (float)(a_outputMax-a_outputMin)/(float)(a_inputMax-a_inputMin);
-	uint16_t output = a_outputMin+slope*(a_input-a_inputMin);
-	
-	return output;
 }

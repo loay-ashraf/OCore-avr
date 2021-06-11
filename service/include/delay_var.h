@@ -1,33 +1,26 @@
 /**********************************************************************
 *
-* File:         pwmin.h
+* File:         servo.h
 *
 * Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
 *
-* Date created: 11/09/2019
+* Date created: 11/06/2021
 *
 * Description:	contains typedefs and function declarations for
-*               PWMIN module.
+*               variable delay functions.
 *
 **********************************************************************/
 
-#ifndef PWM_IN_H_
-#define PWM_IN_H_
+#ifndef DELAY_VAR_H_
+#define DELAY_VAR_H_
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/mcu/io/io_defs.h"
 #include "service/include/std_types.h"
-
-/*--------------------------------ENUMS------------------------------*/
-
-typedef enum{PWMIN_FALLING,PWMIN_RISING}pwminedge_t;
 
 /*------------------------FUNCTION DECLARATIONS----------------------*/
 
-uint16_t PWMIN_getPulseWidth(pin_t a_pin, uint8_t Edge);
-float PWMIN_getFreqHZ(void);
-float PWMIN_getFreqKHZ(void);
-float PWMIN_getFreqMHZ(void);
+void delayVarms(uint16_t a_ms);
+void delayVarus(uint16_t a_us);
 
-#endif /* PWM_IN_H_ */
+#endif /* DELAY_VAR_H_ */

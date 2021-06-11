@@ -26,6 +26,6 @@ void ex_rtos_dispTemp(void);
 void ex_rtos_textEntry(void);
 void ex_servo_knob(void);
 void ex_servo_sweep(void);
-
+void ex_ultrasonic_readDistance(void);
 
 #endif /* EXAMPLES_H_ */

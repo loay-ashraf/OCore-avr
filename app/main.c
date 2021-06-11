@@ -28,6 +28,7 @@ int main(void){
 	/*ex_rs232_transmit();*/
 	/*ex_servo_knob();*/
 	/*ex_servo_sweep();*/
+	/*ex_ultrasonic_readDistance();*/
 	
 	while (1){
 

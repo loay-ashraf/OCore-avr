@@ -18,7 +18,7 @@
 
 #include "twi_config.h"
 #include "hal/mcu/io/io_defs.h"
-#include "hal/mcu/sys/std_types.h"
+#include "service/include/std_types.h"
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 

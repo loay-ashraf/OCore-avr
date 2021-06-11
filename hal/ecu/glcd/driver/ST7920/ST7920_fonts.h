@@ -15,7 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/mcu/sys/std_types.h"
+#include "service/include/std_types.h"
 #include <avr/pgmspace.h>
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/

@@ -16,8 +16,8 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/mcu/sys/std_types.h"
 #include "hal/mcu/io/io_defs.h"
+#include "service/include/std_types.h"
 
 /*--------------------------------ENUMS------------------------------*/
 

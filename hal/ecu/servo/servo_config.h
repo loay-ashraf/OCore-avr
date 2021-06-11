@@ -14,6 +14,10 @@
 #ifndef SERVO_CONFIG_H_
 #define SERVO_CONFIG_H_
 
+/*------------------------------INCLUDES-----------------------------*/
+
+#include "hal/mcu/sys/cpu_config.h"
+
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define SERVO_CHANNELS_NUMBER	2

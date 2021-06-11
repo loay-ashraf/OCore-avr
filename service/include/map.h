@@ -1,33 +1,25 @@
 /**********************************************************************
 *
-* File:         pwmin.h
+* File:         map.h
 *
 * Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
 *
-* Date created: 11/09/2019
+* Date created: 11/06/2021
 *
 * Description:	contains typedefs and function declarations for
-*               PWMIN module.
+*               common map functions.
 *
 **********************************************************************/
 
-#ifndef PWM_IN_H_
-#define PWM_IN_H_
+#ifndef MAP_H_
+#define MAP_H_
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/mcu/io/io_defs.h"
 #include "service/include/std_types.h"
-
-/*--------------------------------ENUMS------------------------------*/
-
-typedef enum{PWMIN_FALLING,PWMIN_RISING}pwminedge_t;
 
 /*------------------------FUNCTION DECLARATIONS----------------------*/
 
-uint16_t PWMIN_getPulseWidth(pin_t a_pin, uint8_t Edge);
-float PWMIN_getFreqHZ(void);
-float PWMIN_getFreqKHZ(void);
-float PWMIN_getFreqMHZ(void);
+uint16_t map(uint8_t a_input, uint16_t a_inputMin, uint16_t a_inputMax, uint16_t a_outputMin, uint16_t a_outputMax);
 
-#endif /* PWM_IN_H_ */
+#endif /* MAP_H_ */

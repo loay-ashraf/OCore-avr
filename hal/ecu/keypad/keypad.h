@@ -17,7 +17,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "keypad_config.h"
-#include "hal/mcu/sys/std_types.h"
+#include "service/include/std_types.h"
 
 /*--------------------------FUNCTION POINTERS------------------------*/
 

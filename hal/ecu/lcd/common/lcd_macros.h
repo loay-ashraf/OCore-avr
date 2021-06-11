@@ -6,7 +6,7 @@
 *
 * Date created: 23/09/2019
 *
-* Description:	contains function-like adpater macros for LCD module.
+* Description:	contains function-like adapter macros for LCD module.
 *
 **********************************************************************/
 
