@@ -129,9 +129,11 @@ void ST7920_init(bool_t a_backlightON){
 		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);		/* set data port direction register */
 	
 	#elif (ST7920_INTERFACE == 0)
-	
+		
+		spiconfig_t spiConfig = {.mode = SPI_MASTER,.prescaler=SPI_DIV128,.speedmode=SPI_NORMAL,.dataorder=SPI_MSB_FIRST,.datamode=SPI_MODE3};
 		gpio_clearPin(ST7920_PSB_PIN);
-		spi_enable();
+		spi_config(SPI0_M,&spiConfig);
+		spi_enable(SPI0_M);
 	
 	#endif
 	
@@ -831,9 +833,9 @@ static void _sendByte(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	
 		gpio_setPin(ST7920_RS_PIN);													/* select ST7920 chip (SS signal) */
 		DELAY_US(350);
-		spi_transmitByte(a_transType? 0xFA : 0xF8);
-		spi_transmitByte(a_data&0xF0);
-		spi_transmitByte((a_data<<4)&0xF0);
+		spi_transmitByte(SPI0_M,a_transType? 0xFA : 0xF8);
+		spi_transmitByte(SPI0_M,a_data&0xF0);
+		spi_transmitByte(SPI0_M,(a_data<<4)&0xF0);
 		DELAY_US(350);
 		gpio_clearPin(ST7920_RS_PIN);												/* release ST7920 chip (SS signal) */
 	
