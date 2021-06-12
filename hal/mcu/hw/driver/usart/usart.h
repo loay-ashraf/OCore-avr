@@ -32,6 +32,7 @@
 
 /*--------------------------------ENUMS------------------------------*/
 
+typedef enum{USART0_M}usart_t;
 typedef enum{US_ASYNC,US_SYNC}usartmode_t;
 typedef enum{US_NORMAL,US_DOUBLE}usartspeed_t;
 typedef enum{US_FIVE_BITS=5,US_SIX_BITS,US_SEVEN_BITS,US_EIGHT_BITS,US_NINE_BITS}usartframsize_t;	
@@ -56,16 +57,16 @@ typedef struct{
 
 /*------------------------FUNCTION DECLARATIONS----------------------*/	
 
-void usart_config(usartconfig_t a_usartConfig);
-void usart_setBaudrate(usartbaudrate_t a_baudrate);
-void usart_enableTXRX(void);
-void usart_disableTXRX(void);
-void usart_transmitCharacter(char a_char);
-void usart_transmitString(const char * a_str, usartlineterm_t a_usartLineTerm);
-char usart_receiveCharacter(void);
-char * usart_receiveString(usartlineterm_t a_usartLineTerm);
-void usart_enableInterrupt(usartinterrupt_t a_usartInterrupt);
-void usart_disableInterrupt(usartinterrupt_t a_usartInterrupt);
-void usart_setISRCallback(usartinterrupt_t a_usartInterrupt, ISRcallback_t a_ISRCallback);
+void usart_config(usart_t a_usart, usartconfig_t * a_usartConfig);
+void usart_setBaudrate(usart_t a_usart, usartbaudrate_t a_baudrate);
+void usart_enable(usart_t a_usart);
+void usart_disable(usart_t a_usart);
+void usart_transmitCharacter(usart_t a_usart, char a_char);
+void usart_transmitString(usart_t a_usart, const char * a_str, usartlineterm_t a_usartLineTerm);
+char usart_receiveCharacter(usart_t a_usart);
+char * usart_receiveString(usart_t a_usart, usartlineterm_t a_usartLineTerm);
+void usart_enableInterrupt(usart_t a_usart, usartinterrupt_t a_usartInterrupt);
+void usart_disableInterrupt(usart_t a_usart, usartinterrupt_t a_usartInterrupt);
+void usart_setISRCallback(usart_t a_usart, usartinterrupt_t a_usartInterrupt, ISRcallback_t a_ISRCallback);
 
 #endif /* USART_H_ */

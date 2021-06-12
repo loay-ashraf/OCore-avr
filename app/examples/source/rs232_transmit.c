@@ -25,9 +25,9 @@ void ex_rs232_transmit(void){
 	LCD_init(TRUE,TRUE,TRUE,TRUE);
 	Keypad_setKeyMap(keyMap);
 	Keypad_init();
-	usart_config(usartConfig);
-	usart_setBaudrate(US_9600);
-	usart_enableTXRX();
+	usart_config(USART0_M,&usartConfig);
+	usart_setBaudrate(USART0_M,US_9600);
+	usart_enable(USART0_M);
 	
 	while(1){		/* loop forever */
 		
@@ -64,7 +64,7 @@ void ex_rs232_transmit(void){
 				
 				transmitString[transmitStringLength] = '\0';	/* terminate string */
 				
-				usart_transmitString(transmitString,US_LF);		/* transmit string */
+				usart_transmitString(USART0_M,transmitString,US_LF);		/* transmit string */
 				LCD_clearDisplay();								/* clear display */
 				
 			}else{		/* otherwise */

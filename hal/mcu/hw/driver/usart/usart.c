@@ -77,41 +77,41 @@ static ISRcallback_t g_usartISRCallback[3];
 *
 **********************************************************************/
 
-void usart_config(usartconfig_t a_usartConfig){
+void usart_config(usart_t a_usart, usartconfig_t * a_usartConfig){
     
-	g_mode = a_usartConfig.mode; 
-	g_frameSize = a_usartConfig.frameSize;
+	g_mode = a_usartConfig->mode; 
+	g_frameSize = a_usartConfig->frameSize;
     
-	if(!a_usartConfig.mode){
+	if(!a_usartConfig->mode){
 	
-		if(a_usartConfig.speed == US_DOUBLE)
+		if(a_usartConfig->speed == US_DOUBLE)
 			SBI(UCSRA,U2X);
 		else
 			CBI(UCSRA,U2X);
 		
-		if(a_usartConfig.frameSize != US_NINE_BITS && a_usartConfig.frameSize >= US_FIVE_BITS){
+		if(a_usartConfig->frameSize != US_NINE_BITS && a_usartConfig->frameSize >= US_FIVE_BITS){
 			
-			WRI(UCSRC,((1<<URSEL)|((a_usartConfig.frameSize-5)<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
+			WRI(UCSRC,((1<<URSEL)|((a_usartConfig->frameSize-5)<<UCSZ0)|(a_usartConfig->parity<<UPM0)|(a_usartConfig->stopBit<<USBS)));
 
-		}else if (a_usartConfig.frameSize == US_NINE_BITS){
+		}else if (a_usartConfig->frameSize == US_NINE_BITS){
 			
 			// set number of bits to 9 in the data frame
 			SBI(UCSRB,UCSZ2);
-			WRI(UCSRC,((1<<URSEL)|(3<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
+			WRI(UCSRC,((1<<URSEL)|(3<<UCSZ0)|(a_usartConfig->parity<<UPM0)|(a_usartConfig->stopBit<<USBS)));
 			
 		}
 
-	}else if (a_usartConfig.mode == US_SYNC){
+	}else if (a_usartConfig->mode == US_SYNC){
 	
-		if(a_usartConfig.frameSize != US_NINE_BITS && a_usartConfig.frameSize >= US_FIVE_BITS){
+		if(a_usartConfig->frameSize != US_NINE_BITS && a_usartConfig->frameSize >= US_FIVE_BITS){
 			
-			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|((a_usartConfig.frameSize-5)<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
+			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|((a_usartConfig->frameSize-5)<<UCSZ0)|(a_usartConfig->parity<<UPM0)|(a_usartConfig->stopBit<<USBS)));
 
-		}else if (a_usartConfig.frameSize == US_NINE_BITS){
+		}else if (a_usartConfig->frameSize == US_NINE_BITS){
 			
 			// set number of bits to 9 in the data frame
 			SBI(UCSRB,UCSZ2);
-			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|(3<<UCSZ0)|(a_usartConfig.parity<<UPM0)|(a_usartConfig.stopBit<<USBS)));
+			WRI(UCSRC,((1<<URSEL)|(1<<UMSEL)|(3<<UCSZ0)|(a_usartConfig->parity<<UPM0)|(a_usartConfig->stopBit<<USBS)));
 			
 		}
 	
@@ -131,11 +131,11 @@ void usart_config(usartconfig_t a_usartConfig){
 *
 **********************************************************************/
 
-void usart_setBaudrate(usartbaudrate_t a_baudrate){
+void usart_setBaudrate(usart_t a_usart, usartbaudrate_t a_baudrate){
    
 	uint16_t UBValue = 0;
    
-	usart_disableTXRX();								// disable receiver and transmitter buffers
+	usart_disable(USART0_M);								// disable receiver and transmitter buffers
 
 	if(!g_mode){
 
@@ -160,10 +160,9 @@ void usart_setBaudrate(usartbaudrate_t a_baudrate){
 
 /**********************************************************************
 *
-* Function:    usart_enableTXRX
+* Function:    usart_enable
 *
-* Description: Enables transmitter and receiver for 
-*              usart interface module.
+* Description: Enables usart interface module.      
 *
 * Notes:
 *
@@ -171,18 +170,17 @@ void usart_setBaudrate(usartbaudrate_t a_baudrate){
 *
 **********************************************************************/
 
-void usart_enableTXRX(void){
+void usart_enable(usart_t a_usart){
 
-  SRI(UCSRB,((1<<TXEN)|(1<<RXEN)));		// enable receiver and transmitter buffers
+	SRI(UCSRB,((1<<TXEN)|(1<<RXEN)));		// enable receiver and transmitter buffers
 
 }
 
 /**********************************************************************
 *
-* Function:    usart_disableTXRX
+* Function:    usart_disable
 *
-* Description: Disables transmitter and receiver for
-*              usart interface module.
+* Description: Disables usart interface module.
 *
 * Notes:
 *
@@ -190,9 +188,9 @@ void usart_enableTXRX(void){
 *
 **********************************************************************/
  
-void usart_disableTXRX(void){
+void usart_disable(usart_t a_usart){
 
-	 CRI(UCSRB,((1<<TXEN)|(1<<RXEN)));		// enable receiver and transmitter buffers
+	CRI(UCSRB,((1<<TXEN)|(1<<RXEN)));		// enable receiver and transmitter buffers
 
 }
 
@@ -208,7 +206,7 @@ void usart_disableTXRX(void){
 *
 **********************************************************************/
 
-void usart_transmitCharacter(char a_char){
+void usart_transmitCharacter(usart_t a_usart, char a_char){
 
 	while(!RBI(UCSRA,UDRE));			// wait for empty transmit buffer
 	
@@ -240,26 +238,26 @@ void usart_transmitCharacter(char a_char){
 *
 **********************************************************************/
  
-void usart_transmitString(const char * a_str, usartlineterm_t a_usartLineTerm){
+void usart_transmitString(usart_t a_usart, const char * a_str, usartlineterm_t a_usartLineTerm){
 
 	while(*a_str != '\0')
       
-		usart_transmitCharacter(*a_str++);		// iterate through the array till the NULL terminator
+		usart_transmitCharacter(USART0_M,*a_str++);		// iterate through the array till the NULL terminator
 	
 	/*------------transmit line terminator-----------*/
 	
 	switch(a_usartLineTerm){
 		
-		case US_CR: usart_transmitCharacter('\r');		
+		case US_CR: usart_transmitCharacter(USART0_M,'\r');		
 		break;
 		
-		case US_LF: usart_transmitCharacter('\n');	
+		case US_LF: usart_transmitCharacter(USART0_M,'\n');	
 		break;
 		
 		case US_CRLF: {
 			
-			usart_transmitCharacter('\r');
-			usart_transmitCharacter('\n');
+			usart_transmitCharacter(USART0_M,'\r');
+			usart_transmitCharacter(USART0_M,'\n');
 			
 		}
 		break;
@@ -280,7 +278,7 @@ void usart_transmitString(const char * a_str, usartlineterm_t a_usartLineTerm){
 *
 **********************************************************************/
 
-char usart_receiveCharacter(void){
+char usart_receiveCharacter(usart_t a_usart){
     
 	while(!RBI(UCSRA,RXC));			// Wait for incoming data
    
@@ -314,7 +312,7 @@ char usart_receiveCharacter(void){
 *
 **********************************************************************/
 
-char * usart_receiveString(usartlineterm_t a_usartLineTerm){
+char * usart_receiveString(usart_t a_usart, usartlineterm_t a_usartLineTerm){
 	
 	static char input[USART_BUFFER_SIZE];
 	uint8_t tmp, index = 0;
@@ -323,7 +321,7 @@ char * usart_receiveString(usartlineterm_t a_usartLineTerm){
 		 
 		case US_CR: {
 			 
-			while ((tmp = usart_receiveCharacter()) != '\r'){
+			while ((tmp = usart_receiveCharacter(USART0_M)) != '\r'){
 				 
 				input[index++] = tmp;				// iterate through the array till CR is received
 				if(index == USART_BUFFER_SIZE)
@@ -347,7 +345,7 @@ char * usart_receiveString(usartlineterm_t a_usartLineTerm){
 		 
 		case US_LF: {
 			 
-			while ((tmp = usart_receiveCharacter()) != '\n'){
+			while ((tmp = usart_receiveCharacter(USART0_M)) != '\n'){
 				
 				if(tmp == '\r')
 					return USART_RX_ERROR;
@@ -374,7 +372,7 @@ char * usart_receiveString(usartlineterm_t a_usartLineTerm){
 		 
 		case US_CRLF: {
 			 
-			while ((tmp = usart_receiveCharacter()) != '\r'){
+			while ((tmp = usart_receiveCharacter(USART0_M)) != '\r'){
 				 
 				input[index++] = tmp;				// iterate through the array till CR is received
 				if(index == USART_BUFFER_SIZE)
@@ -382,7 +380,7 @@ char * usart_receiveString(usartlineterm_t a_usartLineTerm){
 				 
 			}
 			 
-			if((tmp = usart_receiveCharacter()) == '\n'){
+			if((tmp = usart_receiveCharacter(USART0_M)) == '\n'){
 				 
 				input[index] = '\0';				// terminate the array with NULL terminator
 				return input;						// return pointer to the first element of the array
@@ -414,7 +412,7 @@ char * usart_receiveString(usartlineterm_t a_usartLineTerm){
 *
 **********************************************************************/
  
-void usart_enableInterrupt(usartinterrupt_t a_usartInterrupt){
+void usart_enableInterrupt(usart_t a_usart, usartinterrupt_t a_usartInterrupt){
 	 
 	if(!RBI(SREG,I_BIT))
 		ENABLE_GLOBAL_INTERRUPTS;
@@ -435,13 +433,13 @@ void usart_enableInterrupt(usartinterrupt_t a_usartInterrupt){
 *
 **********************************************************************/
  
-void usart_disableInterrupt(usartinterrupt_t a_usartInterrupt){
+void usart_disableInterrupt(usart_t a_usart, usartinterrupt_t a_usartInterrupt){
 	 
 	CBI(UCSRB,a_usartInterrupt);
 	 
 }
  
-void usart_setISRCallback(usartinterrupt_t a_usartInterrupt, ISRcallback_t a_ISRCallback){
+void usart_setISRCallback(usart_t a_usart, usartinterrupt_t a_usartInterrupt, ISRcallback_t a_ISRCallback){
 	 
 	g_usartISRCallback[a_usartInterrupt-5] = a_ISRCallback;
 	 
