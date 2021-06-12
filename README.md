@@ -26,13 +26,19 @@ Notice: if using Eclipse IDE, you must add the following line in linker's "other
 ## <a name="projectcontents"></a>Project Contents
 The project contains the following software layers:
 - RTOS layer
+- Service Layer
 - Hardware Abstraction Layer (HAL) which is then divided into: mcu layer and ecu layer
 
 The RTOS layer contains:
 - FreeRTOS kernel V10.2.1
 - complmentary APIs like tasks, coroutines, queue, etc.
 
+The Service layer contains:
+- common functions like `map`
+- common header files like `std_types.h`
+
 The ecu layer contains:
+- Distance APIs/drivers - Ultrasonic HC-SR04
 - Character LCD API/driver - HD44780 controller
 - Graphical LCD API/driver - ST7920 controller
 - Keypad matrix API/driver
@@ -63,22 +69,28 @@ The mcu layer contains:
     │       └───source
     ├───hal
     │   ├───ecu
+    │   │   ├───distance
+    │   │   │   └───ultrasonic
+    │   │   │       ├───api
+    │   │   │       ├───common
+    │   │   │       └───driver
+    │   │   │           └───HC-SR04
     │   │   ├───glcd
     │   │   │   ├───api
-    │   │   │   ├───common   
+    │   │   │   ├───common
     │   │   │   └───driver
     │   │   │       └───ST7920
     │   │   ├───keypad
     │   │   ├───lcd
     │   │   │   ├───api
-    │   │   │   ├───common     
+    │   │   │   ├───common
     │   │   │   └───driver
     │   │   │       └───HD44780
     │   │   ├───rtcc
     │   │   │   ├───api
-    │   │   │   ├───common     
+    │   │   │   ├───common
     │   │   │   └───driver
-    │   │   │       └───DS3231    
+    │   │   │       └───DS3231
     │   │   └───servo
     │   └───mcu
     │       ├───boot
@@ -99,10 +111,13 @@ The mcu layer contains:
     │       │       └───wdt
     │       ├───io
     │       └───sys
-    └───rtos
-        ├───config
+    ├───rtos
+    │   ├───config
+    │   ├───include
+    │   └───source
+    └───service
         ├───include
-        └───source
+        └───src
 ```
 ## Built With
 - Atmel Studio 7 - The official AVR IDE (for the AVR parts of the code)
