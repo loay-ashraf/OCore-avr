@@ -367,7 +367,7 @@ void ST7920_setFont(glcdfont_t a_font){
 
 void ST7920_scrollDisplay(glcddirection_t a_direction){
 	
-	if(a_direction == GLCD_LEFT || a_direction == GLCD_RIGHT);
+	if(a_direction == GLCD_LEFT || a_direction == GLCD_RIGHT)
 	
 		ST7920_sendInstruction(ST7920_SCROLL_DISPLAY|(a_direction<<2));
 	
