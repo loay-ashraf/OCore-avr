@@ -36,7 +36,7 @@ Changes from V2.6.0
 
 #include "rtos/include/FreeRTOS.h"
 #include "rtos/include/task.h"
-#include "hal/mcu/hw/driver/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer16/timer16.h"
 #include "hal/mcu/sys/interrupt.h"
 #include <stdlib.h>
 

@@ -7,7 +7,7 @@
 
 #include "app/examples/include/examples.h"
 #include "hal/ecu/servo/servo.h"
-#include "hal/mcu/hw/driver/adc/adc.h"
+#include "hal/mcu/peripheral/adc/adc.h"
 
 /*****************************************************************/
 /* map function to interpolate a value from one range to another */

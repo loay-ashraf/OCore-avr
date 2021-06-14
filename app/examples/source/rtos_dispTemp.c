@@ -8,8 +8,8 @@
 #include "app/examples/include/examples.h"
 #include "rtos/config/rtos_config.h"
 #include "hal/ecu/lcd/api/lcd.h"
-#include "hal/mcu/hw/driver/adc/adc.h"
-#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/mcu/peripheral/adc/adc.h"
+#include "hal/mcu/peripheral/gpio/gpio.h"
 
 /* EEPROM routines used only with the WinAVR compiler. */
 #include <avr/eeprom.h>

@@ -8,7 +8,7 @@
 #include "app/examples/include/examples.h"
 #include "hal/ecu/lcd/api/lcd.h"
 #include "hal/ecu/keypad/keypad.h"
-#include "hal/mcu/hw/driver/usart/usart.h"
+#include "hal/mcu/peripheral/usart/usart.h"
 #include "hal/mcu/sys/delay.h"
 
 static char keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS] = {{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};				/* Keypad key map array */

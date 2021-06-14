@@ -55,21 +55,21 @@ void gpio_setPinDirection(pin_t a_pin, datadirection_t a_dataDirection){
 		else
 		CBI(DDRA,a_pin);
 		
-		}else if(a_pin > 7 && a_pin < 16){
+	}else if(a_pin > 7 && a_pin < 16){
 		
 		if(a_dataDirection)
 		SBI(DDRB,(a_pin-8));
 		else
 		CBI(DDRB,(a_pin-8));
 		
-		}else if(a_pin > 15 && a_pin < 24){
+	}else if(a_pin > 15 && a_pin < 24){
 		
 		if(a_dataDirection)
 		SBI(DDRC,(a_pin-16));
 		else
 		CBI(DDRC,(a_pin-16));
 		
-		}else if(a_pin > 23 && a_pin < 32){
+	}else if(a_pin > 23 && a_pin < 32){
 		
 		if(a_dataDirection)
 		SBI(DDRD,(a_pin-24));

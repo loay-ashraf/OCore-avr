@@ -6,7 +6,7 @@
  */ 
 
 #include "app/examples/include/examples.h"
-#include "hal/mcu/hw/api/dac/dac.h"
+#include "hal/mcu/api/dac/dac.h"
 #include "hal/mcu/sys/delay.h"
 
 void ex_dac_fade(void){

@@ -14,7 +14,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "m16_adc.h"
-#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/ddp/avr8/mega/m16/gpio/m16_gpio.h"
 #include "hal/mcu/io/io_macros.h"
 #include "hal/mcu/sys/delay.h"
 #include "hal/mcu/sys/interrupt.h"
@@ -109,7 +109,7 @@ void adc_disable(void){
 
 uint16_t adc_read(adcchannel_t a_adcChannel){
 	
-	GPIO_SET_PIN_DIRECTION((ADC_PORT+a_adcChannel),IO_INPUT);
+	gpio_setPinDirection((ADC_PORT+a_adcChannel),IO_INPUT);
 	
 	CRI(ADMUX,0x0F);					// clear channel multiplexer bits
 	

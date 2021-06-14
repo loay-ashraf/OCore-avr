@@ -14,7 +14,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "m16_ac.h"
-#include "hal/mcu/hw/driver/gpio/gpio.h"
+#include "hal/ddp/avr8/mega/m16/gpio/m16_gpio.h"
 #include "hal/mcu/io/io_macros.h"
 #include "hal/mcu/sys/interrupt.h"
 
@@ -50,8 +50,8 @@ static ISRcallback_t g_acISRCallback;
 
 void ac_enable(void){
 	
-	GPIO_SET_PIN_DIRECTION(AC_IN0_PIN,IO_INPUT);
-	GPIO_SET_PIN_DIRECTION(AC_IN1_PIN,IO_INPUT);
+	gpio_setPinDirection(AC_IN0_PIN,IO_INPUT);
+	gpio_setPinDirection(AC_IN1_PIN,IO_INPUT);
 	CBI(ACSR,ACD);
 	
 }

@@ -7,7 +7,7 @@
 
 #include "app/examples/include/examples.h"
 #include "hal/ecu/lcd/api/lcd.h"
-#include "hal/mcu/hw/driver/usart/usart.h"
+#include "hal/mcu/peripheral/usart/usart.h"
 #include <string.h>
 
 static usartconfig_t usartConfig = {.mode=US_ASYNC,.frameSize=US_EIGHT_BITS,.parity=US_EVEN,.speed=US_NORMAL,.stopBit=US_ONE_BIT};	/* USART configuration structure */

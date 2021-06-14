@@ -17,8 +17,8 @@
 #include "ST7920_config.h"
 #include "ST7920_fonts.h"
 #include "hal/ecu/glcd/common/glcd_config.h"
-#include "hal/mcu/hw/driver/gpio/gpio.h"
-#include "hal/mcu/hw/driver/spi/spi.h"
+#include "hal/mcu/peripheral/gpio/gpio.h"
+#include "hal/mcu/peripheral/spi/spi.h"
 #include "hal/mcu/sys/delay.h"
 #include "service/include/map.h"
 #include <avr/pgmspace.h>

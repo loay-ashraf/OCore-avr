@@ -14,7 +14,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "servo.h"
-#include "hal/mcu/hw/driver/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer16/timer16.h"
 #include "service/include/map.h"
 #include "service/include/delay_var.h"
 
