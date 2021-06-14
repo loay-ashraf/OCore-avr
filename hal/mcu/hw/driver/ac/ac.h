@@ -14,28 +14,16 @@
 #ifndef AC_H_
 #define AC_H_
 
-/*------------------------------INCLUDES-----------------------------*/
+#include "hal/ddp/ddp_interface.h"
+#include PATH_TO_AC
 
-#include "hal/mcu/io/io_defs.h"
-
-/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
-
-#define AC_IN0_PIN		PB2_M
-#define AC_IN1_PIN		PB3_M
-
-/*--------------------------------ENUMS------------------------------*/
-
-typedef enum{AC_TOGGLE,AC_FALLING_EDGE=0x02,AC_RISING_EDGE}acinterruptmode_t;
-	
-/*------------------------FUNCTION DECLARATIONS----------------------*/	
-
-void ac_enable(void);
-void ac_disable(void);
-void ac_enableBandGap(void);
-void ac_disableBandGap(void);
-void ac_enableInterrupt(void);
-void ac_disableInterrupt(void);
-void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode);
-void ac_setISRCallback(ISRcallback_t a_ISRCallback);
+#define AC_ENABLE								ac_enable()
+#define AC_DISABLE								ac_disable()
+#define AC_ENABLE_BAND_GAP						ac_enableBandGap()
+#define AC_DISABLE_BAND_GAP						ac_disableBandGap()
+#define AC_ENABLE_INTERRUPT						ac_enableInterrupt()
+#define AC_DISABLE_INTERRUPT					ac_disableInterrupt()
+#define AC_SET_INTERRUPT_MODE(INTERRUPT_MODE)	ac_setInterruptMode(INTERRUPT_MODE)
+#define AC_SET_ISR_CALLBACK(ISR_CALLBACK)		ac_setISRCallback(ISR_CALLBACK)
 
 #endif /* AC_H_ */

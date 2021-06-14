@@ -22,7 +22,7 @@ int main(void){
 	/*ex_lcd_scrollDisplay();*/
 	/*ex_lcd_shiftCursor();*/
 	/*ex_rtcc_displayClock();*/
-	/*ex_rtos_dispTemp();*/
+	ex_rtos_dispTemp();
 	/*ex_rtos_textEntry();*/
 	/*ex_rs232_receive();*/
 	/*ex_rs232_transmit();*/
@@ -32,6 +32,6 @@ int main(void){
 	
 	while (1){
 
-    	}
+    }
 }
 

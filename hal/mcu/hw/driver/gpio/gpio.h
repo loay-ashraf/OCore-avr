@@ -6,51 +6,32 @@
 *
 * Date created: 31/03/2019
 *
-* Description:	contains definitions, configurations, typedefs
-*               and function declarations for gpio module.
+* Description:	contains function-like adapter macros for gpio module.
 *
 **********************************************************************/
 
 #ifndef GPIO_H_
 #define GPIO_H_
 
-/*------------------------------INCLUDES-----------------------------*/
+#include "hal/ddp/ddp_interface.h"
+#include PATH_TO_GPIO
 
-#include "hal/mcu/io/io_defs.h"
-#include "service/include/std_types.h"
-
-/*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
-
-#define GPIO_INT0_PIN	PD2_M
-#define GPIO_INT1_PIN	PD3_M
-#define GPIO_INT2_PIN	PB2_M
-
-/*--------------------------------ENUMS------------------------------*/
-
-typedef enum{IO_LOWER_NIBBLE=0x0F,IO_UPPER_NIBBLE=0xF0,IO_FULLPORT=0xFF}portmask_t;
-typedef enum{IO_INPUT,IO_OUTPUT}datadirection_t;
-typedef enum{IO_LOW,IO_HIGH}pinstate_t;
-typedef enum{IO_INT0,IO_INT1,IO_INT2}gpiointerrupt_t;
-typedef	enum{IO_LOW_LEVEL,IO_LOGICAL_CHANGE,IO_FALLING_EDGE,IO_RISING_EDGE}gpiointerruptmode_t;
-	
-/*------------------------FUNCTION DECLARATIONS----------------------*/		
-
-void gpio_setPinDirection(pin_t a_pin, datadirection_t a_dataDirection);
-void gpio_setPortDirection(port_t a_port, portmask_t a_portMask, datadirection_t a_dataDirection);
-void gpio_enablePinPullUp(pin_t a_pin);
-void gpio_enablePortPullUp(port_t a_port, portmask_t a_portMask);
-void gpio_setPin(pin_t a_pin);
-void gpio_clearPin(pin_t a_pin);
-void gpio_togglePin(pin_t a_pin);
-void gpio_writePort(port_t a_port, ubyte_t a_value);
-void gpio_setPort(port_t a_port, portmask_t a_portMask);
-void gpio_clearPort(port_t a_port, portmask_t a_portMask);
-pinstate_t gpio_readPin(pin_t a_pin);
-ubyte_t gpio_readPort(port_t a_port);
-void gpio_enableInterrupt(gpiointerrupt_t a_interrupt);
-void gpio_disableInterrupt(gpiointerrupt_t a_interrupt);
-void gpio_setInterruptMode(gpiointerrupt_t a_interrupt, gpiointerruptmode_t a_interruptMode);
-void gpio_clearInterruptFlag(gpiointerrupt_t a_interrupt);
-void gpio_setISRCallback(gpiointerrupt_t a_interrupt, ISRcallback_t a_ISRCallback);
+#define GPIO_SET_PIN_DIRECTION(PIN,DATA_DIRECTION)				gpio_setPinDirection(PIN,DATA_DIRECTION)
+#define GPIO_SET_PORT_DIRECTION(PORT,PORT_MASK,DATA_DIRECTION)	gpio_setPortDirection(PORT,PORT_MASK,DATA_DIRECTION)
+#define GPIO_ENABLE_PIN_PULLUP(PIN)								gpio_enablePinPullUp(PIN)
+#define GPIO_ENABLE_PORT_PULLUP(PORT,PORT_MASK)					gpio_enablePortPullUp(PORT,PORT_MASK)
+#define GPIO_SET_PIN(PIN)										gpio_setPin(PIN)
+#define GPIO_CLEAR_PIN(PIN)										gpio_clearPin(PIN)
+#define GPIO_TOGGLE_PIN(PIN)									gpio_togglePin(PIN)
+#define GPIO_WRITE_PORT(PORT,PORT_VALUE)						gpio_writePort(PORT,PORT_VALUE)
+#define GPIO_SET_PORT(PORT,PORT_MASK)							gpio_setPort(PORT,PORT_MASK)
+#define GPIO_CLEAR_PORT(PORT,PORT_MASK)							gpio_clearPort(PORT,PORT_MASK)
+#define GPIO_READ_PIN(PIN)										gpio_readPin(PIN)
+#define GPIO_READ_PORT(PORT)									gpio_readPort(PORT)
+#define GPIO_ENABLE_INTERRUPT(INTERRUPT)						gpio_enableInterrupt(INTERRUPT)
+#define GPIO_DISABLE_INTERRUPT(INTERRUPT)						gpio_disableInterrupt(INTERRUPT)
+#define GPIO_SET_INTERRUPT_MODE(INTERRUPT,INTERRUPT_MODE)		gpio_setInterruptMode(INTERRUPT,INTERRUPT_MODE)
+#define GPIO_CLEAR_INTERRUPT_FLAG(INTERRUPT)					gpio_clearInterruptFlag(INTERRUPT)
+#define GPIO_SET_ISR_CALLBACK(INTERRUPT,ISR_CALLBACK)			gpio_setISRCallback(INTERRUPT,ISR_CALLBACK)
 
 #endif /* GPIO_H_ */
