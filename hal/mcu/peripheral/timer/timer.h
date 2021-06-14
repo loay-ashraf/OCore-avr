@@ -29,6 +29,7 @@
 
 /*--------------------------------ENUMS------------------------------*/
 
+typedef enum{TIMER0_M,TIMER2_M}timer_t;
 typedef enum{T_NORMAL,T_PHASE_CORRECT=0x40,T_CTC=0x08,T_FAST_PWM=0x48}timermode_t;
 typedef enum{T_DIV1=0x01,T_DIV8,T_DIV32,T_DIV64,T_DIV128,T_DIV256,T_DIV1024,T_EXT_FALLING=0x06,T_EXT_RISING}timerprescaler_t;
 typedef enum{T_OFF,T_TOGGLE=0x10,T_CLEAR=0x20,T_SET=0x30}timerocmode_t;		
