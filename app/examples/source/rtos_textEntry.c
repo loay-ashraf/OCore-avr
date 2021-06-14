@@ -50,7 +50,7 @@ void ex_rtos_textEntry(void){
 	/* initialize error LED, LCD and keypad interfaces */
 	/***************************************************/
 	
-	gpio_setPinDirection(PD2_M,IO_OUTPUT);
+	GPIO_SET_PIN_DIRECTION(PD2_M,IO_OUTPUT);
 	LCD_init(TRUE,TRUE,TRUE,TRUE);
 	Keypad_setKeyMap(keyMap);
 	Keypad_init();
@@ -130,7 +130,7 @@ static portBASE_TYPE xErrorHasOccurred = pdFALSE;
 		
 		/* Toggle the LED if everything is okay so we know if an error occurs even if not
 		using console IO. */
-		gpio_togglePin(PD2_M);
+		GPIO_TOGGLE_PIN(PD2_M);
 		
 	}
 }

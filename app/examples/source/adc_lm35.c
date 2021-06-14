@@ -18,13 +18,13 @@ void ex_adc_lm35(void){
 	/* initialize LCD and ADC interfaces */
 	/*************************************/
 	
-	adc_config(AD_DIV16,AD_AVCC,FALSE);
-	adc_enable();
+	ADC_CONFIG(AD_DIV16,AD_AVCC,FALSE);
+	ADC_ENABLE;
 	LCD_init(TRUE,FALSE,FALSE,TRUE);
 	
 	while(1){		/* loop forever */
 		
-		adcValue = adc_read(AD_CH0);		/* read analog value from channel zero (PA0) */
+		adcValue = ADC_READ(AD_CH0);		/* read analog value from channel zero (PA0) */
 		
 		/****************************************/
 		/* display temperature in Celsius scale */

@@ -32,12 +32,12 @@ void ex_servo_knob(void){
 	/* initialize ADC and Servo interfaces */
 	/***************************************/
 	
-	adc_config(AD_DIV16,AD_AVCC,FALSE);
-	adc_enable();
+	ADC_CONFIG(AD_DIV16,AD_AVCC,FALSE);
+	ADC_ENABLE;
 	Servo_enable();
 	Servo_activateChannel(SER_CH0,100,0);
 	
 	while(1)		/* loop forever */
-		Servo_setPositionDirect(SER_CH0,map(adc_read(AD_CH0),0,1023,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX));	/* set servo position according to the knob position */
+		Servo_setPositionDirect(SER_CH0,map(ADC_READ(AD_CH0),0,1023,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX));	/* set servo position according to the knob position */
 	
 }

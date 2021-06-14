@@ -429,10 +429,10 @@ void DS3231_enableAlarm(rtccalarm_t a_alarm){
 	
 	twi_transmitStop(TWI0_M);
 	
-	gpio_enablePinPullUp(DS3231_ALARM_INT_PIN);
-	gpio_setInterruptMode(DS3231_ALARM_INT,DS3231_ALARM_INT_MODE);
-	gpio_setISRCallback(DS3231_ALARM_INT,&_alarmISR);
-	gpio_enableInterrupt(DS3231_ALARM_INT);
+	GPIO_ENABLE_PIN_PULLUP(DS3231_ALARM_INT_PIN);
+	GPIO_SET_INTERRUPT_MODE(DS3231_ALARM_INT,DS3231_ALARM_INT_MODE);
+	GPIO_SET_ISR_CALLBACK(DS3231_ALARM_INT,&_alarmISR);
+	GPIO_ENABLE_INTERRUPT(DS3231_ALARM_INT);
 	
 }
 
@@ -472,7 +472,7 @@ void DS3231_disableAlarm(rtccalarm_t a_alarm){
 	
 	twi_transmitStop(TWI0_M);
 	
-	gpio_disableInterrupt(DS3231_ALARM_INT);
+	GPIO_DISABLE_INTERRUPT(DS3231_ALARM_INT);
 	
 }
 

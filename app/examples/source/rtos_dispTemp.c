@@ -49,10 +49,10 @@ void ex_rtos_dispTemp(void){
 	/* initialize error LED, LCD and keypad interfaces */
 	/***************************************************/
 	
-	gpio_setPinDirection(PD2_M,IO_OUTPUT);
+	GPIO_SET_PIN_DIRECTION(PD2_M,IO_OUTPUT);
 	LCD_init(TRUE,FALSE,FALSE,TRUE);
-	adc_config(AD_DIV16,AD_AVCC,FALSE);
-	adc_enable();
+	ADC_CONFIG(AD_DIV16,AD_AVCC,FALSE);
+	ADC_ENABLE;
 	
 	xTaskCreate(readTemp,"readTemp",configMINIMAL_STACK_SIZE,NULL,3,NULL);			/* task to read temperature every 10 ms */
 	xTaskCreate(updateLCD,"updateLCD",configMINIMAL_STACK_SIZE,NULL,2,NULL);		/* task to update LCD every 500 ms */
@@ -71,7 +71,7 @@ static void readTemp(void *pvParameters){
 		
 		vTaskDelay(10);
 		
-		temp = adc_read(AD_CH0);
+		temp = ADC_READ(AD_CH0);
 		
 		readTemp_isRunning = TRUE;
 		
@@ -138,7 +138,7 @@ static portBASE_TYPE xErrorHasOccurred = pdFALSE;
 		
 		/* Toggle the LED if everything is okay so we know if an error occurs even if not
 		using console IO. */
-		gpio_togglePin(PD2_M);
+		GPIO_TOGGLE_PIN(PD2_M);
 		
 	}
 }

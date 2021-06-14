@@ -43,7 +43,7 @@ void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorB
 	
 	#ifdef HD44780_BL_PIN
 	
-		gpio_setPinDirection(HD44780_BL_PIN,IO_OUTPUT);
+		GPIO_SET_PIN_DIRECTION(HD44780_BL_PIN,IO_OUTPUT);
 		
 		HD44780_configBacklight(a_backlightON);
 		
@@ -51,13 +51,13 @@ void HD44780_init(bool_t a_backlightON, bool_t a_cursorVisible, bool_t a_cursorB
 	
 	#ifdef HD44780_RW_PIN
 	
-		gpio_setPinDirection(HD44780_RW_PIN,IO_OUTPUT);
+		GPIO_SET_PIN_DIRECTION(HD44780_RW_PIN,IO_OUTPUT);
 	
 	#endif
 	
-	gpio_setPinDirection(HD44780_EN_PIN,IO_OUTPUT);												/* set control port direction register */
-	gpio_setPinDirection(HD44780_RS_PIN,IO_OUTPUT);
-	gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);					/* set data port direction register */
+	GPIO_SET_PIN_DIRECTION(HD44780_EN_PIN,IO_OUTPUT);												/* set control port direction register */
+	GPIO_SET_PIN_DIRECTION(HD44780_RS_PIN,IO_OUTPUT);
+	GPIO_SET_PORT_DIRECTION(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);					/* set data port direction register */
 	
 	_resetDisplay();
 	
@@ -170,21 +170,21 @@ void HD44780_configBacklight(bool_t a_backlightON){
 		
 			if(a_backlightON)
 			
-				gpio_setPin(HD44780_BL_PIN);
+				GPIO_SET_PIN(HD44780_BL_PIN);
 			
 			else
 			
-				gpio_clearPin(HD44780_BL_PIN);
+				GPIO_CLEAR_PIN(HD44780_BL_PIN);
 		
 		#elif (HD44780_BL_MODE == 0)
 		
 			if(a_backlightON)
 			
-				gpio_clearPin(HD44780_BL_PIN);
+				GPIO_CLEAR_PIN(HD44780_BL_PIN);
 			
 			else
 			
-				gpio_setPin(HD44780_BL_PIN);
+				GPIO_SET_PIN(HD44780_BL_PIN);
 		
 		#endif
 		
@@ -509,26 +509,26 @@ static void _sendByte(ubyte_t a_data, hd44780transmissiontype_t a_transType){
 	
 	if(a_transType == HD44780_INSTRUCTION){
 		
-		gpio_setPin(HD44780_EN_PIN);											/* enable HD44780 interface for new data (EN signal), Command register is selected */
+		GPIO_SET_PIN(HD44780_EN_PIN);											/* enable HD44780 interface for new data (EN signal), Command register is selected */
 		DELAY_US(800);
-		gpio_setPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		/* send a nibble of command */
+		GPIO_SET_PORT(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		/* send a nibble of command */
 		DELAY_US(800);
-		gpio_clearPin(HD44780_EN_PIN);											/* clear control port */
+		GPIO_CLEAR_PIN(HD44780_EN_PIN);											/* clear control port */
 		DELAY_US(200);
-		gpio_clearPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));	/* clear data port */
+		GPIO_CLEAR_PORT(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));	/* clear data port */
 		
 	}else if(a_transType == HD44780_DATA){
 		
-		gpio_setPin(HD44780_RS_PIN);											/* select Data register (RS signal) */
+		GPIO_SET_PIN(HD44780_RS_PIN);											/* select Data register (RS signal) */
 		DELAY_US(800);
-		gpio_setPin(HD44780_EN_PIN);											/* enable HD44780 interface for new data (EN signal) */
+		GPIO_SET_PIN(HD44780_EN_PIN);											/* enable HD44780 interface for new data (EN signal) */
 		DELAY_US(800);
-		gpio_setPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		/* send a nibble of data */
+		GPIO_SET_PORT(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));		/* send a nibble of data */
 		DELAY_US(800);
-		gpio_clearPin(HD44780_EN_PIN);											/* clear EN pin */
-		gpio_clearPin(HD44780_RS_PIN);											/* clear RS pin */
+		GPIO_CLEAR_PIN(HD44780_EN_PIN);											/* clear EN pin */
+		GPIO_CLEAR_PIN(HD44780_RS_PIN);											/* clear RS pin */
 		DELAY_US(200);
-		gpio_clearPort(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));	/* clear data port */
+		GPIO_CLEAR_PORT(HD44780_DATA_PORT, (a_data & HD44780_DATA_PORT_MASK));	/* clear data port */
 		
 	}
 	
@@ -552,21 +552,21 @@ static ubyte_t _readByte(void){
 	
 		ubyte_t data;
 	
-		gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_INPUT);
+		GPIO_SET_PORT_DIRECTION(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_INPUT);
 	
-		gpio_setPin(HD44780_RS_PIN);										// select Data register (RS signal)
-		gpio_setPin(HD44780_RW_PIN);										// select Data register (RW signal)
+		GPIO_SET_PIN(HD44780_RS_PIN);										// select Data register (RS signal)
+		GPIO_SET_PIN(HD44780_RW_PIN);										// select Data register (RW signal)
 		DELAY_US(800);
-		gpio_setPin(HD44780_EN_PIN);										// enable GHD44780 interface for new data (EN signal)
+		GPIO_SET_PIN(HD44780_EN_PIN);										// enable GHD44780 interface for new data (EN signal)
 		DELAY_US(800);
-		data = (gpio_readPort(HD44780_DATA_PORT)&HD44780_DATA_PORT_MASK);		// read nibble of data
+		data = (GPIO_READ_PORT(HD44780_DATA_PORT)&HD44780_DATA_PORT_MASK);		// read nibble of data
 		DELAY_US(800);
-		gpio_clearPin(HD44780_EN_PIN);										// clear EN pin
-		gpio_clearPin(HD44780_RW_PIN);										// clear RW pin
-		gpio_clearPin(HD44780_RS_PIN);										// clear RS pin
+		GPIO_CLEAR_PIN(HD44780_EN_PIN);										// clear EN pin
+		GPIO_CLEAR_PIN(HD44780_RW_PIN);										// clear RW pin
+		GPIO_CLEAR_PIN(HD44780_RS_PIN);										// clear RS pin
 		DELAY_US(200);
 	
-		gpio_setPortDirection(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);
+		GPIO_SET_PORT_DIRECTION(HD44780_DATA_PORT,HD44780_DATA_PORT_MASK,IO_OUTPUT);
 	
 		return data;
 	

@@ -14,7 +14,7 @@ int main(void){
 	/*ex_adc_lm35();*/
 	/*ex_dac_fade();*/
 	/*ex_glcd_barTemperature();*/
-	/*ex_glcd_displayImg();*/
+	ex_glcd_displayImg();
 	/*ex_glcd_drawBoxes();*/
 	/*ex_glcd_drawCircles();*/
 	/*ex_glcd_text();*/
@@ -22,7 +22,7 @@ int main(void){
 	/*ex_lcd_scrollDisplay();*/
 	/*ex_lcd_shiftCursor();*/
 	/*ex_rtcc_displayClock();*/
-	ex_rtos_dispTemp();
+	/*ex_rtos_dispTemp();*/
 	/*ex_rtos_textEntry();*/
 	/*ex_rs232_receive();*/
 	/*ex_rs232_transmit();*/

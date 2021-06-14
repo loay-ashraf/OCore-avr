@@ -70,15 +70,15 @@ void Keypad_init(void){
 	
 	#if (KEYPAD_CONFIG == 1)
 	
-		gpio_setPortDirection(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
-		gpio_setPortDirection(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
-		gpio_clearPort(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);
+		GPIO_SET_PORT_DIRECTION(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
+		GPIO_SET_PORT_DIRECTION(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
+		GPIO_CLEAR_PORT(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);
 	
 	#elif (KEYPAD_CONFIG == -1)
 
-		gpio_setPortDirection(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
-		gpio_setPortDirection(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
-		gpio_setPort(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);	
+		GPIO_SET_PORT_DIRECTION(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
+		GPIO_SET_PORT_DIRECTION(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
+		GPIO_SET_PORT(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);
 	
 	#endif			
   
@@ -176,11 +176,11 @@ char Keypad_scan(void){
 	 
 		#if (KEYPAD_CONFIG == 1)
 			
-			gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
+			GPIO_SET_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
 		 
 		#elif (KEYPAD_CONFIG == -1)
 			
-			gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
+			GPIO_CLEAR_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
 		 
 		#endif
 
@@ -188,13 +188,13 @@ char Keypad_scan(void){
 
 			#if (KEYPAD_CONFIG == 1)
 				
-				if (gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+				if (GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
 					
 					DELAY_MS(100);
 					
-					if (gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){	
+					if (GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
 						
-						gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
+						GPIO_CLEAR_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
 						return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
 						
 					}
@@ -202,13 +202,13 @@ char Keypad_scan(void){
 					
 			#elif (KEYPAD_CONFIG == -1)
 				
-				if (!gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+				if (!GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
 					
 					DELAY_MS(100);
 					
-					if (!gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+					if (!GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
 						
-						gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
+						GPIO_SET_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
 						return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
 						
 					}
@@ -219,11 +219,11 @@ char Keypad_scan(void){
 	 
 		#if (KEYPAD_CONFIG == 1)
 		 
-			gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
+			GPIO_CLEAR_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
 		 
 		#elif (KEYPAD_CONFIG == -1)
 		 
-			gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
+			GPIO_SET_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
 		 
 		#endif
 	

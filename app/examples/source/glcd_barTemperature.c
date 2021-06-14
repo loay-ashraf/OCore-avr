@@ -19,8 +19,8 @@ void ex_glcd_barTemperature(void){
 	/**************************************/
 	
 	GLCD_init(TRUE);
-	adc_config(AD_DIV16,AD_AVCC,FALSE);
-	adc_enable();
+	ADC_CONFIG(AD_DIV16,AD_AVCC,FALSE);
+	ADC_ENABLE;
 	
 	
 	while(1){		/* loop forever */
@@ -29,7 +29,7 @@ void ex_glcd_barTemperature(void){
 		/* read ADC channel 0 and update graph bar every 1 second */
 		/**********************************************************/
 		
-		temp = adc_read(AD_CH0)*0.448;
+		temp = ADC_READ(AD_CH0)*0.448;
 		GLCD_drawVerticalBar(GLCD_BAR1,temp,0,60);
 		DELAY_MS(1000);
 		

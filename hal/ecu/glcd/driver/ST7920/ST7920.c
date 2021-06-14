@@ -97,12 +97,12 @@ static void _enableGraphics(void);
 
 void ST7920_init(bool_t a_backlightON){
 	
-	gpio_setPinDirection(ST7920_PSB_PIN,IO_OUTPUT);
-	gpio_setPinDirection(ST7920_RS_PIN,IO_OUTPUT);
+	GPIO_SET_PIN_DIRECTION(ST7920_PSB_PIN,IO_OUTPUT);
+	GPIO_SET_PIN_DIRECTION(ST7920_RS_PIN,IO_OUTPUT);
 	
 	#ifdef ST7920_BL_PIN
 	
-		gpio_setPinDirection(ST7920_BL_PIN,IO_OUTPUT);
+		GPIO_SET_PIN_DIRECTION(ST7920_BL_PIN,IO_OUTPUT);
 		
 		ST7920_configBacklight(a_backlightON);
 	
@@ -110,30 +110,30 @@ void ST7920_init(bool_t a_backlightON){
 	
 	#ifdef ST7920_RST_PIN
 	
-		gpio_setPinDirection(ST7920_RST_PIN,IO_OUTPUT);
-		gpio_setPin(ST7920_RST_PIN);
+		GPIO_SET_PIN_DIRECTION(ST7920_RST_PIN,IO_OUTPUT);
+		GPIO_SET_PIN(ST7920_RST_PIN);
 	
 	#endif
 	
 	#if (ST7920_INTERFACE == 1)
 	
-		gpio_setPin(ST7920_PSB_PIN);
+		GPIO_SET_PIN(ST7920_PSB_PIN);
 		
 		#ifdef ST7920_RW_PIN
 		
-			gpio_setPinDirection(ST7920_RW_PIN,IO_OUTPUT);
+			GPIO_SET_PIN_DIRECTION(ST7920_RW_PIN,IO_OUTPUT);
 		
 		#endif
 		
-		gpio_setPinDirection(ST7920_EN_PIN,IO_OUTPUT);								
-		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);		/* set data port direction register */
+		GPIO_SET_PIN_DIRECTION(ST7920_EN_PIN,IO_OUTPUT);
+		GPIO_SET_PORT_DIRECTION(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);		/* set data port direction register */
 	
 	#elif (ST7920_INTERFACE == 0)
 		
 		spiconfig_t spiConfig = {.mode = SPI_MASTER,.prescaler=SPI_DIV128,.speedmode=SPI_NORMAL,.dataorder=SPI_MSB_FIRST,.datamode=SPI_MODE3};
-		gpio_clearPin(ST7920_PSB_PIN);
-		spi_config(SPI0_M,&spiConfig);
-		spi_enable(SPI0_M);
+		GPIO_CLEAR_PIN(ST7920_PSB_PIN);
+		SPI_CONFIG(SPI0_M,&spiConfig);
+		SPI_ENABLE(SPI0_M);
 	
 	#endif
 	
@@ -274,21 +274,21 @@ void ST7920_configBacklight(bool_t a_backlightON){
 		
 			if(a_backlightON)
 			
-				gpio_setPin(ST7920_BL_PIN);
+				GPIO_SET_PIN(ST7920_BL_PIN);
 			
 			else
 			
-				gpio_clearPin(ST7920_BL_PIN);
+				GPIO_CLEAR_PIN(ST7920_BL_PIN);
 		
 		#elif (ST7920_BL_MODE == 0)
 		
 			if(a_backlightON)
 			
-				gpio_clearPin(ST7920_BL_PIN);
+				GPIO_CLEAR_PIN(ST7920_BL_PIN);
 			
 			else
 			
-				gpio_setPin(ST7920_BL_PIN);
+				GPIO_SET_PIN(ST7920_BL_PIN);
 		
 		#endif
 	
@@ -804,40 +804,40 @@ static void _sendByte(ubyte_t a_data, st7920transmissiontype_t a_transType){
 	
 		if(a_transType == ST7920_INSTRUCTION){
 		
-			gpio_setPin(ST7920_EN_PIN);												/* enable ST7920 interface for new data (EN signal), Command register is selected */
+			GPIO_SET_PIN(ST7920_EN_PIN);												/* enable ST7920 interface for new data (EN signal), Command register is selected */
 			DELAY_US(800);
-			gpio_setPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* send a nibble of command */
+			GPIO_SET_PORT(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* send a nibble of command */
 			DELAY_US(800);
-			gpio_clearPin(ST7920_EN_PIN);											/* clear control port */
+			GPIO_CLEAR_PIN(ST7920_EN_PIN);											/* clear control port */
 			DELAY_US(200);
-			gpio_clearPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* clear data port */
+			GPIO_CLEAR_PORT(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* clear data port */
 			DELAY_US(200);
 		
 		}else if(a_transType == ST7920_DATA){
 		
-			gpio_setPin(ST7920_RS_PIN);												/* select Data register (RS signal) */
+			GPIO_SET_PIN(ST7920_RS_PIN);												/* select Data register (RS signal) */
 			DELAY_US(800);
-			gpio_setPin(ST7920_EN_PIN);												/* enable ST7920 interface for new data (EN signal) */
+			GPIO_SET_PIN(ST7920_EN_PIN);												/* enable ST7920 interface for new data (EN signal) */
 			DELAY_US(800);
-			gpio_setPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* send a nibble of data */
+			GPIO_SET_PORT(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* send a nibble of data */
 			DELAY_US(800);
-			gpio_clearPin(ST7920_EN_PIN);											/* clear EN pin */
-			gpio_clearPin(ST7920_RS_PIN);											/* clear RS pin */
+			GPIO_CLEAR_PIN(ST7920_EN_PIN);											/* clear EN pin */
+			GPIO_CLEAR_PIN(ST7920_RS_PIN);											/* clear RS pin */
 			DELAY_US(200);
-			gpio_clearPort(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* clear data port */
+			GPIO_CLEAR_PORT(ST7920_DATA_PORT,(a_data & ST7920_DATA_PORT_MASK));		/* clear data port */
 			DELAY_US(200);
 		
 		}
 	
 	#elif (ST7920_INTERFACE == 0)
 	
-		gpio_setPin(ST7920_RS_PIN);													/* select ST7920 chip (SS signal) */
+		GPIO_SET_PIN(ST7920_RS_PIN);													/* select ST7920 chip (SS signal) */
 		DELAY_US(350);
-		spi_transmitByte(SPI0_M,a_transType? 0xFA : 0xF8);
-		spi_transmitByte(SPI0_M,a_data&0xF0);
-		spi_transmitByte(SPI0_M,(a_data<<4)&0xF0);
+		SPI_TRANSMIT_BYTE(SPI0_M,a_transType? 0xFA : 0xF8);
+		SPI_TRANSMIT_BYTE(SPI0_M,a_data&0xF0);
+		SPI_TRANSMIT_BYTE(SPI0_M,(a_data<<4)&0xF0);
 		DELAY_US(350);
-		gpio_clearPin(ST7920_RS_PIN);												/* release ST7920 chip (SS signal) */
+		GPIO_CLEAR_PIN(ST7920_RS_PIN);												/* release ST7920 chip (SS signal) */
 	
 	#endif
 	
@@ -861,21 +861,21 @@ static ubyte_t _readByte(void){
 	
 		ubyte_t data;
 	
-		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_INPUT);
+		GPIO_SET_PORT_DIRECTION(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_INPUT);
 	
-		gpio_setPin(ST7920_RS_PIN);											/* select Data register (RS signal) */
-		gpio_setPin(ST7920_RW_PIN);											/* select Read mode (RW signal) */
+		GPIO_SET_PIN(ST7920_RS_PIN);										/* select Data register (RS signal) */
+		GPIO_SET_PIN(ST7920_RW_PIN);										/* select Read mode (RW signal) */
 		DELAY_US(800);
-		gpio_setPin(ST7920_EN_PIN);											/* enable ST7920 interface for new data (EN signal) */
+		GPIO_SET_PIN(ST7920_EN_PIN);										/* enable ST7920 interface for new data (EN signal) */
 		DELAY_US(800);
-		data = (gpio_readPort(ST7920_DATA_PORT)&ST7920_DATA_PORT_MASK);		/* read nibble of data */
+		data = (GPIO_READ_PORT(ST7920_DATA_PORT)&ST7920_DATA_PORT_MASK);	/* read nibble of data */
 		DELAY_US(800);
-		gpio_clearPin(ST7920_EN_PIN);										/* clear EN pin */
-		gpio_clearPin(ST7920_RW_PIN);										/* clear RW pin */
-		gpio_clearPin(ST7920_RS_PIN);										/* clear RS pin */
+		GPIO_CLEAR_PIN(ST7920_EN_PIN);										/* clear EN pin */
+		GPIO_CLEAR_PIN(ST7920_RW_PIN);										/* clear RW pin */
+		GPIO_CLEAR_PIN(ST7920_RS_PIN);										/* clear RS pin */
 		DELAY_US(200);
 	
-		gpio_setPortDirection(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);
+		GPIO_SET_PORT_DIRECTION(ST7920_DATA_PORT,ST7920_DATA_PORT_MASK,IO_OUTPUT);
 	
 		return data;
 	
