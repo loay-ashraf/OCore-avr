@@ -17,7 +17,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/mcu/io/io_defs.h"
+#include "hal/mcu/sys/io.h"
 #include "service/include/std_types.h"
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/

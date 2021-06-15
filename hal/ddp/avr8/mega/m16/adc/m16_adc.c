@@ -15,9 +15,9 @@
 
 #include "m16_adc.h"
 #include "hal/ddp/avr8/mega/m16/gpio/m16_gpio.h"
-#include "hal/mcu/io/io_macros.h"
-#include "hal/mcu/sys/delay.h"
-#include "hal/mcu/sys/interrupt.h"
+#include "hal/ddp/avr8/mega/m16/m16_delay.h"
+#include "hal/ddp/avr8/mega/m16/m16_interrupt.h"
+#include "service/include/register_macros.h"
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/
 

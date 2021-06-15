@@ -9,7 +9,7 @@
 #include "rtos/config/rtos_config.h"
 #include "hal/ecu/lcd/api/lcd.h"
 #include "hal/ecu/keypad/keypad.h"
-#include "hal/mcu/peripheral/gpio/gpio.h"
+#include "hal/mcu/peripheral/gpio.h"
 
 /* EEPROM routines used only with the WinAVR compiler. */
 #include <avr/eeprom.h>

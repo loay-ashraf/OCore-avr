@@ -16,7 +16,7 @@
 #include "HD44780.h"
 #include "HD44780_config.h"
 #include "hal/ecu/lcd/common/lcd_config.h"
-#include "hal/mcu/peripheral/gpio/gpio.h"
+#include "hal/mcu/peripheral/gpio.h"
 #include "hal/mcu/sys/delay.h"
 
 /*------------------------FUNCTION PROTOTYPES------------------------*/

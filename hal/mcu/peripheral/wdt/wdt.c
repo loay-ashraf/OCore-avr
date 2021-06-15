@@ -14,7 +14,8 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "wdt.h"
-#include "hal/mcu/io/io_macros.h"
+#include "hal/mcu/sys/io.h"
+#include "service/include/register_macros.h"
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/
 

@@ -14,10 +14,10 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "twi.h"
-#include "hal/mcu/peripheral/gpio/gpio.h"
-#include "hal/mcu/io/io_macros.h"
+#include "hal/mcu/peripheral/gpio.h"
 #include "hal/mcu/sys/delay.h"
 #include "hal/mcu/sys/interrupt.h"
+#include "service/include/register_macros.h"
 #include <math.h>
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/

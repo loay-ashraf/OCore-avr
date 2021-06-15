@@ -15,7 +15,7 @@
 
 #include "DS3231.h"
 #include "DS3231_config.h"
-#include "hal/mcu/peripheral/gpio/gpio.h"
+#include "hal/mcu/peripheral/gpio.h"
 #include "hal/mcu/peripheral/twi/twi.h"
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/

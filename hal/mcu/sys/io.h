@@ -1,21 +1,21 @@
 /**********************************************************************
 *
-* File:         sleep.h
+* File:         io.h
 *
 * Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
 *
-* Date created: 12/05/2019
+* Date created: 05/05/2019
 *
-* Description:	contains CPU sleep instructions macros.
+* Description:	contains port, pin and peripherals definitions.
 *
 **********************************************************************/
 
-#ifndef SLEEP_H_
-#define SLEEP_H_
+#ifndef IO_H_
+#define IO_H_
 
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "hal/ddp/ddp_interface.h"
-#include PATH_TO_SLEEP_H
+#include PATH_TO_IO_H
 
-#endif /* SLEEP_H_ */
+#endif /* IO_H_ */

@@ -16,7 +16,7 @@
 #include "HC_SR04.h"
 #include "HC_SR04_config.h"
 #include "hal/mcu/api/pwmin/pwmin.h"
-#include "hal/mcu/peripheral/gpio/gpio.h"
+#include "hal/mcu/peripheral/gpio.h"
 #include "hal/mcu/sys/delay.h"
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/

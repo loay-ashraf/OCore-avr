@@ -14,9 +14,9 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "usart.h"
-#include "hal/mcu/io/io_macros.h"
 #include "hal/mcu/sys/cpu_config.h"
 #include "hal/mcu/sys/interrupt.h"
+#include "service/include/register_macros.h"
  
 /*--------------------------GLOBAL VARIABLES-------------------------*/
 

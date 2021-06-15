@@ -17,7 +17,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/mcu/io/io_defs.h"
+#include "hal/ddp/avr8/mega/m16/m16_io.h"
 #include "service/include/std_types.h"
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/

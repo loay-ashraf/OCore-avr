@@ -13,8 +13,8 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "m16_gpio.h"
-#include "hal/mcu/io/io_macros.h"
-#include "hal/mcu/sys/interrupt.h"
+#include "hal/ddp/avr8/mega/m16/m16_interrupt.h"
+#include "service/include/register_macros.h"
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/
 

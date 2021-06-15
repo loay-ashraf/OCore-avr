@@ -14,7 +14,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "keypad.h"
-#include "hal/mcu/peripheral/gpio/gpio.h"
+#include "hal/mcu/peripheral/gpio.h"
 #include "hal/mcu/peripheral/timer16/timer16.h"
 #include "hal/mcu/sys/delay.h"
 

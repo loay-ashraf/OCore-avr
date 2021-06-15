@@ -214,4 +214,8 @@ typedef union{
 	
 }registerudword_t;
 
+/*--------------------------FUNCTION POINTERS------------------------*/
+
+typedef void (*ISRcallback_t) (void);
+
 #endif /* STD_TYPES_H_ */

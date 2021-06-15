@@ -15,12 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "cpu_config.h"
-#include <util/delay.h>
-
-/*-------------------------------MACROS------------------------------*/
-
-#define DELAY_MS(MS)	_delay_ms(MS) 
-#define DELAY_US(US)	_delay_us(US)
+#include "hal/ddp/ddp_interface.h"
+#include PATH_TO_DELAY_H
 
 #endif /* DELAY_H_ */

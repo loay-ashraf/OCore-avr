@@ -15,11 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include <avr/interrupt.h>
-
-/*-------------------------------MACROS------------------------------*/
-
-#define ENABLE_GLOBAL_INTERRUPTS	sei()
-#define DISABLE_GLOBAL_INTERRUPTS	cli()
+#include "hal/ddp/ddp_interface.h"
+#include PATH_TO_INTERRUPT_H
 
 #endif /* INTERRUPT_H_ */

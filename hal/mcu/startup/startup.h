@@ -1,21 +1,19 @@
 /**********************************************************************
 *
-* File:         sleep.h
+* File:         startup.h
 *
 * Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
 *
-* Date created: 12/05/2019
+* Date created: 05/06/2019
 *
-* Description:	contains CPU sleep instructions macros.
+* Description:	contains inclusions of needed modules during MCU 
+*               boot process.
 *
 **********************************************************************/
 
-#ifndef SLEEP_H_
-#define SLEEP_H_
+#ifndef STARTUP_H_
+#define STARTUP_H_
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/ddp/ddp_interface.h"
-#include PATH_TO_SLEEP_H
-
-#endif /* SLEEP_H_ */
+#endif /* STARTUP_H_ */
