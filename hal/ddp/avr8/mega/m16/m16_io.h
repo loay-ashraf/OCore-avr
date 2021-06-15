@@ -20,18 +20,23 @@ typedef enum{PA0_M,PA1_M,PA2_M,PA3_M,PA4_M,PA5_M,PA6_M,PA7_M,PB0_M,PB1_M,PB2_M,P
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
-#define PORTS_NUM      4
-#define PINS_NUM       32
-#define AC_NUM         1
-#define ADC_NUM        1
-#define ADC_CH_NUM     8
-#define SPI_NUM        1
-#define TIMER_NUM      2
-#define TIMER16_NUM    1
-#define TWI_NUM        1
-#define USART_NUM      1
-#define WDT_NUM        1
+#define RAM_SIZE        1024
+#define ROM_SIZE        32768
+#define EEPROM_SIZE     512
+#define STACK_GROWTH    -1
 
-#define I_BIT          0x07
+#define PORTS_NUM       4
+#define PINS_NUM        32
+#define AC_NUM          1
+#define ADC_NUM         1
+#define ADC_CH_NUM      8
+#define SPI_NUM         1
+#define TIMER_NUM       2
+#define TIMER16_NUM     1
+#define TWI_NUM         1
+#define USART_NUM       1
+#define WDT_NUM         1
+
+#define I_BIT           0x07
 
 #endif /* M16_IO_H_ */
