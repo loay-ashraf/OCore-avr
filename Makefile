@@ -176,15 +176,15 @@ sym: build/$(TARGET).sym
 
 # Display size of file.
 sizeafter:
-    @if [ -f build/$(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); echo; fi
+	@if [ -f build/$(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); echo; fi
 
 # Burn the fuses.
 fuses:
-    $(AVRDUDE) $(AVRDUDE_BASIC) $(AVRDUDE_WRITE_FUSES)
+	$(AVRDUDE) $(AVRDUDE_BASIC) $(AVRDUDE_WRITE_FUSES)
 
 # Program the device.
 program: build/$(TARGET).hex build/$(TARGET).eep
-    $(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
 # Convert ELF to COFF for use in debugging / simulating in AVR Studio or VMLAB.
 COFFCONVERT=$(OBJCOPY) --debugging \
@@ -194,72 +194,72 @@ COFFCONVERT=$(OBJCOPY) --debugging \
 --change-section-address .eeprom-0x810000
 
 coff: build/$(TARGET).elf
-    $(COFFCONVERT) -O coff-avr build/$(TARGET).elf build/$(TARGET).coff
+	$(COFFCONVERT) -O coff-avr build/$(TARGET).elf build/$(TARGET).coff
 
 
 extcoff: build/$(TARGET).elf
-    $(COFFCONVERT) -O coff-ext-avr build/$(TARGET).elf build/$(TARGET).coff
+	$(COFFCONVERT) -O coff-ext-avr build/$(TARGET).elf build/$(TARGET).coff
 
 
 .SUFFIXES: .elf .hex .eep .lss .sym
 
 .elf.hex:
-    $(OBJCOPY) -O $(FORMAT) -R .eeprom -R .fuse -R .lock $< $@
+	$(OBJCOPY) -O $(FORMAT) -R .eeprom -R .fuse -R .lock $< $@
 
 .elf.eep:
-    -$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
-    --change-section-lma .eeprom=0 -O $(FORMAT) $< $@
+	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
+	--change-section-lma .eeprom=0 -O $(FORMAT) $< $@
 
 # Create extended listing file from ELF output file.
 .elf.lss:
-    $(OBJDUMP) -h -S $< > $@
+	$(OBJDUMP) -h -S $< > $@
 
 # Create a symbol table from ELF output file.
 .elf.sym:
-    $(NM) -n $< > $@
+	$(NM) -n $< > $@
 
 
 
 # Link: create ELF output file from object files.
 build/$(TARGET).elf: $(OBJ) dir
-    $(CC) $(ALL_CFLAGS) $(OBJ) --output build/$(TARGET).elf $(LDFLAGS)
+	$(CC) $(ALL_CFLAGS) $(OBJ) --output build/$(TARGET).elf $(LDFLAGS)
 
 
 # Compile: create object files from C source files.
 .c.o:
-    $(CC) -c $(ALL_CFLAGS) $< -o $@
+	$(CC) -c $(ALL_CFLAGS) $< -o $@
 
 
 # Compile: create assembler files from C source files.
 .c.s:
-    $(CC) -S $(ALL_CFLAGS) $< -o $@
+	$(CC) -S $(ALL_CFLAGS) $< -o $@
 
 
 # Assemble: create object files from assembler source files.
 .S.o:
-    $(CC) -c $(ALL_ASFLAGS) $< -o $@
+	$(CC) -c $(ALL_ASFLAGS) $< -o $@
 
 # Create build directory
 dir:
 
-    mkdir -p build
+	mkdir -p build
 
 
 # Target: clean project.
 clean:
-    $(REMOVE) build/$(TARGET).hex build/$(TARGET).eep build/$(TARGET).coff build/$(TARGET).elf \
-    build/$(TARGET).map build/$(TARGET).sym build/$(TARGET).lss \
-    $(OBJ) $(LST) $(SRC:.c=.s) $(SRC:.c=.d)
+	$(REMOVE) build/$(TARGET).hex build/$(TARGET).eep build/$(TARGET).coff build/$(TARGET).elf \
+	build/$(TARGET).map build/$(TARGET).sym build/$(TARGET).lss \
+	$(OBJ) $(LST) $(SRC:.c=.s) $(SRC:.c=.d)
 
 depend:
-    if grep '^# DO NOT DELETE' $(MAKEFILE) >/dev/null; \
-    then \
-        sed -e '/^# DO NOT DELETE/,$$d' $(MAKEFILE) > \
-            $(MAKEFILE).$$$$ && \
-        $(MV) $(MAKEFILE).$$$$ $(MAKEFILE); \
-    fi
-    echo '# DO NOT DELETE THIS LINE -- make depend depends on it.' \
-        >> $(MAKEFILE); \
-    $(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(MAKEFILE)
+	if grep '^# DO NOT DELETE' $(MAKEFILE) >/dev/null; \
+	then \
+		sed -e '/^# DO NOT DELETE/,$$d' $(MAKEFILE) > \
+			$(MAKEFILE).$$$$ && \
+		$(MV) $(MAKEFILE).$$$$ $(MAKEFILE); \
+	fi
+	echo '# DO NOT DELETE THIS LINE -- make depend depends on it.' \
+		>> $(MAKEFILE); \
+	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(MAKEFILE)
 
-.PHONY:    all build elf hex eep lss sym program coff extcoff clean depend
+.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend
