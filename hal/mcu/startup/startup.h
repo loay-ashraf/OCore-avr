@@ -2,11 +2,11 @@
 *
 * File:         startup.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 05/06/2019
 *
-* Description:	contains inclusions of needed modules during MCU 
+* Description:    contains inclusions of needed modules during MCU 
 *               boot process.
 *
 **********************************************************************/

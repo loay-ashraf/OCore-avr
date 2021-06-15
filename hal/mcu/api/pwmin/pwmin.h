@@ -2,11 +2,11 @@
 *
 * File:         pwmin.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 11/09/2019
 *
-* Description:	contains typedefs and function declarations for
+* Description:  contains typedefs and function declarations for
 *               PWMIN module.
 *
 **********************************************************************/

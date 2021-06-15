@@ -6,7 +6,7 @@
 *
 * Date created: 13/06/2021
 *
-* Description:	contains function definitions for analog-digital
+* Description:  contains function definitions for analog-digital
 *               converter module.
 *
 **********************************************************************/
@@ -51,10 +51,10 @@ static ISRcallback_t g_adcISRCallback;
 
 void adc_config(adcprescaler_t a_adcPrescaler, adcreference_t a_adcReference, bool_t a_leftAdjust){
 
-	SRI(ADMUX,(a_adcReference<<6));		// set the reference voltage bits
-	SRI(ADMUX,(a_leftAdjust<<5));		// set data adjustment bits
+    SRI(ADMUX,(a_adcReference<<6));    // set the reference voltage bits
+    SRI(ADMUX,(a_leftAdjust<<5));      // set data adjustment bits
 
-	SRI(ADCSRA,a_adcPrescaler);			// set prescaler bits
+    SRI(ADCSRA,a_adcPrescaler);        // set prescaler bits
 
 }
 
@@ -71,9 +71,9 @@ void adc_config(adcprescaler_t a_adcPrescaler, adcreference_t a_adcReference, bo
 **********************************************************************/
 
 void adc_enable(void){
-	
-	SBI(ADCSRA,ADEN);					// enable the ADC
-	
+    
+    SBI(ADCSRA,ADEN);    // enable the ADC
+    
 }
 
 /**********************************************************************
@@ -89,9 +89,9 @@ void adc_enable(void){
 **********************************************************************/
 
 void adc_disable(void){
-	
-	CBI(ADCSRA,ADEN);					// disable the ADC
-	
+    
+    CBI(ADCSRA,ADEN);    // disable the ADC
+    
 }
 
 /**********************************************************************
@@ -108,22 +108,22 @@ void adc_disable(void){
 **********************************************************************/
 
 uint16_t adc_read(adcchannel_t a_adcChannel){
-	
-	gpio_setPinDirection((ADC_PORT+a_adcChannel),IO_INPUT);
-	
-	CRI(ADMUX,0x0F);					// clear channel multiplexer bits
-	
-	if (a_adcChannel < 8)
-	SRI(ADMUX,a_adcChannel);		// set channel bits
-	
-	SBI(ADCSRA,ADSC);					// trigger ADC conversion
-	
-	while(!RBI(ADCSRA,ADIF));			// wait for the conversion to finish
-	
-	SBI(ADCSRA,ADIF);					// clear "conversion finished" flag
+    
+    gpio_setPinDirection((ADC_PORT+a_adcChannel),IO_INPUT);
+    
+    CRI(ADMUX,0x0F);             // clear channel multiplexer bits
+    
+    if (a_adcChannel < 8)
+    SRI(ADMUX,a_adcChannel);     // set channel bits
+    
+    SBI(ADCSRA,ADSC);            // trigger ADC conversion
+    
+    while(!RBI(ADCSRA,ADIF));    // wait for the conversion to finish
+    
+    SBI(ADCSRA,ADIF);            // clear "conversion finished" flag
 
-	DELAY_MS(1);
-	return ADC;							// return the value in the ADC Data register
+    DELAY_MS(1);
+    return ADC;                  // return the value in the ADC Data register
 
 }
 
@@ -141,12 +141,12 @@ uint16_t adc_read(adcchannel_t a_adcChannel){
 **********************************************************************/
 
 void adc_enableAutoTrigger(adcautotriggersource_t a_adcAutoTriggerSource){
-	
-	CRI(SFIOR,0xE0);
-	SRI(SFIOR,a_adcAutoTriggerSource);
-	
-	SBI(ADCSRA,ADATE);
-	
+    
+    CRI(SFIOR,0xE0);
+    SRI(SFIOR,a_adcAutoTriggerSource);
+    
+    SBI(ADCSRA,ADATE);
+    
 }
 
 /**********************************************************************
@@ -163,9 +163,9 @@ void adc_enableAutoTrigger(adcautotriggersource_t a_adcAutoTriggerSource){
 **********************************************************************/
 
 void adc_disableAutoTrigger(void){
-	
-	CBI(ADCSRA,ADATE);
-	
+    
+    CBI(ADCSRA,ADATE);
+    
 }
 
 /**********************************************************************
@@ -182,11 +182,11 @@ void adc_disableAutoTrigger(void){
 **********************************************************************/
 
 void adc_enableInterrupt(void){
-	
-	if(!RBI(SREG,I_BIT))
-	ENABLE_GLOBAL_INTERRUPTS;
-	SBI(ADCSRA,ADIE);
-	
+    
+    if(!RBI(SREG,I_BIT))
+    ENABLE_GLOBAL_INTERRUPTS;
+    SBI(ADCSRA,ADIE);
+    
 }
 
 /**********************************************************************
@@ -203,9 +203,9 @@ void adc_enableInterrupt(void){
 **********************************************************************/
 
 void adc_disableInterrupt(void){
-	
-	CBI(ADCSRA,ADIE);
-	
+    
+    CBI(ADCSRA,ADIE);
+    
 }
 
 /**********************************************************************
@@ -222,15 +222,15 @@ void adc_disableInterrupt(void){
 **********************************************************************/
 
 void adc_setISRCallback(ISRcallback_t a_ISRCallback){
-	
-	g_adcISRCallback = a_ISRCallback;
-	
+    
+    g_adcISRCallback = a_ISRCallback;
+    
 }
 
 /*---------------------------------ISR-------------------------------*/
 
 ISR(ADC_vect){
-	
-	g_adcISRCallback();
-	
+    
+    g_adcISRCallback();
+    
 }

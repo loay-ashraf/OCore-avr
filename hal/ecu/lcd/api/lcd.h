@@ -2,11 +2,11 @@
 *
 * File:         lcd.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 15/01/2018
 *
-* Description:	contains function declarations for LCD module.
+* Description:  contains function declarations for LCD module.
 *
 **********************************************************************/
 

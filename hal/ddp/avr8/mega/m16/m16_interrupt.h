@@ -14,7 +14,7 @@
 
 /*-------------------------------MACROS------------------------------*/
 
-#define ENABLE_GLOBAL_INTERRUPTS	sei()
-#define DISABLE_GLOBAL_INTERRUPTS	cli()
+#define ENABLE_GLOBAL_INTERRUPTS     sei()
+#define DISABLE_GLOBAL_INTERRUPTS    cli()
 
 #endif /* INTERRUPT_H_ */

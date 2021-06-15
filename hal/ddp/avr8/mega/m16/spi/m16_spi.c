@@ -6,7 +6,7 @@
 *
 * Date created: 14/06/2021
 *
-* Description:	contains function definitions for serial peripheral 
+* Description:  contains function definitions for serial peripheral
 *               interface module.
 *
 **********************************************************************/ 
@@ -49,30 +49,30 @@ static ISRcallback_t g_spiISRCallback;
 **********************************************************************/
 
 void spi_config(spi_t a_spi, spiconfig_t * a_spiConfig){
-	
-	SRI(SPCR,(a_spiConfig->mode<<MSTR)|(a_spiConfig->prescaler<<SPR0)|(a_spiConfig->dataorder<<DORD)|(a_spiConfig->datamode<<CPHA));
-	SRI(SPSR,(a_spiConfig->speedmode<<SPI2X));
-	
-	if(a_spiConfig->mode == SPI_MASTER){
-		
-		gpio_setPinDirection(SPI0_MOSI_PIN,IO_OUTPUT);
-		gpio_setPinDirection(SPI0_MISO_PIN,IO_INPUT);
-		gpio_setPinDirection(SPI0_SCK_PIN,IO_OUTPUT);
-		gpio_setPinDirection(SPI0_SS_PIN,IO_OUTPUT);
-		gpio_setPinDirection(SPI_SLAVE0_PIN,IO_OUTPUT);
-		gpio_setPinDirection(SPI_SLAVE1_PIN,IO_OUTPUT);
-		gpio_setPinDirection(SPI_SLAVE2_PIN,IO_OUTPUT);
-		gpio_setPinDirection(SPI_SLAVE3_PIN,IO_OUTPUT);
-		
-	}else if(a_spiConfig->mode == SPI_SLAVE){
-		
-		gpio_setPinDirection(SPI0_MOSI_PIN,IO_INPUT);
-		gpio_setPinDirection(SPI0_MISO_PIN,IO_OUTPUT);
-		gpio_setPinDirection(SPI0_SCK_PIN,IO_INPUT);
-		gpio_setPinDirection(SPI0_SS_PIN,IO_INPUT);
-		
-	}
-	
+    
+    SRI(SPCR,(a_spiConfig->mode<<MSTR)|(a_spiConfig->prescaler<<SPR0)|(a_spiConfig->dataorder<<DORD)|(a_spiConfig->datamode<<CPHA));
+    SRI(SPSR,(a_spiConfig->speedmode<<SPI2X));
+    
+    if(a_spiConfig->mode == SPI_MASTER){
+        
+        gpio_setPinDirection(SPI0_MOSI_PIN,IO_OUTPUT);
+        gpio_setPinDirection(SPI0_MISO_PIN,IO_INPUT);
+        gpio_setPinDirection(SPI0_SCK_PIN,IO_OUTPUT);
+        gpio_setPinDirection(SPI0_SS_PIN,IO_OUTPUT);
+        gpio_setPinDirection(SPI_SLAVE0_PIN,IO_OUTPUT);
+        gpio_setPinDirection(SPI_SLAVE1_PIN,IO_OUTPUT);
+        gpio_setPinDirection(SPI_SLAVE2_PIN,IO_OUTPUT);
+        gpio_setPinDirection(SPI_SLAVE3_PIN,IO_OUTPUT);
+        
+    }else if(a_spiConfig->mode == SPI_SLAVE){
+        
+        gpio_setPinDirection(SPI0_MOSI_PIN,IO_INPUT);
+        gpio_setPinDirection(SPI0_MISO_PIN,IO_OUTPUT);
+        gpio_setPinDirection(SPI0_SCK_PIN,IO_INPUT);
+        gpio_setPinDirection(SPI0_SS_PIN,IO_INPUT);
+        
+    }
+    
 }
 
 /**********************************************************************
@@ -88,9 +88,9 @@ void spi_config(spi_t a_spi, spiconfig_t * a_spiConfig){
 **********************************************************************/
 
 void spi_enable(spi_t a_spi){
-	
-	SBI(SPCR,SPE);
-	
+    
+    SBI(SPCR,SPE);
+    
 }
 
 /**********************************************************************
@@ -106,9 +106,9 @@ void spi_enable(spi_t a_spi){
 **********************************************************************/
 
 void spi_disable(spi_t a_spi){
-	
-	CBI(SPCR,SPE);
-	
+    
+    CBI(SPCR,SPE);
+    
 }
 
 /**********************************************************************
@@ -124,22 +124,22 @@ void spi_disable(spi_t a_spi){
 **********************************************************************/
 
 void spi_selectSlave(spi_t a_spi, spislave_t a_spiSlave){
-	
-	switch (a_spiSlave){
-		
-		case SPI_SLAVE0: gpio_clearPin(SPI_SLAVE0_PIN);
-		break;
-		
-		case SPI_SLAVE1: gpio_clearPin(SPI_SLAVE1_PIN);
-		break;
-		
-		case SPI_SLAVE2: gpio_clearPin(SPI_SLAVE2_PIN);
-		break;
-		
-		case SPI_SLAVE3: gpio_clearPin(SPI_SLAVE3_PIN);	
-		break;
-	}
-	
+    
+    switch (a_spiSlave){
+        
+        case SPI_SLAVE0: gpio_clearPin(SPI_SLAVE0_PIN);
+        break;
+        
+        case SPI_SLAVE1: gpio_clearPin(SPI_SLAVE1_PIN);
+        break;
+        
+        case SPI_SLAVE2: gpio_clearPin(SPI_SLAVE2_PIN);
+        break;
+        
+        case SPI_SLAVE3: gpio_clearPin(SPI_SLAVE3_PIN);    
+        break;
+    }
+    
 }
 
 /**********************************************************************
@@ -155,22 +155,22 @@ void spi_selectSlave(spi_t a_spi, spislave_t a_spiSlave){
 **********************************************************************/
 
 void spi_releaseSlave(spi_t a_spi, spislave_t a_spiSlave){
-	
-	switch (a_spiSlave){
-		
-		case SPI_SLAVE0: gpio_setPin(SPI_SLAVE0_PIN);	
-		break;
-		
-		case SPI_SLAVE1: gpio_setPin(SPI_SLAVE1_PIN);
-		break;
-		
-		case SPI_SLAVE2: gpio_setPin(SPI_SLAVE2_PIN);
-		break;
-		
-		case SPI_SLAVE3: gpio_setPin(SPI_SLAVE3_PIN);
-		break;
-	}
-	
+    
+    switch (a_spiSlave){
+        
+        case SPI_SLAVE0: gpio_setPin(SPI_SLAVE0_PIN);    
+        break;
+        
+        case SPI_SLAVE1: gpio_setPin(SPI_SLAVE1_PIN);
+        break;
+        
+        case SPI_SLAVE2: gpio_setPin(SPI_SLAVE2_PIN);
+        break;
+        
+        case SPI_SLAVE3: gpio_setPin(SPI_SLAVE3_PIN);
+        break;
+    }
+    
 }
 
 /**********************************************************************
@@ -186,10 +186,10 @@ void spi_releaseSlave(spi_t a_spi, spislave_t a_spiSlave){
 **********************************************************************/
 
 void spi_transmitByte(spi_t a_spi, ubyte_t a_byte){
-	
-	SPDR = a_byte;
-	while(!RBI(SPSR,SPIF));
-	
+    
+    SPDR = a_byte;
+    while(!RBI(SPSR,SPIF));
+    
 }
 
 /**********************************************************************
@@ -205,10 +205,10 @@ void spi_transmitByte(spi_t a_spi, ubyte_t a_byte){
 **********************************************************************/
 
 ubyte_t spi_receiveByte(spi_t a_spi){
-	
-	while(!RBI(SPSR,SPIF));
-	return SPDR;
-	
+    
+    while(!RBI(SPSR,SPIF));
+    return SPDR;
+    
 }
 
 /**********************************************************************
@@ -225,11 +225,11 @@ ubyte_t spi_receiveByte(spi_t a_spi){
 **********************************************************************/
 
 ubyte_t spi_transreceive(spi_t a_spi, ubyte_t a_byte){
-	
-	SPDR = a_byte;
-	while(!RBI(SPSR,SPIF));
-	return SPDR;
-	
+    
+    SPDR = a_byte;
+    while(!RBI(SPSR,SPIF));
+    return SPDR;
+    
 }
 
 /**********************************************************************
@@ -247,11 +247,11 @@ ubyte_t spi_transreceive(spi_t a_spi, ubyte_t a_byte){
 
 void spi_enableInterrupt(spi_t a_spi)
 {
-	
-	if(!RBI(SREG,I_BIT))
-		ENABLE_GLOBAL_INTERRUPTS;
-	SBI(SPCR,SPIE);
-	
+    
+    if(!RBI(SREG,I_BIT))
+        ENABLE_GLOBAL_INTERRUPTS;
+    SBI(SPCR,SPIE);
+    
 }
 
 /**********************************************************************
@@ -269,9 +269,9 @@ void spi_enableInterrupt(spi_t a_spi)
 
 void spi_disableInterrupt(spi_t a_spi)
 {
-	
-	CBI(SPCR,SPIE);
-	
+    
+    CBI(SPCR,SPIE);
+    
 }
 
 /**********************************************************************
@@ -288,15 +288,15 @@ void spi_disableInterrupt(spi_t a_spi)
 **********************************************************************/
 
 void spi_setISRCallback(spi_t a_spi, ISRcallback_t a_spiISRCallback){
-	
-	g_spiISRCallback = a_spiISRCallback;
-	
+    
+    g_spiISRCallback = a_spiISRCallback;
+    
 }
 
 /*---------------------------------ISR-------------------------------*/
 
 ISR(SPI_STC_vect){
-	
-	g_spiISRCallback();
-	
+    
+    g_spiISRCallback();
+    
 }

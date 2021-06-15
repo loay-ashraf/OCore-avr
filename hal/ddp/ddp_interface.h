@@ -9,19 +9,19 @@
 #define DDP_INTERFACE_H_
 
 #if defined (__AVR__)
-	#if defined (__AVR_ATmega16__)
-		#define PATH_TO_DELAY_H		"hal/ddp/avr8/mega/m16/m16_delay.h"
-		#define PATH_TO_EEPROM_H	"hal/ddp/avr8/mega/m16/m16_eeprom.h"
-		#define PATH_TO_INTERRUPT_H	"hal/ddp/avr8/mega/m16/m16_interrupt.h"
-		#define PATH_TO_IO_H		"hal/ddp/avr8/mega/m16/m16_io.h"
-		#define PATH_TO_SLEEP_H		"hal/ddp/avr8/mega/m16/m16_sleep.h"
- 		#define PATH_TO_AC			"hal/ddp/avr8/mega/m16/ac/m16_ac.h"
-		#define PATH_TO_ADC			"hal/ddp/avr8/mega/m16/adc/m16_adc.h"
-		#define PATH_TO_GPIO		"hal/ddp/avr8/mega/m16/gpio/m16_gpio.h"
-		#define PATH_TO_SPI			"hal/ddp/avr8/mega/m16/spi/m16_spi.h"
-	#endif
+    #if defined (__AVR_ATmega16__)
+        #define PATH_TO_DELAY_H        "hal/ddp/avr8/mega/m16/m16_delay.h"
+        #define PATH_TO_EEPROM_H       "hal/ddp/avr8/mega/m16/m16_eeprom.h"
+        #define PATH_TO_INTERRUPT_H    "hal/ddp/avr8/mega/m16/m16_interrupt.h"
+        #define PATH_TO_IO_H           "hal/ddp/avr8/mega/m16/m16_io.h"
+        #define PATH_TO_SLEEP_H        "hal/ddp/avr8/mega/m16/m16_sleep.h"
+        #define PATH_TO_AC             "hal/ddp/avr8/mega/m16/ac/m16_ac.h"
+        #define PATH_TO_ADC            "hal/ddp/avr8/mega/m16/adc/m16_adc.h"
+        #define PATH_TO_GPIO           "hal/ddp/avr8/mega/m16/gpio/m16_gpio.h"
+        #define PATH_TO_SPI            "hal/ddp/avr8/mega/m16/spi/m16_spi.h"
+    #endif
 #else
-	#error "Architecture not supported yet"
+    #error "Architecture not supported yet"
 #endif
 
 #endif /* DDP_INTERFACE_H_ */

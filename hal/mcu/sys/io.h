@@ -2,11 +2,11 @@
 *
 * File:         io.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 05/05/2019
 *
-* Description:	contains port, pin and peripherals definitions.
+* Description:  contains port, pin and peripherals definitions.
 *
 **********************************************************************/
 

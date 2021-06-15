@@ -2,11 +2,11 @@
 *
 * File:         delay.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 15/05/2019
 *
-* Description:	contains delay macros (in ms and us).
+* Description:  contains delay macros (in ms and us).
 *
 **********************************************************************/
 

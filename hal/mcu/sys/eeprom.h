@@ -2,11 +2,11 @@
 *
 * File:         eeprom.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 15/05/2019
 *
-* Description:	contains EEPROM common operations macros.
+* Description:  contains EEPROM common operations macros.
 *
 **********************************************************************/
 

@@ -6,7 +6,7 @@
 *
 * Date created: 05/06/2019
 *
-* Description:	contains MCU initialization function definition.
+* Description:    contains MCU initialization function definition.
 *
 **********************************************************************/
 
@@ -16,7 +16,7 @@
 
 /*------------------------FUNCTION PROTOTYPES------------------------*/
 
-/*void __attribute__((constructor)) startup();*/	// uncomment if need startup code before calling main()
+/*void __attribute__((constructor)) startup();*/    // uncomment if need startup code before calling main()
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/
 
@@ -36,6 +36,6 @@
 
 void startup(void){
 
-	/*call initializers here*/
+    /*call initializers here*/
 
 }

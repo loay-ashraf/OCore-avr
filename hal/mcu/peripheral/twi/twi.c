@@ -6,7 +6,7 @@
 *
 * Date created: 05/08/2019
 *
-* Description:	contains function definitions for two-wire 
+* Description:  contains function definitions for two-wire
 *               interface module.
 *
 **********************************************************************/
@@ -51,17 +51,17 @@ static ISRcallback_t g_twiISRCallback;
 **********************************************************************/
 
 void twi_config(twi_t a_twi, twiconfig_t * a_twiConfig){
-	
-	gpio_enablePinPullUp(TWI0_M_SDA_PIN);
-	gpio_enablePinPullUp(TWI0_M_SCL_PIN);
-	
-	uint8_t TWBRValue = ((F_CPU/a_twiConfig->frequency)-16)/(2*pow(4,a_twiConfig->prescaler));
+    
+    gpio_enablePinPullUp(TWI0_M_SDA_PIN);
+    gpio_enablePinPullUp(TWI0_M_SCL_PIN);
+    
+    uint8_t TWBRValue = ((F_CPU/a_twiConfig->frequency)-16)/(2*pow(4,a_twiConfig->prescaler));
 
-	SRI(TWSR,a_twiConfig->prescaler);
-	WRI(TWBR,TWBRValue);
-	WRI(TWAR,(a_twiConfig->address<<1)|a_twiConfig->generalcall);
-	SBI(TWCR,a_twiConfig->ackbit);
-	
+    SRI(TWSR,a_twiConfig->prescaler);
+    WRI(TWBR,TWBRValue);
+    WRI(TWAR,(a_twiConfig->address<<1)|a_twiConfig->generalcall);
+    SBI(TWCR,a_twiConfig->ackbit);
+    
 }
 
 /**********************************************************************
@@ -78,7 +78,7 @@ void twi_config(twi_t a_twi, twiconfig_t * a_twiConfig){
 
 void twi_enable(twi_t a_twi){
 
-	SBI(TWCR,TWEN);
+    SBI(TWCR,TWEN);
 
 }
 
@@ -95,12 +95,12 @@ void twi_enable(twi_t a_twi){
 **********************************************************************/
 
 void twi_disable(twi_t a_twi){
-	
-	gpio_clearPin(TWI0_M_SDA_PIN);
-	gpio_clearPin(TWI0_M_SCL_PIN);
-	
-	CBI(TWCR,TWEN);
-	
+    
+    gpio_clearPin(TWI0_M_SDA_PIN);
+    gpio_clearPin(TWI0_M_SCL_PIN);
+    
+    CBI(TWCR,TWEN);
+    
 }
 
 /**********************************************************************
@@ -116,27 +116,27 @@ void twi_disable(twi_t a_twi){
 **********************************************************************/
 
 bool_t twi_transmitStart(twi_t a_twi, ubyte_t a_address, bool_t a_readWrite){
-	
-	SBI(TWCR,TWSTA);
-	SBI(TWCR,TWINT);
-	
-	while(!RBI(TWCR,TWINT));
-	
-	if (twi_getStatus(TWI0_M) == START || twi_getStatus(TWI0_M) == R_START){
-		
-		WRI(TWDR,(a_address<<1)|a_readWrite);
-		CBI(TWCR,TWSTA);
-		SBI(TWCR,TWINT);
+    
+    SBI(TWCR,TWSTA);
+    SBI(TWCR,TWINT);
+    
+    while(!RBI(TWCR,TWINT));
+    
+    if (twi_getStatus(TWI0_M) == START || twi_getStatus(TWI0_M) == R_START){
+        
+        WRI(TWDR,(a_address<<1)|a_readWrite);
+        CBI(TWCR,TWSTA);
+        SBI(TWCR,TWINT);
 
-		while(!RBI(TWCR,TWINT));
-		
-		if(twi_getStatus(TWI0_M) != SLA_R_ACK && twi_getStatus(TWI0_M) != SLA_W_ACK)
-			return ERROR;
-		else
-			return PASS;
-	}else{
-		return ERROR;
-	}
+        while(!RBI(TWCR,TWINT));
+        
+        if(twi_getStatus(TWI0_M) != SLA_R_ACK && twi_getStatus(TWI0_M) != SLA_W_ACK)
+            return ERROR;
+        else
+            return PASS;
+    }else{
+        return ERROR;
+    }
 }
 
 /**********************************************************************
@@ -152,14 +152,14 @@ bool_t twi_transmitStart(twi_t a_twi, ubyte_t a_address, bool_t a_readWrite){
 **********************************************************************/
 
 void twi_transmitStop(twi_t a_twi){
-	
-	CBI(TWCR,TWEA);
-	DELAY_US(100);
-	SBI(TWCR,TWSTO);
-	SBI(TWCR,TWINT);
-	DELAY_US(100);
-	SBI(TWCR,TWEA);
-	
+    
+    CBI(TWCR,TWEA);
+    DELAY_US(100);
+    SBI(TWCR,TWSTO);
+    SBI(TWCR,TWINT);
+    DELAY_US(100);
+    SBI(TWCR,TWEA);
+    
 }
 
 /**********************************************************************
@@ -175,21 +175,21 @@ void twi_transmitStop(twi_t a_twi){
 **********************************************************************/
 
 bool_t twi_transmitByte(twi_t a_twi, ubyte_t a_data){
-	
-	if(twi_getStatus(TWI0_M) == SLA_W_ACK || twi_getStatus(TWI0_M) == TX_ACK_MASTER || twi_getStatus(TWI0_M) == TX_ACK_SLAVE){
-		
-		WRI(TWDR,a_data);
-		SBI(TWCR,TWINT);
-		
-		while(!RBI(TWCR,TWINT));
-		
-		if(twi_getStatus(TWI0_M) != TX_ACK_MASTER && twi_getStatus(TWI0_M) != TX_ACK_SLAVE)
-			return ERROR;
-		else
-			return PASS;
-	}else{
-		return ERROR;
-	}
+    
+    if(twi_getStatus(TWI0_M) == SLA_W_ACK || twi_getStatus(TWI0_M) == TX_ACK_MASTER || twi_getStatus(TWI0_M) == TX_ACK_SLAVE){
+        
+        WRI(TWDR,a_data);
+        SBI(TWCR,TWINT);
+        
+        while(!RBI(TWCR,TWINT));
+        
+        if(twi_getStatus(TWI0_M) != TX_ACK_MASTER && twi_getStatus(TWI0_M) != TX_ACK_SLAVE)
+            return ERROR;
+        else
+            return PASS;
+    }else{
+        return ERROR;
+    }
 }
 
 /**********************************************************************
@@ -205,22 +205,22 @@ bool_t twi_transmitByte(twi_t a_twi, ubyte_t a_data){
 **********************************************************************/
 
 ubyte_t twi_receiveByte(twi_t a_twi){
-	
-	if(twi_getStatus(TWI0_M) == SLA_R_ACK || twi_getStatus(TWI0_M) == RX_ACK_MASTER){
-		
-		SBI(TWCR,TWINT);
-		while(!RBI(TWCR,TWINT));
-		
-		if(twi_getStatus(TWI0_M) != RX_ACK_MASTER)
-			return ERROR;
-		else
-			return TWDR;
-		
-	}else{
-		
-		return ERROR;
-		
-	}
+    
+    if(twi_getStatus(TWI0_M) == SLA_R_ACK || twi_getStatus(TWI0_M) == RX_ACK_MASTER){
+        
+        SBI(TWCR,TWINT);
+        while(!RBI(TWCR,TWINT));
+        
+        if(twi_getStatus(TWI0_M) != RX_ACK_MASTER)
+            return ERROR;
+        else
+            return TWDR;
+        
+    }else{
+        
+        return ERROR;
+        
+    }
 }     
 
 /**********************************************************************
@@ -237,11 +237,11 @@ ubyte_t twi_receiveByte(twi_t a_twi){
 **********************************************************************/    
 
 void twi_enableInterrupt(twi_t a_twi){
-	
-	if(!RBI(SREG,I_BIT))
-		ENABLE_GLOBAL_INTERRUPTS;
-	SBI(TWCR,TWIE);
-	
+    
+    if(!RBI(SREG,I_BIT))
+        ENABLE_GLOBAL_INTERRUPTS;
+    SBI(TWCR,TWIE);
+    
 }
 
 /**********************************************************************
@@ -259,8 +259,8 @@ void twi_enableInterrupt(twi_t a_twi){
 
 void twi_disableInterrupt(twi_t a_twi){
 
-	CBI(TWCR,TWIE);	
-	
+    CBI(TWCR,TWIE);    
+    
 }
 
 /**********************************************************************
@@ -277,9 +277,9 @@ void twi_disableInterrupt(twi_t a_twi){
 **********************************************************************/
 
 void twi_setISRCallback(twi_t a_twi, ISRcallback_t a_twiISRCallback){
-	
-	g_twiISRCallback = a_twiISRCallback;
-	
+    
+    g_twiISRCallback = a_twiISRCallback;
+    
 }
 
 /**********************************************************************
@@ -295,14 +295,15 @@ void twi_setISRCallback(twi_t a_twi, ISRcallback_t a_twiISRCallback){
 **********************************************************************/
 
 ubyte_t twi_getStatus(twi_t a_twi){
-	
-	return (RRI(TWSR)&0xF8);
+    
+    return (RRI(TWSR)&0xF8);
+
 }
 
 /*---------------------------------ISR-------------------------------*/
 
 ISR(TWI_vect){
-	
-	g_twiISRCallback();
-	
+    
+    g_twiISRCallback();
+    
 }

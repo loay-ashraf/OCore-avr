@@ -2,11 +2,11 @@
 *
 * File:         m16_adc.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 13/06/2021
 *
-* Description:	contains definitions, configurations, typedefs
+* Description:  contains definitions, configurations, typedefs
 *               and function declarations for analog-digital
 *               converter module.
 *
@@ -22,7 +22,7 @@
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
-#define ADC_PORT	PORTA_M
+#define ADC_PORT    PORTA_M
 
 /*--------------------------------ENUMS------------------------------*/
 

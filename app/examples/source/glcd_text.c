@@ -9,26 +9,26 @@
 #include "hal/ecu/glcd/api/glcd.h"
 
 void ex_glcd_text(void){
-	
-	uint8_t y = 0;
-	
-	/******************************************************/
-	/* initialize GLCD interface and enable graphics mode */
-	/******************************************************/
-	
-	GLCD_init(TRUE);
-	
-	/***************************/
-	/* display 8 lines of text */
-	/***************************/
-	
-	while(y<8){
-		
-		GLCD_setCursorPosition(0,y*8);
-		GLCD_puts("I'M IN GFX MODE!");
-		y++;
-		
-	}
-	
+    
+    uint8_t y = 0;
+    
+    /******************************************************/
+    /* initialize GLCD interface and enable graphics mode */
+    /******************************************************/
+    
+    GLCD_init(TRUE);
+    
+    /***************************/
+    /* display 8 lines of text */
+    /***************************/
+    
+    while(y<8){
+        
+        GLCD_setCursorPosition(0,y*8);
+        GLCD_puts("I'M IN GFX MODE!");
+        y++;
+        
+    }
+    
 }
 

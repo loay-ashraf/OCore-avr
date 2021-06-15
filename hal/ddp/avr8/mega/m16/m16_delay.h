@@ -15,7 +15,7 @@
 
 /*-------------------------------MACROS------------------------------*/
 
-#define DELAY_MS(MS)	_delay_ms(MS)
-#define DELAY_US(US)	_delay_us(US)
+#define DELAY_MS(MS)    _delay_ms(MS)
+#define DELAY_US(US)    _delay_us(US)
 
 #endif /* M16_DELAY_H_ */

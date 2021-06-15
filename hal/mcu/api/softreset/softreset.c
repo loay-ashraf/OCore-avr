@@ -6,7 +6,7 @@
 *
 * Date created: 13/09/2019
 *
-* Description:	contains function definitions for software reset
+* Description:  contains function definitions for software reset
 *               module.
 *
 **********************************************************************/
@@ -32,8 +32,8 @@
 **********************************************************************/
 
 void softReset(void){
-	
-	wdt_enable(WD_16);
-	while(1);
-	
+    
+    wdt_enable(WD_16);
+    while(1);
+    
 }

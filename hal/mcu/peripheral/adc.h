@@ -6,7 +6,7 @@
 *
 * Date created: 12/01/2018
 *
-* Description:    contains function-like adapter macros for
+* Description:  contains function-like adapter macros for
 *               analog-digital converter module.
 *
 **********************************************************************/

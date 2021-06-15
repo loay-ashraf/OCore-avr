@@ -2,11 +2,11 @@
 *
 * File:         sleep.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 12/05/2019
 *
-* Description:	contains CPU sleep instructions macros.
+* Description:  contains CPU sleep instructions macros.
 *
 **********************************************************************/
 

@@ -2,11 +2,11 @@
 *
 * File:         glcd.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 09/09/2019
 *
-* Description:	contains function declarations for GLCD module.
+* Description:  contains function declarations for GLCD module.
 *
 **********************************************************************/
 

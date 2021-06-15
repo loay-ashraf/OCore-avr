@@ -2,11 +2,11 @@
 *
 * File:         rtcc_types.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 04/10/2019
 *
-* Description:	contains typedefs and common data types for
+* Description:  contains typedefs and common data types for
 *               RTCC module.
 *
 **********************************************************************/
@@ -30,41 +30,40 @@ typedef enum{RT_PER_SEC=0x0F,RT_PER_MIN=0x0E,RT_MATCH_SEC=0X0E,RT_MATCH_MIN=0X0C
 /*-------------------------------STRUCTS-----------------------------*/
 
 typedef struct {
-	
-	uint8_t hour;
-	rtccampm_t AMPM;
-	uint8_t minute;
-	uint8_t second;
-	
+    
+    uint8_t hour;
+    rtccampm_t AMPM;
+    uint8_t minute;
+    uint8_t second;
+    
 }rtccclock_t;
 
 typedef struct {
-	
-	uint8_t century;
-	uint16_t year;
-	rtccmonth_t month;
-	uint8_t date;
-	rtccweekday_t weekDay;
-	uint8_t hour;
-	rtccampm_t AMPM;
-	uint8_t minute;
-	uint8_t second;
-	
+    
+    uint8_t century;
+    uint16_t year;
+    rtccmonth_t month;
+    uint8_t date;
+    rtccweekday_t weekDay;
+    uint8_t hour;
+    rtccampm_t AMPM;
+    uint8_t minute;
+    uint8_t second;
+    
 }rtcccalendar_t;
 
 typedef struct {
-	
-	bool_t DYDT;
-	uint8_t date;
-	rtccweekday_t weekDay;
-	uint8_t hour;
-	rtccampm_t AMPM;
-	uint8_t minute;
-	uint8_t second;
-	rtccalarmmode_t alarmMode;
-	ISRcallback_t alarmHandlerCallback;
-	
+    
+    bool_t DYDT;
+    uint8_t date;
+    rtccweekday_t weekDay;
+    uint8_t hour;
+    rtccampm_t AMPM;
+    uint8_t minute;
+    uint8_t second;
+    rtccalarmmode_t alarmMode;
+    ISRcallback_t alarmHandlerCallback;
+    
 }rtccalarmconfig_t;
-
 
 #endif /* RTCC_TYPES_H_ */

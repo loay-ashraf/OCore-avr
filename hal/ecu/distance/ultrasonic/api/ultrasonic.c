@@ -6,7 +6,7 @@
 *
 * Date created: 11/06/2021
 *
-* Description:	contains function definitions for Ultrasonic module.
+* Description:  contains function definitions for Ultrasonic module.
 *
 **********************************************************************/
 
@@ -30,9 +30,9 @@
 **********************************************************************/
 
 uint16_t Ultrasonic_readcm(void){
-	
-	return ULTRASONIC_READCM;
-	
+    
+    return ULTRASONIC_READCM;
+    
 }
 
 /**********************************************************************
@@ -48,9 +48,9 @@ uint16_t Ultrasonic_readcm(void){
 **********************************************************************/
 
 uint8_t Ultrasonic_readm(void){
-	
-	return (ULTRASONIC_READCM/100.0);
-	
+    
+    return (ULTRASONIC_READCM/100.0);
+    
 }
 
 /**********************************************************************
@@ -66,9 +66,9 @@ uint8_t Ultrasonic_readm(void){
 **********************************************************************/
 
 uint8_t Ultrasonic_readin(void){
-	
-	return (ULTRASONIC_READCM*0.393701);
-	
+    
+    return (ULTRASONIC_READCM*0.393701);
+    
 }
 
 /**********************************************************************
@@ -84,7 +84,7 @@ uint8_t Ultrasonic_readin(void){
 **********************************************************************/
 
 uint8_t Ultrasonic_readft(void){
-	
-	return (ULTRASONIC_READCM*0.0328084);
-	
+    
+    return (ULTRASONIC_READCM*0.0328084);
+    
 }

@@ -2,11 +2,11 @@
 *
 * File:         interrupt.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 30/07/2019
 *
-* Description:	contains global interrupts macros.
+* Description:  contains global interrupts macros.
 *
 **********************************************************************/
 

@@ -2,11 +2,11 @@
 *
 * File:         glcd_types.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 30/09/2019
 *
-* Description:	contains typedefs and common data types for
+* Description:  contains typedefs and common data types for
 *               GLCD module.
 *
 **********************************************************************/

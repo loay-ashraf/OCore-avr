@@ -2,11 +2,11 @@
 *
 * File:         twi.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 05/08/2019
 *
-* Description:	contains definitions and function declarations 
+* Description:  contains definitions and function declarations
 *               for two-wire interface module.
 *
 **********************************************************************/
@@ -21,20 +21,20 @@
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
-#define	TWI0_M_SDA_PIN	PC1_M
-#define TWI0_M_SCL_PIN	PC0_M
+#define TWI0_M_SDA_PIN    PC1_M
+#define TWI0_M_SCL_PIN    PC0_M
 
-#define ERROR			FALSE
-#define PASS			TRUE
-#define WRITE			FALSE
-#define READ			TRUE
-#define START			0x08
-#define R_START			0x10
-#define SLA_W_ACK		0x18
-#define SLA_R_ACK		0x40
-#define TX_ACK_MASTER	0x28
-#define RX_ACK_MASTER	0x50
-#define TX_ACK_SLAVE	0xC8
+#define ERROR             FALSE
+#define PASS              TRUE
+#define WRITE             FALSE
+#define READ              TRUE
+#define START             0x08
+#define R_START           0x10
+#define SLA_W_ACK         0x18
+#define SLA_R_ACK         0x40
+#define TX_ACK_MASTER     0x28
+#define RX_ACK_MASTER     0x50
+#define TX_ACK_SLAVE      0xC8
 
 /*--------------------------------ENUMS------------------------------*/
 
@@ -45,15 +45,15 @@ typedef enum{TWI_DIV1,TWI_DIV4,TWI_DIV16,TWI_DIV64}twiprescaler_t;
 
 typedef struct{
 
-	twiprescaler_t prescaler;
-	uint32_t frequency;
-	uint8_t address;
-	bool_t generalcall;
-	bool_t ackbit;
-	
+    twiprescaler_t prescaler;
+    uint32_t frequency;
+    uint8_t address;
+    bool_t generalcall;
+    bool_t ackbit;
+    
 }twiconfig_t;
 
-/*------------------------FUNCTION DECLARATIONS----------------------*/	
+/*------------------------FUNCTION DECLARATIONS----------------------*/    
 
 void twi_config(twi_t a_twi, twiconfig_t * a_twiConfig);
 void twi_enable(twi_t a_twi);

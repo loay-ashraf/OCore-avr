@@ -2,11 +2,11 @@
 *
 * File:         servo.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 11/06/2021
 *
-* Description:	contains typedefs and function declarations for
+* Description:  contains typedefs and function declarations for
 *               variable delay functions.
 *
 **********************************************************************/

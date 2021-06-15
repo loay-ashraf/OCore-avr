@@ -2,11 +2,11 @@
 *
 * File:         HD44780.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 23/09/2019
 *
-* Description:	contains definitions, typedefs and function 
+* Description:  contains definitions, typedefs and function
 *               declarations for HD44780 controller module.
 *
 **********************************************************************/
@@ -20,17 +20,17 @@
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
-#define HD44780_4BIT_MODE		0x28
-#define HD44780_8BIT_MODE		0x38
-#define HD44780_DISPLAY_ON		0x0C
-#define HD44780_ENTRY_MODE		0x04
-#define HD44780_CLEAR_DISPLAY	0x01
-#define HD44780_SCROLL_DISPLAY	0x18
-#define HD44780_SHIFT_CURSOR	0x10
-#define HD44780_ROW_ZERO		0x80
-#define HD44780_ROW_ONE			0xC0
-#define HD44780_ROW_TWO			0x94
-#define HD44780_ROW_THREE		0xD4
+#define HD44780_4BIT_MODE         0x28
+#define HD44780_8BIT_MODE         0x38
+#define HD44780_DISPLAY_ON        0x0C
+#define HD44780_ENTRY_MODE        0x04
+#define HD44780_CLEAR_DISPLAY     0x01
+#define HD44780_SCROLL_DISPLAY    0x18
+#define HD44780_SHIFT_CURSOR      0x10
+#define HD44780_ROW_ZERO          0x80
+#define HD44780_ROW_ONE           0xC0
+#define HD44780_ROW_TWO           0x94
+#define HD44780_ROW_THREE         0xD4
 
 /*--------------------------------ENUMS------------------------------*/
 

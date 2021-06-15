@@ -2,11 +2,11 @@
 *
 * File:         m16_ac.c
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 13/06/2021
 *
-* Description:	contains function definitions for analog comparator 
+* Description:  contains function definitions for analog comparator
 *               module.
 *
 **********************************************************************/
@@ -49,11 +49,11 @@ static ISRcallback_t g_acISRCallback;
 **********************************************************************/
 
 void ac_enable(void){
-	
-	gpio_setPinDirection(AC_IN0_PIN,IO_INPUT);
-	gpio_setPinDirection(AC_IN1_PIN,IO_INPUT);
-	CBI(ACSR,ACD);
-	
+    
+    gpio_setPinDirection(AC_IN0_PIN,IO_INPUT);
+    gpio_setPinDirection(AC_IN1_PIN,IO_INPUT);
+    CBI(ACSR,ACD);
+    
 }
 
 /**********************************************************************
@@ -69,9 +69,9 @@ void ac_enable(void){
 **********************************************************************/
 
 void ac_disable(void){
-	
-	SBI(ACSR,ACD);
-	
+    
+    SBI(ACSR,ACD);
+    
 }
 
 /**********************************************************************
@@ -88,9 +88,9 @@ void ac_disable(void){
 **********************************************************************/
 
 void ac_enableBandGap(void){
-	
-	SBI(ACSR,ACBG);	
-	
+    
+    SBI(ACSR,ACBG);    
+    
 }
 
 /**********************************************************************
@@ -107,9 +107,9 @@ void ac_enableBandGap(void){
 **********************************************************************/
 
 void ac_disableBandGap(void){
-	
-	CBI(ACSR,ACBG);
-	
+    
+    CBI(ACSR,ACBG);
+    
 }
 
 /**********************************************************************
@@ -126,11 +126,11 @@ void ac_disableBandGap(void){
 **********************************************************************/
 
 void ac_enableInterrupt(void){
-	
-	if(!RBI(SREG,I_BIT))
-		ENABLE_GLOBAL_INTERRUPTS;
-	SBI(ACSR,ACIE);	
-	
+    
+    if(!RBI(SREG,I_BIT))
+        ENABLE_GLOBAL_INTERRUPTS;
+    SBI(ACSR,ACIE);    
+    
 }
 
 /**********************************************************************
@@ -147,9 +147,9 @@ void ac_enableInterrupt(void){
 **********************************************************************/
 
 void ac_disableInterrupt(void){
-	
-	CBI(ACSR,ACIE);
-	
+    
+    CBI(ACSR,ACIE);
+    
 }
 
 /**********************************************************************
@@ -166,10 +166,10 @@ void ac_disableInterrupt(void){
 **********************************************************************/
 
 void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode){
-	
-	CRI(ACSR,0x03);
-	SRI(ACSR,a_acInterruptMode);
-	
+    
+    CRI(ACSR,0x03);
+    SRI(ACSR,a_acInterruptMode);
+    
 }
 
 
@@ -187,15 +187,15 @@ void ac_setInterruptMode(acinterruptmode_t a_acInterruptMode){
 **********************************************************************/
  
 void ac_setISRCallback(ISRcallback_t a_ISRCallback){
-	 
-	 g_acISRCallback = a_ISRCallback;
-	 
+     
+     g_acISRCallback = a_ISRCallback;
+     
 }
 
 /*---------------------------------ISR-------------------------------*/
 
 ISR(ANA_COMP_vect){
-	
-	g_acISRCallback();
-	
+    
+    g_acISRCallback();
+    
 }

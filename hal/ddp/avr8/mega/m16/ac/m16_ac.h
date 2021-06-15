@@ -20,14 +20,14 @@
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
-#define AC_IN0_PIN		PB2_M
-#define AC_IN1_PIN		PB3_M
+#define AC_IN0_PIN    PB2_M
+#define AC_IN1_PIN    PB3_M
 
 /*--------------------------------ENUMS------------------------------*/
 
 typedef enum{AC_TOGGLE,AC_FALLING_EDGE=0x02,AC_RISING_EDGE}acinterruptmode_t;
-	
-/*------------------------FUNCTION DECLARATIONS----------------------*/	
+    
+/*------------------------FUNCTION DECLARATIONS----------------------*/    
 
 void ac_enable(void);
 void ac_disable(void);

@@ -1,29 +1,28 @@
 /**********************************************************************
 *
-* File:         wdt.c
+* File:         delay_var.c
 *
 * Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
-* Date created: 04/09/2019
+* Date created: 11/06/2021
 *
-* Description:  contains function definitions for watchdog timer
-*               module.
+* Description:  contains function definitions for variable delay
+*               functions.
 *
 **********************************************************************/
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "wdt.h"
-#include "hal/mcu/sys/io.h"
-#include "service/include/register_macros.h"
+#include "service/include/delay_var.h"
+#include "hal/mcu/sys/delay.h"
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/
 
 /**********************************************************************
 *
-* Function:    wdt_enable
+* Function:    delayVarms
 *
-* Description: Enables watchdog timer module.
+* Description: Halts CPU cycles for a number of milliseconds.
 *
 * Notes:
 *
@@ -31,18 +30,18 @@
 *
 **********************************************************************/
 
-void wdt_enable(wdttimeout_t a_wdtTimeout){
+void delayVarms(uint16_t a_ms){
     
-    SRI(WDTCR,a_wdtTimeout);
-    SBI(WDTCR,WDE);
+    while(a_ms--)
+        DELAY_MS(1);
     
 }
 
 /**********************************************************************
 *
-* Function:    wdt_disable
+* Function:    delayVarus
 *
-* Description: Disables watchdog timer module.
+* Description: Halts CPU cycles for a number of microseconds.
 *
 * Notes:
 *
@@ -50,9 +49,9 @@ void wdt_enable(wdttimeout_t a_wdtTimeout){
 *
 **********************************************************************/
 
-void wdt_disable(void){
+void delayVarus(uint16_t a_us){
     
-    SBI(WDTCR,WDTOE);
-    CBI(WDTCR,WDE);
+    while(a_us--)
+        DELAY_US(1);
     
 }

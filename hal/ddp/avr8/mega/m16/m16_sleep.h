@@ -14,10 +14,10 @@
 
 /*-------------------------------MACROS------------------------------*/
 
-#define SET_SLEEP_MODE(MODE)	set_sleep_mode(MODE)
-#define SLEEP_MODE				sleep_mode()
-#define SLEEP_ENABLE			sleep_enable()
-#define SLEEP_DISABLE			sleep_disable()
-#define SLEEP_CPU				sleep_cpu()
+#define SET_SLEEP_MODE(MODE)    set_sleep_mode(MODE)
+#define SLEEP_MODE              sleep_mode()
+#define SLEEP_ENABLE            sleep_enable()
+#define SLEEP_DISABLE           sleep_disable()
+#define SLEEP_CPU               sleep_cpu()
 
 #endif /* M16_SLEEP_H_ */
