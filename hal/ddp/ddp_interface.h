@@ -19,6 +19,7 @@
         #define PATH_TO_ADC            "hal/ddp/avr8/mega/m16/adc/m16_adc.h"
         #define PATH_TO_GPIO           "hal/ddp/avr8/mega/m16/gpio/m16_gpio.h"
         #define PATH_TO_SPI            "hal/ddp/avr8/mega/m16/spi/m16_spi.h"
+        #define PATH_TO_TWI            "hal/ddp/avr8/mega/m16/twi/m16_twi.h"
     #endif
 #else
     #error "Architecture not supported yet"

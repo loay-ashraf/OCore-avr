@@ -13,7 +13,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "lcd.h"
-#include "hal/ecu/lcd/common/lcd_macros.h"
+#include "hal/ecu/display/lcd/common/lcd_macros.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

@@ -15,7 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/ecu/lcd/driver/lcd_driver.h"
+#include "hal/ecu/display/lcd/driver/lcd_driver.h"
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 

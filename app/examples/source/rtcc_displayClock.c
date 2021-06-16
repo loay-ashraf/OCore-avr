@@ -6,7 +6,7 @@
  */ 
 
 #include "app/examples/include/examples.h"
-#include "hal/ecu/lcd/api/lcd.h"
+#include "hal/ecu/display/lcd/api/lcd.h"
 #include "hal/ecu/rtcc/api/rtcc.h"
 
 void ex_rtcc_displayClock(void){

@@ -21,7 +21,7 @@ typedef enum{PA0_M,PA1_M,PA2_M,PA3_M,PA4_M,PA5_M,PA6_M,PA7_M,PB0_M,PB1_M,PB2_M,P
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
 #define RAM_SIZE        1024
-#define ROM_SIZE        32768
+#define ROM_SIZE        16384
 #define EEPROM_SIZE     512
 #define STACK_GROWTH    -1
 

@@ -15,7 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/ecu/lcd/common/lcd_types.h"
+#include "hal/ecu/display/lcd/common/lcd_types.h"
 
 /*------------------------FUNCTION DECLARATIONS----------------------*/
 

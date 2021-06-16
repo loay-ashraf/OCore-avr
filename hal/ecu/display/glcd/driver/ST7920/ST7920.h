@@ -16,7 +16,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "hal/ecu/glcd/common/glcd_types.h"
+#include "hal/ecu/display/glcd/common/glcd_types.h"
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 

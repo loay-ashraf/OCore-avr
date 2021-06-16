@@ -16,7 +16,7 @@
 #include "DS3231.h"
 #include "DS3231_config.h"
 #include "hal/mcu/peripheral/gpio.h"
-#include "hal/mcu/peripheral/twi/twi.h"
+#include "hal/mcu/peripheral/twi.h"
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/
 
@@ -92,8 +92,8 @@ void DS3231_init(void){
 void DS3231_enable(void){
     
     twiconfig_t twiConfig = {.prescaler=TWI_DIV16,.frequency=200000UL,.address=0b1110000,.generalcall=TRUE,.ackbit=FALSE};
-    twi_config(TWI0_M,&twiConfig);    
-    twi_enable(TWI0_M);
+    TWI_CONFIG(TWI0_M,&twiConfig);
+    TWI_ENABLE(TWI0_M);
     
 }
 
@@ -113,26 +113,26 @@ void DS3231_setClockMode(rtccclockmode_t a_clockMode){
     
     g_clockMode = a_clockMode;
     ubyte_t hourRegister;
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x02);
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,READ);
-    hourRegister = twi_receiveByte(TWI0_M);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x02);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,READ);
+    hourRegister = TWI_RECEIVE_BYTE(TWI0_M);
     
     if(a_clockMode==RT_TWELVE){
         
-        twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-        twi_transmitByte(TWI0_M,0x02);
-        twi_transmitByte(TWI0_M,0x40|hourRegister);
+    	TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    	TWI_TRANSMIT_BYTE(TWI0_M,0x02);
+    	TWI_TRANSMIT_BYTE(TWI0_M,0x40|hourRegister);
         
     }else if(a_clockMode==RT_TWENTY_FOUR){
         
-        twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-        twi_transmitByte(TWI0_M,0x02);
-        twi_transmitByte(TWI0_M,0xBF&hourRegister);
+    	TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    	TWI_TRANSMIT_BYTE(TWI0_M,0x02);
+    	TWI_TRANSMIT_BYTE(TWI0_M,0xBF&hourRegister);
         
     }
     
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
 }
 
@@ -150,25 +150,25 @@ void DS3231_setClockMode(rtccclockmode_t a_clockMode){
 
 void DS3231_setClock(rtccclock_t a_clock){
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x00);
-    twi_transmitByte(TWI0_M,0x00);
+	TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+	TWI_TRANSMIT_BYTE(TWI0_M,0x00);
+	TWI_TRANSMIT_BYTE(TWI0_M,0x00);
     
-    twi_transmitByte(TWI0_M,(a_clock.minute%10)|((a_clock.minute/10)<<4));
+	TWI_TRANSMIT_BYTE(TWI0_M,(a_clock.minute%10)|((a_clock.minute/10)<<4));
     
     if (g_clockMode == RT_TWELVE){
         
         a_clock.hour = ((a_clock.hour%10)|((a_clock.hour/10)<<4))|0x40;
-        twi_transmitByte(TWI0_M,a_clock.hour|(a_clock.AMPM<<4));
+        TWI_TRANSMIT_BYTE(TWI0_M,a_clock.hour|(a_clock.AMPM<<4));
         
     }else if (g_clockMode == RT_TWENTY_FOUR){
         
         a_clock.hour = ((a_clock.hour%10)|((a_clock.hour/10)<<4));
-        twi_transmitByte(TWI0_M,a_clock.hour);
+        TWI_TRANSMIT_BYTE(TWI0_M,a_clock.hour);
         
     }
     
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
 }
 
@@ -186,33 +186,33 @@ void DS3231_setClock(rtccclock_t a_clock){
 
 void DS3231_setCalendar(rtcccalendar_t a_calendar){
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x00);
-    twi_transmitByte(TWI0_M,0x00);
+	TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+	TWI_TRANSMIT_BYTE(TWI0_M,0x00);
+	TWI_TRANSMIT_BYTE(TWI0_M,0x00);
     
-    twi_transmitByte(TWI0_M,(a_calendar.minute%10)|((a_calendar.minute/10)<<4));
+	TWI_TRANSMIT_BYTE(TWI0_M,(a_calendar.minute%10)|((a_calendar.minute/10)<<4));
     
     if (g_clockMode == RT_TWELVE){
         
         a_calendar.hour = ((a_calendar.hour%10)|((a_calendar.hour/10)<<4))|0x40;
-        twi_transmitByte(TWI0_M,a_calendar.hour|(a_calendar.AMPM<<4));
+        TWI_TRANSMIT_BYTE(TWI0_M,a_calendar.hour|(a_calendar.AMPM<<4));
         
     }else if (g_clockMode == RT_TWENTY_FOUR){
         
         a_calendar.hour = ((a_calendar.hour%10)|((a_calendar.hour/10)<<4));
-        twi_transmitByte(TWI0_M,a_calendar.hour);
+        TWI_TRANSMIT_BYTE(TWI0_M,a_calendar.hour);
         
     }
     
-    twi_transmitByte(TWI0_M,a_calendar.weekDay);
+    TWI_TRANSMIT_BYTE(TWI0_M,a_calendar.weekDay);
     
-    twi_transmitByte(TWI0_M,(a_calendar.date%10)|((a_calendar.date/10)<<4));
+    TWI_TRANSMIT_BYTE(TWI0_M,(a_calendar.date%10)|((a_calendar.date/10)<<4));
     
-    twi_transmitByte(TWI0_M,(a_calendar.month%10)|((a_calendar.month/10)<<4));
+    TWI_TRANSMIT_BYTE(TWI0_M,(a_calendar.month%10)|((a_calendar.month/10)<<4));
     
-    twi_transmitByte(TWI0_M,(a_calendar.year%10)|((a_calendar.year/10)<<4));
+    TWI_TRANSMIT_BYTE(TWI0_M,(a_calendar.year%10)|((a_calendar.year/10)<<4));
     
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
 }
 
@@ -232,14 +232,14 @@ rtccclock_t DS3231_getClock(void){
     
     rtccclock_t clock;
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x00);
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,READ);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x00);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,READ);
     
-    clock.second = twi_receiveByte(TWI0_M);
-    clock.minute = twi_receiveByte(TWI0_M);
-    clock.hour = twi_receiveByte(TWI0_M);
-    twi_transmitStop(TWI0_M);
+    clock.second = TWI_RECEIVE_BYTE(TWI0_M);
+    clock.minute = TWI_RECEIVE_BYTE(TWI0_M);
+    clock.hour = TWI_RECEIVE_BYTE(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
     if(g_clockMode == RT_TWELVE)
         clock.AMPM = (clock.hour&0x20)>>4;
@@ -273,24 +273,24 @@ rtcccalendar_t DS3231_getCalendar(void){
     
     rtcccalendar_t calendar;
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x00);
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,READ);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x00);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,READ);
     
-    calendar.second = twi_receiveByte(TWI0_M);
-    calendar.minute = twi_receiveByte(TWI0_M);
-    calendar.hour = twi_receiveByte(TWI0_M);
+    calendar.second = TWI_RECEIVE_BYTE(TWI0_M);
+    calendar.minute = TWI_RECEIVE_BYTE(TWI0_M);
+    calendar.hour = TWI_RECEIVE_BYTE(TWI0_M);
     
     if(g_clockMode == RT_TWELVE)
         calendar.AMPM = (calendar.hour&0x20)>>4;
     else if(g_clockMode == RT_TWENTY_FOUR)
         calendar.AMPM = 0xFF;
     
-    calendar.weekDay = twi_receiveByte(TWI0_M);
-    calendar.date = twi_receiveByte(TWI0_M);
-    calendar.month = twi_receiveByte(TWI0_M);
-    calendar.year = twi_receiveByte(TWI0_M);
-    twi_transmitStop(TWI0_M);
+    calendar.weekDay = TWI_RECEIVE_BYTE(TWI0_M);
+    calendar.date = TWI_RECEIVE_BYTE(TWI0_M);
+    calendar.month = TWI_RECEIVE_BYTE(TWI0_M);
+    calendar.year = TWI_RECEIVE_BYTE(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
     calendar.second = (((calendar.second&0xF0)>>4)*10)+(calendar.second&0x0F);
     calendar.minute = (((calendar.minute&0xF0)>>4)*10)+(calendar.minute&0x0F);
@@ -346,20 +346,20 @@ void DS3231_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig){
         
         case RT_ALARM1: {
             
-            twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-            twi_transmitByte(TWI0_M,0x07);
+        	TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+        	TWI_TRANSMIT_BYTE(TWI0_M,0x07);
             
-            twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x01)<<7)|a_alarmConfig.second);
-            twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x02)<<6)|a_alarmConfig.minute);
-            twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x04)<<5)|a_alarmConfig.hour);
+        	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x01)<<7)|a_alarmConfig.second);
+        	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x02)<<6)|a_alarmConfig.minute);
+        	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x04)<<5)|a_alarmConfig.hour);
             
             if(a_alarmConfig.DYDT)
 
-                twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.weekDay);
+            	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.weekDay);
             
             else
             
-                twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.date);
+            	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.date);
             
             g_alarmHandlerCallback[0] = a_alarmConfig.alarmHandlerCallback;
             
@@ -368,19 +368,19 @@ void DS3231_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig){
         
         case RT_ALARM2: {
             
-            twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-            twi_transmitByte(TWI0_M,0x0B);
+        	TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+        	TWI_TRANSMIT_BYTE(TWI0_M,0x0B);
             
-            twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x02)<<6)|a_alarmConfig.minute);
-            twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x04)<<5)|a_alarmConfig.hour);
+        	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x02)<<6)|a_alarmConfig.minute);
+        	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x04)<<5)|a_alarmConfig.hour);
             
             if(a_alarmConfig.DYDT)
 
-                twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.weekDay);
+            	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.weekDay);
             
             else
             
-                twi_transmitByte(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.date);
+            	TWI_TRANSMIT_BYTE(TWI0_M,((a_alarmConfig.alarmMode&0x08)<<4)|a_alarmConfig.date);
             
             g_alarmHandlerCallback[1] = a_alarmConfig.alarmHandlerCallback;
             
@@ -389,7 +389,7 @@ void DS3231_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig){
         
     }
     
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
 }
 
@@ -409,25 +409,25 @@ void DS3231_enableAlarm(rtccalarm_t a_alarm){
     
     ubyte_t ctrlReg;
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x0E);
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,READ);
-    ctrlReg = twi_receiveByte(TWI0_M);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x0E);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,READ);
+    ctrlReg = TWI_RECEIVE_BYTE(TWI0_M);
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x0E);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x0E);
     
     switch(a_alarm){
         
-        case RT_ALARM1: twi_transmitByte(TWI0_M,ctrlReg|0x05);
+        case RT_ALARM1: TWI_TRANSMIT_BYTE(TWI0_M,ctrlReg|0x05);
         break;
         
-        case RT_ALARM2: twi_transmitByte(TWI0_M,ctrlReg|0x06);
+        case RT_ALARM2: TWI_TRANSMIT_BYTE(TWI0_M,ctrlReg|0x06);
         break;
         
     }
     
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
     GPIO_ENABLE_PIN_PULLUP(DS3231_ALARM_INT_PIN);
     GPIO_SET_INTERRUPT_MODE(DS3231_ALARM_INT,DS3231_ALARM_INT_MODE);
@@ -452,25 +452,25 @@ void DS3231_disableAlarm(rtccalarm_t a_alarm){
     
     ubyte_t ctrlReg;
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x0E);
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,READ);
-    ctrlReg = twi_receiveByte(TWI0_M);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x0E);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,READ);
+    ctrlReg = TWI_RECEIVE_BYTE(TWI0_M);
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x0E);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x0E);
     
     switch(a_alarm){
         
-        case RT_ALARM1: twi_transmitByte(TWI0_M,ctrlReg&0xFE);
+        case RT_ALARM1: TWI_TRANSMIT_BYTE(TWI0_M,ctrlReg&0xFE);
         break;
         
-        case RT_ALARM2: twi_transmitByte(TWI0_M,ctrlReg&0xFD);
+        case RT_ALARM2: TWI_TRANSMIT_BYTE(TWI0_M,ctrlReg&0xFD);
         break;
         
     }
     
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
     GPIO_DISABLE_INTERRUPT(DS3231_ALARM_INT);
     
@@ -492,12 +492,12 @@ void DS3231_disableAlarm(rtccalarm_t a_alarm){
 float DS3231_getTempCelsius(void){
     
     uint8_t temp_i,temp_d;
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x11);
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,READ);
-    temp_i = twi_receiveByte(TWI0_M);
-    temp_d = (twi_receiveByte(TWI0_M)>>6)*25;
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x11);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,READ);
+    temp_i = TWI_RECEIVE_BYTE(TWI0_M);
+    temp_d = (TWI_RECEIVE_BYTE(TWI0_M)>>6)*25;
+    TWI_TRANSMIT_STOP(TWI0_M);
     
     return (float)(temp_i+(temp_d/100.0));
     
@@ -539,10 +539,10 @@ static void _alarmISR(void){
     
     ubyte_t csReg;
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x0F);
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,READ);
-    csReg = twi_receiveByte(TWI0_M);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x0F);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,READ);
+    csReg = TWI_RECEIVE_BYTE(TWI0_M);
     
     if((csReg&0x01) && (csReg&0x02)){
         
@@ -559,9 +559,9 @@ static void _alarmISR(void){
         
     }
     
-    twi_transmitStart(TWI0_M,DS3231_ADDRESS,WRITE);
-    twi_transmitByte(TWI0_M,0x0F);
-    twi_transmitByte(TWI0_M,0x88);
-    twi_transmitStop(TWI0_M);
+    TWI_TRANSMIT_START(TWI0_M,DS3231_ADDRESS,WRITE);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x0F);
+    TWI_TRANSMIT_BYTE(TWI0_M,0x88);
+    TWI_TRANSMIT_STOP(TWI0_M);
     
 }

@@ -6,7 +6,7 @@
  */ 
 
 #include "app/examples/include/examples.h"
-#include "hal/ecu/glcd/api/glcd.h"
+#include "hal/ecu/display/glcd/api/glcd.h"
 
 void ex_glcd_drawCircles(void){
     

@@ -7,7 +7,7 @@
 
 #include "app/examples/include/examples.h"
 #include "rtos/config/rtos_config.h"
-#include "hal/ecu/lcd/api/lcd.h"
+#include "hal/ecu/display/lcd/api/lcd.h"
 #include "hal/mcu/peripheral/adc.h"
 #include "hal/mcu/peripheral/gpio.h"
 

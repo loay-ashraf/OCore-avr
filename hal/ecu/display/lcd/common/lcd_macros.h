@@ -17,7 +17,7 @@
 
 #if (LCD_CONTROLLER == LCD_HD44780)
 
-#include "hal/ecu/lcd/driver/HD44780/HD44780.h"
+#include "hal/ecu/display/lcd/driver/HD44780/HD44780.h"
 
 #endif
 

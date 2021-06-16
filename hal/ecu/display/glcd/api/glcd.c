@@ -13,7 +13,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
  #include "glcd.h"
- #include "hal/ecu/glcd/common/glcd_macros.h"
+ #include "hal/ecu/display/glcd/common/glcd_macros.h"
  #include <math.h>
  #include <stdlib.h>
  #include <stdio.h>

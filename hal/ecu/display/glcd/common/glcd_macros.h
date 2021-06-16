@@ -17,7 +17,7 @@
 
 #if (GLCD_CONTROLLER == GLCD_ST7920)
 
-#include "hal/ecu/glcd/driver/ST7920/ST7920.h"
+#include "hal/ecu/display/glcd/driver/ST7920/ST7920.h"
 
 #endif
 

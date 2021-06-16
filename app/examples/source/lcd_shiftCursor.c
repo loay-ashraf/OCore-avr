@@ -6,7 +6,7 @@
  */ 
 
 #include "app/examples/include/examples.h"
-#include "hal/ecu/lcd/api/lcd.h"
+#include "hal/ecu/display/lcd/api/lcd.h"
 #include "hal/mcu/sys/delay.h"
 
 void ex_lcd_shiftCursor(void){
