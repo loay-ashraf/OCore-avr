@@ -21,6 +21,7 @@
         #define PATH_TO_SPI            "hal/ddp/avr8/mega/m16/spi/m16_spi.h"
         #define PATH_TO_TWI            "hal/ddp/avr8/mega/m16/twi/m16_twi.h"
         #define PATH_TO_USART          "hal/ddp/avr8/mega/m16/usart/m16_usart.h"
+        #define PATH_TO_WDT            "hal/ddp/avr8/mega/m16/wdt/m16_wdt.h"
     #endif
 #else
     #error "Architecture not supported yet"
