@@ -8,7 +8,7 @@
 #include "app/examples/include/examples.h"
 #include "hal/ecu/display/lcd/api/lcd.h"
 #include "hal/ecu/keypad/keypad.h"
-#include "hal/mcu/peripheral/usart/usart.h"
+#include "hal/mcu/peripheral/usart.h"
 #include "hal/mcu/sys/delay.h"
 
 static char keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS] = {{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};                /* Keypad key map array */
@@ -25,9 +25,9 @@ void ex_rs232_transmit(void){
     LCD_init(TRUE,TRUE,TRUE,TRUE);
     Keypad_setKeyMap(keyMap);
     Keypad_init();
-    usart_config(USART0_M,&usartConfig);
-    usart_setBaudrate(USART0_M,US_9600);
-    usart_enable(USART0_M);
+    USART_CONFIG(USART0_M,&usartConfig);
+    USART_SET_BAUDRATE(USART0_M,US_9600);
+    USART_ENABLE(USART0_M);
     
     while(1){        /* loop forever */
         
@@ -64,7 +64,7 @@ void ex_rs232_transmit(void){
                 
                 transmitString[transmitStringLength] = '\0';    /* terminate string */
                 
-                usart_transmitString(USART0_M,transmitString,US_LF);        /* transmit string */
+                USART_TRANSMIT_STRING(USART0_M,transmitString,US_CR);        /* transmit string */
                 LCD_clearDisplay();                                /* clear display */
                 
             }else{        /* otherwise */
