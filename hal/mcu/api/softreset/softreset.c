@@ -14,7 +14,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "softreset.h"
-#include "hal/mcu/peripheral/wdt/wdt.h"
+#include "hal/mcu/peripheral/wdt.h"
 
 /*-----------------------FUNCTION DEFINITIONS------------------------*/
 
@@ -33,7 +33,7 @@
 
 void softReset(void){
     
-    wdt_enable(WD_16);
+    WDT_ENABLE(WD_16);
     while(1);
     
 }
