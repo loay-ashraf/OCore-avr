@@ -36,7 +36,7 @@ Changes from V2.6.0
 
 #include "rtos/include/FreeRTOS.h"
 #include "rtos/include/task.h"
-#include "hal/mcu/peripheral/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer16.h"
 #include "hal/mcu/sys/interrupt.h"
 #include <stdlib.h>
 
@@ -372,15 +372,15 @@ static void prvSetupTimerInterrupt( void )
 
     /* Setup compare match value for compare match A.  Interrupts are disabled 
     before this is called so we need not worry here. */
-    timer16_setMode(configTICK_TIMER,configTICK_TIMER_MODE);
-    timer16_setOCRA(configTICK_TIMER,ulCompareMatch);
-    timer16_setISRCallback(configTICK_TIMER,configTICK_TIMER_INT,&tickISR);
+    TIMER16_SET_MODE(configTICK_TIMER,configTICK_TIMER_MODE);
+    TIMER16_SET_OCRA(configTICK_TIMER,ulCompareMatch);
+    TIMER16_SET_ISR_CALLBACK(configTICK_TIMER,configTICK_TIMER_INT,&tickISR);
 
     /* Enable the interrupt - this is okay as interrupt are currently globally
     disabled. */
-    timer16_enableInterrupt(configTICK_TIMER,configTICK_TIMER_INT);
+    TIMER16_ENABLE_INTERRUPT(configTICK_TIMER,configTICK_TIMER_INT);
     DISABLE_GLOBAL_INTERRUPTS;
-    timer16_start(configTICK_TIMER,configTICK_TIMER_PRE);
+    TIMER16_START(configTICK_TIMER,configTICK_TIMER_PRE);
     
 }
 

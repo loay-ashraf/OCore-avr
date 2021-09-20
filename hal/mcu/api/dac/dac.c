@@ -15,8 +15,8 @@
 
 #include "dac.h"
 #include "dac_config.h"
-#include "hal/mcu/peripheral/timer/timer.h"
-#include "hal/mcu/peripheral/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer.h"
+#include "hal/mcu/peripheral/timer16.h"
 #include "hal/mcu/sys/cpu_config.h"
 #include "service/include/map.h"
 
@@ -68,15 +68,15 @@ void dac_setDuty(dacchannel_t a_dacChannel, uint8_t a_duty){
                 
             if(g_isActivated[DA_CH0]){
                 
-                timer_setOCR(DAC_CH0_TIMER,map(a_duty,DAC_CH0_DUTY_MIN,DAC_CH0_DUTY_MAX,0,0xFF));
+            	TIMER_SET_OCR(DAC_CH0_TIMER,map(a_duty,DAC_CH0_DUTY_MIN,DAC_CH0_DUTY_MAX,0,0xFF));
                 
                 
             }else{
                 
-                timer_setMode(DAC_CH0_TIMER,DAC_CH0_TIMER_MODE);
-                timer_setOCR(DAC_CH0_TIMER,map(a_duty,DAC_CH0_DUTY_MIN,DAC_CH0_DUTY_MAX,0,0xFF));
-                timer_setOCMode(DAC_CH0_TIMER,DAC_CH0_TIMER_OCMODE);
-                timer_start(DAC_CH0_TIMER,DAC_CH0_TIMER_PRESCALER);
+            	TIMER_SET_MODE(DAC_CH0_TIMER,DAC_CH0_TIMER_MODE);
+                TIMER_SET_OCR(DAC_CH0_TIMER,map(a_duty,DAC_CH0_DUTY_MIN,DAC_CH0_DUTY_MAX,0,0xFF));
+                TIMER_SET_OC_MODE(DAC_CH0_TIMER,DAC_CH0_TIMER_OCMODE);
+                TIMER_START(DAC_CH0_TIMER,DAC_CH0_TIMER_PRESCALER);
                 g_isActivated[DA_CH0] = TRUE;
                 
             }    
@@ -93,15 +93,15 @@ void dac_setDuty(dacchannel_t a_dacChannel, uint8_t a_duty){
                 
             if(g_isActivated[DA_CH1]){
             
-                timer16_setOCRA(DAC_CH0_TIMER,map(a_duty,DAC_CH1_DUTY_MIN,DAC_CH1_DUTY_MAX,0,DAC_CH1_TIMER_TOP));
+            	TIMER16_SET_OCRA(DAC_CH0_TIMER,map(a_duty,DAC_CH1_DUTY_MIN,DAC_CH1_DUTY_MAX,0,DAC_CH1_TIMER_TOP));
             
             }else{
                 
-                timer16_setMode(DAC_CH1_TIMER,DAC_CH1_TIMER_MODE);
-                timer16_setICR(DAC_CH1_TIMER,DAC_CH1_TIMER_TOP);
-                timer16_setOCRA(DAC_CH1_TIMER,map(a_duty,DAC_CH1_DUTY_MIN,DAC_CH1_DUTY_MAX,0,DAC_CH1_TIMER_TOP));
-                timer16_setOCAMode(DAC_CH1_TIMER,DAC_CH1_TIMER_OCMODE);
-                timer16_start(DAC_CH1_TIMER,DAC_CH1_TIMER_PRESCALER);
+            	TIMER16_SET_MODE(DAC_CH1_TIMER,DAC_CH1_TIMER_MODE);
+            	TIMER16_SET_ICR(DAC_CH1_TIMER,DAC_CH1_TIMER_TOP);
+                TIMER16_SET_OCRA(DAC_CH1_TIMER,map(a_duty,DAC_CH1_DUTY_MIN,DAC_CH1_DUTY_MAX,0,DAC_CH1_TIMER_TOP));
+                TIMER16_SET_OCA_MODE(DAC_CH1_TIMER,DAC_CH1_TIMER_OCMODE);
+                TIMER16_START(DAC_CH1_TIMER,DAC_CH1_TIMER_PRESCALER);
                 g_isActivated[DA_CH1] = TRUE;
                 
             }
@@ -118,15 +118,15 @@ void dac_setDuty(dacchannel_t a_dacChannel, uint8_t a_duty){
                 
             if(g_isActivated[DA_CH2]){
                 
-                timer16_setOCRB(DAC_CH2_TIMER,map(a_duty,DAC_CH2_DUTY_MIN,DAC_CH2_DUTY_MAX,0,DAC_CH2_TIMER_TOP));
+            	TIMER16_SET_OCRB(DAC_CH2_TIMER,map(a_duty,DAC_CH2_DUTY_MIN,DAC_CH2_DUTY_MAX,0,DAC_CH2_TIMER_TOP));
                 
             }else{
                 
-                timer16_setMode(DAC_CH2_TIMER,DAC_CH2_TIMER_MODE);
-                timer16_setICR(DAC_CH2_TIMER,DAC_CH2_TIMER_TOP);
-                timer16_setOCRB(DAC_CH2_TIMER,map(a_duty,DAC_CH2_DUTY_MIN,DAC_CH2_DUTY_MAX,0,DAC_CH2_TIMER_TOP));
-                timer16_setOCBMode(DAC_CH2_TIMER,DAC_CH2_TIMER_OCMODE);
-                timer16_start(DAC_CH2_TIMER,DAC_CH2_TIMER_PRESCALER);
+            	TIMER16_SET_MODE(DAC_CH2_TIMER,DAC_CH2_TIMER_MODE);
+                TIMER16_SET_ICR(DAC_CH2_TIMER,DAC_CH2_TIMER_TOP);
+                TIMER16_SET_OCRB(DAC_CH2_TIMER,map(a_duty,DAC_CH2_DUTY_MIN,DAC_CH2_DUTY_MAX,0,DAC_CH2_TIMER_TOP));
+                TIMER16_SET_OCB_MODE(DAC_CH2_TIMER,DAC_CH2_TIMER_OCMODE);
+                TIMER16_START(DAC_CH2_TIMER,DAC_CH2_TIMER_PRESCALER);
                 g_isActivated[DA_CH2] = TRUE;
                 
             }    
@@ -143,15 +143,15 @@ void dac_setDuty(dacchannel_t a_dacChannel, uint8_t a_duty){
                 
             if(g_isActivated[DA_CH2]){
                 
-                timer_setOCR(DAC_CH3_TIMER,map(a_duty,DAC_CH3_DUTY_MIN,DAC_CH3_DUTY_MAX,0,0xFF));
+            	TIMER_SET_OCR(DAC_CH3_TIMER,map(a_duty,DAC_CH3_DUTY_MIN,DAC_CH3_DUTY_MAX,0,0xFF));
                 
             }else{
                 
                 
-                timer_setMode(DAC_CH3_TIMER,DAC_CH3_TIMER_MODE);
-                timer_setOCR(DAC_CH3_TIMER,map(a_duty,DAC_CH3_DUTY_MIN,DAC_CH3_DUTY_MAX,0,0xFF));
-                timer_setOCMode(DAC_CH3_TIMER,DAC_CH3_TIMER_OCMODE);
-                timer_start(DAC_CH3_TIMER,DAC_CH3_TIMER_PRESCALER);
+            	TIMER_SET_MODE(DAC_CH3_TIMER,DAC_CH3_TIMER_MODE);
+                TIMER_SET_OCR(DAC_CH3_TIMER,map(a_duty,DAC_CH3_DUTY_MIN,DAC_CH3_DUTY_MAX,0,0xFF));
+                TIMER_SET_OC_MODE(DAC_CH3_TIMER,DAC_CH3_TIMER_OCMODE);
+                TIMER_START(DAC_CH3_TIMER,DAC_CH3_TIMER_PRESCALER);
                 g_isActivated[DA_CH3] = TRUE;
                 
             }    

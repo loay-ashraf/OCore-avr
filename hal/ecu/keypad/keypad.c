@@ -15,7 +15,7 @@
 
 #include "keypad.h"
 #include "hal/mcu/peripheral/gpio.h"
-#include "hal/mcu/peripheral/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer16.h"
 #include "hal/mcu/sys/delay.h"
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/
@@ -127,11 +127,11 @@ void Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scan
     g_keyHandlerCallback = a_keyHandlerCallback;
     uint16_t ICR1Value = F_CPU/(64*a_scanFrequency);
       
-    timer16_setMode(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_MODE);
-    timer16_enableInterrupt(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
-    timer16_setISRCallback(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT,&_periodicScanISR);
-    timer16_setICR(KEYPAD_SCAN_TIMER,ICR1Value);
-    timer16_start(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_PRE);
+    TIMER16_SET_MODE(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_MODE);
+    TIMER16_ENABLE_INTERRUPT(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
+    TIMER16_SET_ISR_CALLBACK(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT,&_periodicScanISR);
+    TIMER16_SET_ICR(KEYPAD_SCAN_TIMER,ICR1Value);
+    TIMER16_START(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_PRE);
     
 }
 
@@ -149,9 +149,9 @@ void Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scan
   
 void Keypad_disablePeriodicScan(void){
       
-    timer16_disableInterrupt(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
-    timer16_setICR(KEYPAD_SCAN_TIMER,0);
-    timer16_stop(KEYPAD_SCAN_TIMER);
+	TIMER16_DISABLE_INTERRUPT(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
+	TIMER16_SET_ICR(KEYPAD_SCAN_TIMER,0);
+	TIMER16_STOP(KEYPAD_SCAN_TIMER);
       
 }
 

@@ -19,6 +19,8 @@
         #define PATH_TO_ADC            "hal/ddp/avr8/mega/m16/adc/m16_adc.h"
         #define PATH_TO_GPIO           "hal/ddp/avr8/mega/m16/gpio/m16_gpio.h"
         #define PATH_TO_SPI            "hal/ddp/avr8/mega/m16/spi/m16_spi.h"
+        #define PATH_TO_TIMER          "hal/ddp/avr8/mega/m16/timer/m16_timer.h"
+        #define PATH_TO_TIMER16        "hal/ddp/avr8/mega/m16/timer16/m16_timer16.h"
         #define PATH_TO_TWI            "hal/ddp/avr8/mega/m16/twi/m16_twi.h"
         #define PATH_TO_USART          "hal/ddp/avr8/mega/m16/usart/m16_usart.h"
         #define PATH_TO_WDT            "hal/ddp/avr8/mega/m16/wdt/m16_wdt.h"

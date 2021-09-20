@@ -14,7 +14,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "servo.h"
-#include "hal/mcu/peripheral/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer16.h"
 #include "service/include/map.h"
 #include "service/include/delay_var.h"
 
@@ -81,9 +81,9 @@ static uint8_t g_servoPosition[SERVO_CHANNELS_NUMBER];
 
 void Servo_enable(void){
     
-    timer16_setMode(SERVO_TIMER,SERVO_TIMER_MODE);
-    timer16_setICR(SERVO_TIMER,SERVO_TIMER_TOP);
-    timer16_start(SERVO_TIMER,SERVO_TIMER_PRESCALER);
+	TIMER16_SET_MODE(SERVO_TIMER,SERVO_TIMER_MODE);
+	TIMER16_SET_ICR(SERVO_TIMER,SERVO_TIMER_TOP);
+	TIMER16_START(SERVO_TIMER,SERVO_TIMER_PRESCALER);
     
 }
 
@@ -101,7 +101,7 @@ void Servo_enable(void){
 
 void Servo_disable(void){
     
-    timer16_stop(SERVO_TIMER);
+	TIMER16_STOP(SERVO_TIMER);
     
 }
 
@@ -131,8 +131,8 @@ void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpee
             else if(a_initialPosition > SERVO_CH0_POSITION_MAX)
                 a_initialPosition = SERVO_CH0_POSITION_MAX;
             
-            timer16_setOCRA(SERVO_TIMER,map(a_initialPosition,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
-            timer16_setOCAMode(SERVO_TIMER,SERVO_TIMER_OCMODE);
+            TIMER16_SET_OCRA(SERVO_TIMER,map(a_initialPosition,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+            TIMER16_SET_OCA_MODE(SERVO_TIMER,SERVO_TIMER_OCMODE);
             g_servoSpeed[SER_CH0] = a_initialSpeed;
             g_servoDelay[SER_CH0] = (1.0/a_initialSpeed)*1000;
             g_servoPosition[SER_CH0] = a_initialPosition;
@@ -150,8 +150,8 @@ void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpee
             else if(a_initialPosition > SERVO_CH1_POSITION_MAX)
                 a_initialPosition = SERVO_CH1_POSITION_MAX;
             
-            timer16_setOCRB(SERVO_TIMER,map(a_initialPosition,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
-            timer16_setOCBMode(SERVO_TIMER,SERVO_TIMER_OCMODE);    
+            TIMER16_SET_OCRB(SERVO_TIMER,map(a_initialPosition,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+            TIMER16_SET_OCB_MODE(SERVO_TIMER,SERVO_TIMER_OCMODE);
             g_servoSpeed[SER_CH1] = a_initialSpeed;
             g_servoDelay[SER_CH1] = (1.0/a_initialSpeed)*1000;
             g_servoPosition[SER_CH1] = a_initialPosition;
@@ -180,16 +180,16 @@ void Servo_deactivateChannel(servochannel_t a_servoChannel){
         
         case SER_CH0: {
             
-            timer16_setOCAMode(SERVO_TIMER,T16_OFF);
-            timer16_setOCRA(SERVO_TIMER,0);
+        	TIMER16_SET_OCA_MODE(SERVO_TIMER,T16_OFF);
+        	TIMER16_SET_OCRA(SERVO_TIMER,0);
             
         }
         break;
         
         case SER_CH1: {
             
-            timer16_setOCBMode(SERVO_TIMER,T16_OFF);
-            timer16_setOCRB(SERVO_TIMER,0);
+        	TIMER16_SET_OCB_MODE(SERVO_TIMER,T16_OFF);
+        	TIMER16_SET_OCRB(SERVO_TIMER,0);
             
         }
         break;
@@ -244,7 +244,7 @@ void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
                 a_position = SERVO_CH0_POSITION_MAX;
             
             g_servoPosition[SER_CH0] = a_position;
-            timer16_setOCRA(SERVO_TIMER,map(a_position,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+            TIMER16_SET_OCRA(SERVO_TIMER,map(a_position,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
             
         }
         break;
@@ -257,7 +257,7 @@ void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
                 a_position = SERVO_CH1_POSITION_MAX;
             
             g_servoPosition[SER_CH1] = a_position;
-            timer16_setOCRB(SERVO_TIMER,map(a_position,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+            TIMER16_SET_OCRB(SERVO_TIMER,map(a_position,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
         
         }
         break;

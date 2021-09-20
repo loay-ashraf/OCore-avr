@@ -15,8 +15,8 @@
 #include "pwmin.h"
 #include "pwmin_config.h"
 #include "hal/mcu/peripheral/gpio.h"
-#include "hal/mcu/peripheral/timer/timer.h"
-#include "hal/mcu/peripheral/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer.h"
+#include "hal/mcu/peripheral/timer16.h"
 #include "hal/mcu/sys/cpu_config.h"
 #include "service/include/delay_var.h"
 
@@ -56,31 +56,31 @@ uint16_t PWMIN_getPulseWidth(pin_t a_pin, uint8_t a_triggerEdge){
     
     if(a_triggerEdge == PWMIN_RISING){
 
-        while(gpio_readPin(a_pin));
-        while(!gpio_readPin(a_pin));
+        while(GPIO_READ_PIN(a_pin));
+        while(!GPIO_READ_PIN(a_pin));
         
-        timer_setMode(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_MODE);
-        timer_start(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_PRE);
+        TIMER_SET_MODE(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_MODE);
+        TIMER_START(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_PRE);
 
-        while(gpio_readPin(a_pin));
+        while(GPIO_READ_PIN(a_pin));
 
-        timer_stop(PWMIN_PULSE_TIMER);
+        TIMER_STOP(PWMIN_PULSE_TIMER);
 
     }else if(a_triggerEdge == PWMIN_FALLING){
 
-        while(!gpio_readPin(a_pin));
-        while(gpio_readPin(a_pin));
+        while(!GPIO_READ_PIN(a_pin));
+        while(GPIO_READ_PIN(a_pin));
 
-        timer_setMode(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_MODE);
-        timer_start(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_PRE);
+        TIMER_SET_MODE(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_MODE);
+        TIMER_START(PWMIN_PULSE_TIMER,PWMIN_PULSE_TIMER_PRE);
 
-        while(!gpio_readPin(a_pin));
+        while(!GPIO_READ_PIN(a_pin));
 
-        timer_stop(PWMIN_PULSE_TIMER);
+        TIMER_STOP(PWMIN_PULSE_TIMER);
 
     }
 
-    return timer_getTCNT(TIMER2_M)*(1024.0/F_CPU_M);
+    return TIMER_GET_TCNT(TIMER2_M)*(1024.0/F_CPU_M);
 }
 
 /**********************************************************************
@@ -119,12 +119,12 @@ float PWMIN_getFreqHZ(void){
 
 float PWMIN_getFreqKHZ(void){
     
-    timer16_setMode(PWMIN_FREQ_TIMER,PWMIN_FREQ_TIMER_MODE);
-    timer16_start(PWMIN_FREQ_TIMER,PWMIN_FREQ_TIMER_PRE);
+	TIMER16_SET_MODE(PWMIN_FREQ_TIMER,PWMIN_FREQ_TIMER_MODE);
+	TIMER16_START(PWMIN_FREQ_TIMER,PWMIN_FREQ_TIMER_PRE);
     delayVarms(g_timeWindow);
-    timer16_stop(PWMIN_FREQ_TIMER);
+    TIMER16_STOP(PWMIN_FREQ_TIMER);
     
-    if(timer16_getTCNT(PWMIN_FREQ_TIMER) > 65400 || timer16_checkOverflow(PWMIN_FREQ_TIMER)){
+    if(TIMER16_GET_TCNT(PWMIN_FREQ_TIMER) > 65400 || TIMER16_CHECK_OVERFLOW(PWMIN_FREQ_TIMER)){
         
         if(g_timeWindow == 1){
             return 0xFFFF;
@@ -133,11 +133,11 @@ float PWMIN_getFreqKHZ(void){
             return PWMIN_getFreqKHZ();
         }
         
-    }else if(timer16_getTCNT(PWMIN_FREQ_TIMER) < 100){
+    }else if(TIMER16_GET_TCNT(PWMIN_FREQ_TIMER) < 100){
         
         if(g_timeWindow == 1000){
             
-            if(timer16_getTCNT(PWMIN_FREQ_TIMER) == 0)
+            if(TIMER16_GET_TCNT(PWMIN_FREQ_TIMER) == 0)
                 return 0;
             else
                 return 0xFFFF;
@@ -151,7 +151,7 @@ float PWMIN_getFreqKHZ(void){
         
     }else{
         
-        return (float)timer16_getTCNT(PWMIN_FREQ_TIMER)/(float)g_timeWindow;
+        return (float)TIMER16_GET_TCNT(PWMIN_FREQ_TIMER)/(float)g_timeWindow;
     
     }
     
