@@ -1,5 +1,5 @@
-# Embedded Systems Firmware Stack     [![C/C++ CI](https://github.com/loay-ashraf/ATmega16-32-Library-Set/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/loay-ashraf/ESFS/actions/workflows/c-cpp.yml)
-Firmware stack for embedded devices based on layered architecture with full integration of FreeRTOS kernel.
+# 1Core AVR     [![C/C++ CI](https://github.com/loay-ashraf/ATmega16-32-Library-Set/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/loay-ashraf/ESFS/actions/workflows/c-cpp.yml)
+Embedded core written in C for AVR devices based on layered architecture with full integration of FreeRTOS kernel.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -13,7 +13,7 @@ You'll also need git to be installed on your machine.
 
 ### Installing
 You'll need to do the following:
-- clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/ESFS.git`
+- clone the repo to your local machine using: `git clone https://github.com/loay-ashraf/OCore-avr.git`
 - create new project in your IDE.
 - add your project root directory to compiler include path (in project toolchain settings).
 - add the three main folders from cloned repo folder to the project: `app`, `hal`, `rtos`. 
@@ -61,7 +61,7 @@ The mcu layer contains:
 
 ## <a name="projectlayout"></a>Project Layout
 ```
-└───ESFS
+└───OCore-avr
     ├───app
     │   ├───config
     │   └───examples
