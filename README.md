@@ -68,24 +68,38 @@ The mcu layer contains:
     │       ├───include
     │       └───source
     ├───hal
+    │   ├───ddp
+    │   │   └───avr8
+    │   │       └───mega
+    │   │           └───m16
+    │   │               ├───ac
+    │   │               ├───adc
+    │   │               ├───gpio
+    │   │               ├───spi
+    │   │               ├───timer
+    │   │               ├───timer16
+    │   │               ├───twi
+    │   │               ├───usart
+    │   │               └───wdt
     │   ├───ecu
+    │   │   ├───display
+    │   │   │   ├───glcd
+    │   │   │   │   ├───api
+    │   │   │   │   ├───common
+    │   │   │   │   └───driver
+    │   │   │   │       └───ST7920
+    │   │   │   └───lcd
+    │   │   │       ├───api
+    │   │   │       ├───common
+    │   │   │       └───driver
+    │   │   │           └───HD44780
     │   │   ├───distance
     │   │   │   └───ultrasonic
     │   │   │       ├───api
     │   │   │       ├───common
     │   │   │       └───driver
     │   │   │           └───HC-SR04
-    │   │   ├───glcd
-    │   │   │   ├───api
-    │   │   │   ├───common
-    │   │   │   └───driver
-    │   │   │       └───ST7920
     │   │   ├───keypad
-    │   │   ├───lcd
-    │   │   │   ├───api
-    │   │   │   ├───common
-    │   │   │   └───driver
-    │   │   │       └───HD44780
     │   │   ├───rtcc
     │   │   │   ├───api
     │   │   │   ├───common
@@ -93,23 +107,12 @@ The mcu layer contains:
     │   │   │       └───DS3231
     │   │   └───servo
     │   └───mcu
-    │       ├───boot
-    │       ├───hw
-    │       │   ├───api
-    │       │   │   ├───dac
-    │       │   │   ├───pwmin
-    │       │   │   └───softreset
-    │       │   └───driver
-    │       │       ├───ac
-    │       │       ├───adc
-    │       │       ├───gpio
-    │       │       ├───spi
-    │       │       ├───timer
-    │       │       ├───timer16
-    │       │       ├───twi
-    │       │       ├───usart
-    │       │       └───wdt
-    │       ├───io
+    │       ├───api
+    │       │   ├───dac
+    │       │   ├───pwmin
+    │       │   └───softreset
+    │       ├───peripheral
+    │       ├───startup
     │       └───sys
     ├───rtos
     │   ├───config
@@ -117,7 +120,8 @@ The mcu layer contains:
     │   └───source
     └───service
         ├───include
-        └───src
+        └───source
+
 ```
 ## Built With
 - Atmel Studio 7 - The official AVR IDE (for the AVR parts of the code)
@@ -127,6 +131,11 @@ The mcu layer contains:
 
 ## Tested With
 ATmega16 running at 16MHZ (external crystal oscillator)
+
+Fuse configuration:
+- Lfuse: 0xFF
+- Hfuse: 0xC9
+- Lockbits: 0x3F
 
 ## Authors
 Loay Ashraf - <loay.ashraf.96@gmail.com>
