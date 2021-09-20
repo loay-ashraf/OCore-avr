@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: AVR8 CI
 
 on: [push]
 
@@ -18,21 +18,21 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: HEX
-        path: build/ESFS.hex 
+        path: build/OCore-avr.hex 
     - name: Archive EEP artifact
       uses: actions/upload-artifact@v1
       with:
         name: EEP
-        path: build/ESFS.eep  
+        path: build/OCore-avr.eep  
     - name: Archive ELF artifact
       uses: actions/upload-artifact@v1
       with:
         name: ELF
-        path: build/ESFS.elf
+        path: build/OCore-avr.elf
     - name: Archive Map artifact
       uses: actions/upload-artifact@v1
       with:
         name: MAP
-        path: build/ESFS.map
+        path: build/OCore-avr.map
     - name: Clean
       run:  sudo make clean  
