@@ -2,11 +2,11 @@
 *
 * File:         interrupt.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 30/07/2019
 *
-* Description:	contains global interrupts macros.
+* Description:  contains global interrupts macros.
 *
 **********************************************************************/
 
@@ -15,11 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include <avr/interrupt.h>
-
-/*-------------------------------MACROS------------------------------*/
-
-#define ENABLE_GLOBAL_INTERRUPTS	sei()
-#define DISABLE_GLOBAL_INTERRUPTS	cli()
+#include "hal/ddp/ddp_interface.h"
+#include PATH_TO_INTERRUPT_H
 
 #endif /* INTERRUPT_H_ */

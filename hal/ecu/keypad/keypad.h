@@ -2,11 +2,11 @@
 *
 * File:         keypad.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 15/01/2018
 *
-* Description:	contains typedefs and function declarations for
+* Description:  contains typedefs and function declarations for
 *               matrix keypad module.
 *
 **********************************************************************/

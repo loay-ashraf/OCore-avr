@@ -2,11 +2,11 @@
 *
 * File:         HC_SR04.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 11/06/2021
 *
-* Description:	contains definitions, typedefs and function
+* Description:  contains definitions, typedefs and function
 *               declarations for HC-SR04 controller module.
 *
 **********************************************************************/
@@ -20,8 +20,8 @@
 
 /*-------------------DEFINITIONS AND CONFIGURATIONS------------------*/
 
-#define HC_SR04_PULSE_WIDTH			10
-#define HC_SR04_DITANCE_CONSTANT	0.01715	
+#define HC_SR04_PULSE_WIDTH         10
+#define HC_SR04_DITANCE_CONSTANT    0.01715    
 
 /*------------------------FUNCTION DECLARATIONS----------------------*/
 

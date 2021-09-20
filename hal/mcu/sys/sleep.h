@@ -2,11 +2,11 @@
 *
 * File:         sleep.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 12/05/2019
 *
-* Description:	contains CPU sleep instructions macros.
+* Description:  contains CPU sleep instructions macros.
 *
 **********************************************************************/
 
@@ -15,14 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include <avr/sleep.h>
-
-/*-------------------------------MACROS------------------------------*/
-
-#define SET_SLEEP_MODE(MODE)	set_sleep_mode(MODE)
-#define SLEEP_MODE				sleep_mode()
-#define SLEEP_ENABLE			sleep_enable()
-#define SLEEP_DISABLE			sleep_disable()
-#define SLEEP_CPU				sleep_cpu()
+#include "hal/ddp/ddp_interface.h"
+#include PATH_TO_SLEEP_H
 
 #endif /* SLEEP_H_ */

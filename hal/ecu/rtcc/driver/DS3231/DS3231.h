@@ -2,11 +2,11 @@
 *
 * File:         DS3231.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 04/10/2019
 *
-* Description:	contains function declarations for DS3231
+* Description:  contains function declarations for DS3231
 *               controller module.
 *
 **********************************************************************/

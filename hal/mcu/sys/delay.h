@@ -2,11 +2,11 @@
 *
 * File:         delay.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 15/05/2019
 *
-* Description:	contains delay macros (in ms and us).
+* Description:  contains delay macros (in ms and us).
 *
 **********************************************************************/
 
@@ -15,12 +15,7 @@
 
 /*------------------------------INCLUDES-----------------------------*/
 
-#include "cpu_config.h"
-#include <util/delay.h>
-
-/*-------------------------------MACROS------------------------------*/
-
-#define DELAY_MS(MS)	_delay_ms(MS) 
-#define DELAY_US(US)	_delay_us(US)
+#include "hal/ddp/ddp_interface.h"
+#include PATH_TO_DELAY_H
 
 #endif /* DELAY_H_ */

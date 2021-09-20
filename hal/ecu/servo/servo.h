@@ -2,11 +2,11 @@
 *
 * File:         servo.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 12/03/2019
 *
-* Description:	contains typedefs and function declarations for
+* Description:  contains typedefs and function declarations for
 *               servo motor module.
 *
 **********************************************************************/
@@ -22,7 +22,7 @@
 /*--------------------------------ENUMS------------------------------*/
 
 typedef enum{SER_CH0,SER_CH1}servochannel_t;
-	
+    
 /*------------------------FUNCTION DECLARATIONS----------------------*/
 
 void Servo_enable(void);

@@ -6,36 +6,36 @@
  */ 
 
 #include "app/examples/include/examples.h"
-#include "hal/mcu/hw/api/dac/dac.h"
+#include "hal/mcu/api/dac/dac.h"
 #include "hal/mcu/sys/delay.h"
 
 void ex_dac_fade(void){
-	
-	int8_t duty;	/* counter variable */
-	
-	while(1){		/* loop forever */
-		
-		/************************************************/
-		/* first loop to fade LED up to full brightness */
-		/************************************************/
-		
-		for(duty=0;duty<=100;duty++){
-			
-			dac_setDuty(DA_CH0,duty);
-			DELAY_MS(30);
-			
-		}
-		
-		/***************************************************/
-		/* second loop to fade LED down to zero brightness */
-		/***************************************************/
-		
-		for(duty=100;duty>=0;duty--){
-			
-			dac_setDuty(DA_CH0,duty);
-			DELAY_MS(30);
-			
-		}
-	}
-	
+    
+    int8_t duty;    /* counter variable */
+    
+    while(1){        /* loop forever */
+        
+        /************************************************/
+        /* first loop to fade LED up to full brightness */
+        /************************************************/
+        
+        for(duty=0;duty<=100;duty++){
+            
+            dac_setDuty(DA_CH0,duty);
+            DELAY_MS(30);
+            
+        }
+        
+        /***************************************************/
+        /* second loop to fade LED down to zero brightness */
+        /***************************************************/
+        
+        for(duty=100;duty>=0;duty--){
+            
+            dac_setDuty(DA_CH0,duty);
+            DELAY_MS(30);
+            
+        }
+    }
+    
 }

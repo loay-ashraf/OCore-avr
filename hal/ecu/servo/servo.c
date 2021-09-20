@@ -6,7 +6,7 @@
 *
 * Date created: 12/03/2019
 *
-* Description:	contains function definitions for servo motor
+* Description:  contains function definitions for servo motor
 *               module.
 *
 **********************************************************************/
@@ -14,7 +14,7 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "servo.h"
-#include "hal/mcu/hw/driver/timer16/timer16.h"
+#include "hal/mcu/peripheral/timer16.h"
 #include "service/include/map.h"
 #include "service/include/delay_var.h"
 
@@ -80,11 +80,11 @@ static uint8_t g_servoPosition[SERVO_CHANNELS_NUMBER];
 **********************************************************************/
 
 void Servo_enable(void){
-	
-	timer16_setMode(SERVO_TIMER,SERVO_TIMER_MODE);
-	timer16_setICR(SERVO_TIMER,SERVO_TIMER_TOP);
-	timer16_start(SERVO_TIMER,SERVO_TIMER_PRESCALER);
-	
+    
+	TIMER16_SET_MODE(SERVO_TIMER,SERVO_TIMER_MODE);
+	TIMER16_SET_ICR(SERVO_TIMER,SERVO_TIMER_TOP);
+	TIMER16_START(SERVO_TIMER,SERVO_TIMER_PRESCALER);
+    
 }
 
 /**********************************************************************
@@ -100,9 +100,9 @@ void Servo_enable(void){
 **********************************************************************/
 
 void Servo_disable(void){
-	
-	timer16_stop(SERVO_TIMER);
-	
+    
+	TIMER16_STOP(SERVO_TIMER);
+    
 }
 
 /**********************************************************************
@@ -118,48 +118,48 @@ void Servo_disable(void){
 **********************************************************************/
 
 void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpeed, uint8_t a_initialPosition){
-	
-	switch (a_servoChannel){
-		
-		case SER_CH0: {
-			
-			if(a_initialSpeed > SERVO_SPEED_MAX)
-				a_initialSpeed = SERVO_SPEED_MAX;
-			
-			if(a_initialPosition < SERVO_CH0_POSITION_MIN)
-				a_initialPosition = SERVO_CH0_POSITION_MIN;
-			else if(a_initialPosition > SERVO_CH0_POSITION_MAX)
-				a_initialPosition = SERVO_CH0_POSITION_MAX;
-			
-			timer16_setOCRA(SERVO_TIMER,map(a_initialPosition,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
-			timer16_setOCAMode(SERVO_TIMER,SERVO_TIMER_OCMODE);
-			g_servoSpeed[SER_CH0] = a_initialSpeed;
-			g_servoDelay[SER_CH0] = (1.0/a_initialSpeed)*1000;
-			g_servoPosition[SER_CH0] = a_initialPosition;
-			
-		}
-		break;
-		
-		case SER_CH1: {
-			
-			if(a_initialSpeed > SERVO_SPEED_MAX)
-				a_initialSpeed = SERVO_SPEED_MAX;
-			
-			if(a_initialPosition < SERVO_CH1_POSITION_MIN)
-				a_initialPosition = SERVO_CH1_POSITION_MIN;
-			else if(a_initialPosition > SERVO_CH1_POSITION_MAX)
-				a_initialPosition = SERVO_CH1_POSITION_MAX;
-			
-			timer16_setOCRB(SERVO_TIMER,map(a_initialPosition,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
-			timer16_setOCBMode(SERVO_TIMER,SERVO_TIMER_OCMODE);	
-			g_servoSpeed[SER_CH1] = a_initialSpeed;
-			g_servoDelay[SER_CH1] = (1.0/a_initialSpeed)*1000;
-			g_servoPosition[SER_CH1] = a_initialPosition;
-			
-		}
-		break;
-	}
-	
+    
+    switch (a_servoChannel){
+        
+        case SER_CH0: {
+            
+            if(a_initialSpeed > SERVO_SPEED_MAX)
+                a_initialSpeed = SERVO_SPEED_MAX;
+            
+            if(a_initialPosition < SERVO_CH0_POSITION_MIN)
+                a_initialPosition = SERVO_CH0_POSITION_MIN;
+            else if(a_initialPosition > SERVO_CH0_POSITION_MAX)
+                a_initialPosition = SERVO_CH0_POSITION_MAX;
+            
+            TIMER16_SET_OCRA(SERVO_TIMER,map(a_initialPosition,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+            TIMER16_SET_OCA_MODE(SERVO_TIMER,SERVO_TIMER_OCMODE);
+            g_servoSpeed[SER_CH0] = a_initialSpeed;
+            g_servoDelay[SER_CH0] = (1.0/a_initialSpeed)*1000;
+            g_servoPosition[SER_CH0] = a_initialPosition;
+            
+        }
+        break;
+        
+        case SER_CH1: {
+            
+            if(a_initialSpeed > SERVO_SPEED_MAX)
+                a_initialSpeed = SERVO_SPEED_MAX;
+            
+            if(a_initialPosition < SERVO_CH1_POSITION_MIN)
+                a_initialPosition = SERVO_CH1_POSITION_MIN;
+            else if(a_initialPosition > SERVO_CH1_POSITION_MAX)
+                a_initialPosition = SERVO_CH1_POSITION_MAX;
+            
+            TIMER16_SET_OCRB(SERVO_TIMER,map(a_initialPosition,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+            TIMER16_SET_OCB_MODE(SERVO_TIMER,SERVO_TIMER_OCMODE);
+            g_servoSpeed[SER_CH1] = a_initialSpeed;
+            g_servoDelay[SER_CH1] = (1.0/a_initialSpeed)*1000;
+            g_servoPosition[SER_CH1] = a_initialPosition;
+            
+        }
+        break;
+    }
+    
 }
 
 /**********************************************************************
@@ -175,26 +175,26 @@ void Servo_activateChannel(servochannel_t a_servoChannel, uint16_t a_initialSpee
 **********************************************************************/
 
 void Servo_deactivateChannel(servochannel_t a_servoChannel){
-	
-	switch (a_servoChannel){
-		
-		case SER_CH0: {
-			
-			timer16_setOCAMode(SERVO_TIMER,T16_OFF);
-			timer16_setOCRA(SERVO_TIMER,0);
-			
-		}
-		break;
-		
-		case SER_CH1: {
-			
-			timer16_setOCBMode(SERVO_TIMER,T16_OFF);
-			timer16_setOCRB(SERVO_TIMER,0);
-			
-		}
-		break;
-	}
-	
+    
+    switch (a_servoChannel){
+        
+        case SER_CH0: {
+            
+        	TIMER16_SET_OCA_MODE(SERVO_TIMER,T16_OFF);
+        	TIMER16_SET_OCRA(SERVO_TIMER,0);
+            
+        }
+        break;
+        
+        case SER_CH1: {
+            
+        	TIMER16_SET_OCB_MODE(SERVO_TIMER,T16_OFF);
+        	TIMER16_SET_OCRB(SERVO_TIMER,0);
+            
+        }
+        break;
+    }
+    
 }
 
 /**********************************************************************
@@ -210,13 +210,13 @@ void Servo_deactivateChannel(servochannel_t a_servoChannel){
 **********************************************************************/
 
 void Servo_setSpeed(servochannel_t a_servoChannel, uint16_t a_speed){
-		
-	if(a_speed > SERVO_SPEED_MAX)
-		a_speed = SERVO_SPEED_MAX;
-	
-	g_servoSpeed[a_servoChannel] = a_speed;
-	g_servoDelay[a_servoChannel] = (1.0/a_speed)*1000;
-	
+        
+    if(a_speed > SERVO_SPEED_MAX)
+        a_speed = SERVO_SPEED_MAX;
+    
+    g_servoSpeed[a_servoChannel] = a_speed;
+    g_servoDelay[a_servoChannel] = (1.0/a_speed)*1000;
+    
 }
 
 /**********************************************************************
@@ -233,36 +233,36 @@ void Servo_setSpeed(servochannel_t a_servoChannel, uint16_t a_speed){
 **********************************************************************/
 
 void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
-	
-	switch (a_servoChannel){
-		
-		case SER_CH0: {
-			
-			if(a_position < SERVO_CH0_POSITION_MIN)
-				a_position = SERVO_CH0_POSITION_MIN;
-			else if(a_position > SERVO_CH0_POSITION_MAX)
-				a_position = SERVO_CH0_POSITION_MAX;
-			
-			g_servoPosition[SER_CH0] = a_position;
-			timer16_setOCRA(SERVO_TIMER,map(a_position,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
-			
-		}
-		break;
-		
-		case SER_CH1: {
-			
-			if(a_position < SERVO_CH1_POSITION_MIN)
-				a_position = SERVO_CH1_POSITION_MIN;
-			else if(a_position > SERVO_CH1_POSITION_MAX)
-				a_position = SERVO_CH1_POSITION_MAX;
-			
-			g_servoPosition[SER_CH1] = a_position;
-			timer16_setOCRB(SERVO_TIMER,map(a_position,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
-		
-		}
-		break;
-	}
-	
+    
+    switch (a_servoChannel){
+        
+        case SER_CH0: {
+            
+            if(a_position < SERVO_CH0_POSITION_MIN)
+                a_position = SERVO_CH0_POSITION_MIN;
+            else if(a_position > SERVO_CH0_POSITION_MAX)
+                a_position = SERVO_CH0_POSITION_MAX;
+            
+            g_servoPosition[SER_CH0] = a_position;
+            TIMER16_SET_OCRA(SERVO_TIMER,map(a_position,SERVO_CH0_POSITION_MIN,SERVO_CH0_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+            
+        }
+        break;
+        
+        case SER_CH1: {
+            
+            if(a_position < SERVO_CH1_POSITION_MIN)
+                a_position = SERVO_CH1_POSITION_MIN;
+            else if(a_position > SERVO_CH1_POSITION_MAX)
+                a_position = SERVO_CH1_POSITION_MAX;
+            
+            g_servoPosition[SER_CH1] = a_position;
+            TIMER16_SET_OCRB(SERVO_TIMER,map(a_position,SERVO_CH1_POSITION_MIN,SERVO_CH1_POSITION_MAX,SERVO_TIMER_MIN,SERVO_TIMER_MAX));
+        
+        }
+        break;
+    }
+    
 }
 
 /**********************************************************************
@@ -279,82 +279,82 @@ void Servo_setPositionDirect(servochannel_t a_servoChannel, uint8_t a_position){
 **********************************************************************/
 
 void Servo_setPositionGrad(servochannel_t a_servoChannel, uint8_t a_position){
-	
-	switch (a_servoChannel){
-		
-		case SER_CH0: {
-			
-			if(a_position < SERVO_CH0_POSITION_MIN)
-				a_position = SERVO_CH0_POSITION_MIN;
-			else if(a_position > SERVO_CH0_POSITION_MAX)
-				a_position = SERVO_CH0_POSITION_MAX;
-			
-			int16_t numSteps = a_position-g_servoPosition[SER_CH0];
-			uint8_t delayOffset;
-			
-			if(g_servoSpeed[SER_CH0] <= 10)
-				delayOffset = 17;
-			else
-				delayOffset = 0;	
-			
-			if(numSteps > 0){
-				
-				while(numSteps--){
-					
-					delayVarms(g_servoDelay[SER_CH0]-delayOffset);	
-					Servo_setPositionDirect(SER_CH0,g_servoPosition[SER_CH0]+1);
-					
-				}
-				
-			}else if(numSteps < 0){
-		
-				while(numSteps++ < 0){
-						
-				    delayVarms(g_servoDelay[SER_CH0]-delayOffset);
-					Servo_setPositionDirect(SER_CH0,g_servoPosition[SER_CH0]-1);
-						
-				}	
-				
-			}					
-		}
-		break;
-		
-		case SER_CH1: {
-			
-			if(a_position < SERVO_CH1_POSITION_MIN)
-				a_position = SERVO_CH1_POSITION_MIN;
-			else if(a_position > SERVO_CH1_POSITION_MAX)
-				a_position = SERVO_CH1_POSITION_MAX;
-			
-			int16_t numSteps = a_position-g_servoPosition[SER_CH1];
-			uint8_t delayOffset;
-			
-			if(g_servoSpeed[SER_CH1] <= 10)
-				delayOffset = 17;
-			else
-				delayOffset = 0;
-			
-			if(numSteps > 0){
-				
-				while(numSteps--){
-					
-					delayVarms(g_servoDelay[SER_CH1]-delayOffset);
-					Servo_setPositionDirect(SER_CH1,g_servoPosition[SER_CH1]+1);
-					
-				}
-				
-			}else if(numSteps < 0){
-				
-				while(numSteps++ < 0){
-					
-					delayVarms(g_servoDelay[SER_CH1]-delayOffset);
-					Servo_setPositionDirect(SER_CH1,g_servoPosition[SER_CH1]-1);
-					
-				}
-				
-			}
-		}
-		break;
-	}
-	
+    
+    switch (a_servoChannel){
+        
+        case SER_CH0: {
+            
+            if(a_position < SERVO_CH0_POSITION_MIN)
+                a_position = SERVO_CH0_POSITION_MIN;
+            else if(a_position > SERVO_CH0_POSITION_MAX)
+                a_position = SERVO_CH0_POSITION_MAX;
+            
+            int16_t numSteps = a_position-g_servoPosition[SER_CH0];
+            uint8_t delayOffset;
+            
+            if(g_servoSpeed[SER_CH0] <= 10)
+                delayOffset = 17;
+            else
+                delayOffset = 0;    
+            
+            if(numSteps > 0){
+                
+                while(numSteps--){
+                    
+                    delayVarms(g_servoDelay[SER_CH0]-delayOffset);    
+                    Servo_setPositionDirect(SER_CH0,g_servoPosition[SER_CH0]+1);
+                    
+                }
+                
+            }else if(numSteps < 0){
+        
+                while(numSteps++ < 0){
+                        
+                    delayVarms(g_servoDelay[SER_CH0]-delayOffset);
+                    Servo_setPositionDirect(SER_CH0,g_servoPosition[SER_CH0]-1);
+                        
+                }    
+                
+            }                    
+        }
+        break;
+        
+        case SER_CH1: {
+            
+            if(a_position < SERVO_CH1_POSITION_MIN)
+                a_position = SERVO_CH1_POSITION_MIN;
+            else if(a_position > SERVO_CH1_POSITION_MAX)
+                a_position = SERVO_CH1_POSITION_MAX;
+            
+            int16_t numSteps = a_position-g_servoPosition[SER_CH1];
+            uint8_t delayOffset;
+            
+            if(g_servoSpeed[SER_CH1] <= 10)
+                delayOffset = 17;
+            else
+                delayOffset = 0;
+            
+            if(numSteps > 0){
+                
+                while(numSteps--){
+                    
+                    delayVarms(g_servoDelay[SER_CH1]-delayOffset);
+                    Servo_setPositionDirect(SER_CH1,g_servoPosition[SER_CH1]+1);
+                    
+                }
+                
+            }else if(numSteps < 0){
+                
+                while(numSteps++ < 0){
+                    
+                    delayVarms(g_servoDelay[SER_CH1]-delayOffset);
+                    Servo_setPositionDirect(SER_CH1,g_servoPosition[SER_CH1]-1);
+                    
+                }
+                
+            }
+        }
+        break;
+    }
+    
 }

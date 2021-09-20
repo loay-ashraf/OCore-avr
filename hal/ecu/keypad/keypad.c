@@ -6,7 +6,7 @@
 *
 * Date created: 15/01/2018
 *
-* Description:	contains function definitions for matrix keypad
+* Description:  contains function definitions for matrix keypad
 *               module.
 *
 **********************************************************************/
@@ -14,8 +14,8 @@
 /*------------------------------INCLUDES-----------------------------*/
 
 #include "keypad.h"
-#include "hal/mcu/hw/driver/gpio/gpio.h"
-#include "hal/mcu/hw/driver/timer16/timer16.h"
+#include "hal/mcu/peripheral/gpio.h"
+#include "hal/mcu/peripheral/timer16.h"
 #include "hal/mcu/sys/delay.h"
 
 /*--------------------------GLOBAL VARIABLES-------------------------*/
@@ -67,20 +67,20 @@ static void _periodicScanISR(void);
 **********************************************************************/
 
 void Keypad_init(void){
-	
-	#if (KEYPAD_CONFIG == 1)
-	
-		gpio_setPortDirection(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
-		gpio_setPortDirection(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
-		gpio_clearPort(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);
-	
-	#elif (KEYPAD_CONFIG == -1)
+    
+    #if (KEYPAD_CONFIG == 1)
+    
+        GPIO_SET_PORT_DIRECTION(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
+        GPIO_SET_PORT_DIRECTION(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
+        GPIO_CLEAR_PORT(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);
+    
+    #elif (KEYPAD_CONFIG == -1)
 
-		gpio_setPortDirection(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
-		gpio_setPortDirection(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
-		gpio_setPort(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);	
-	
-	#endif			
+        GPIO_SET_PORT_DIRECTION(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK,IO_OUTPUT);
+        GPIO_SET_PORT_DIRECTION(KEYPAD_COLUMN_PORT,KEYPAD_COLUMN_PORT_MASK,IO_INPUT);
+        GPIO_SET_PORT(KEYPAD_ROW_PORT,KEYPAD_ROW_PORT_MASK);
+    
+    #endif            
   
 }
 
@@ -97,16 +97,16 @@ void Keypad_init(void){
 **********************************************************************/
  
 void Keypad_setKeyMap(char a_keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS]){
-	
-	uint8_t rows,columns;
-	
-	for(rows = 0; rows < KEYPAD_ROWS; rows++){
-		
-		for(columns = 0; columns < KEYPAD_COLUMNS; columns++)
-			
-			g_keyMap[rows][columns] = a_keyMap[rows][columns];
-				
-	}  
+    
+    uint8_t rows,columns;
+    
+    for(rows = 0; rows < KEYPAD_ROWS; rows++){
+        
+        for(columns = 0; columns < KEYPAD_COLUMNS; columns++)
+            
+            g_keyMap[rows][columns] = a_keyMap[rows][columns];
+                
+    }  
 }
 
 /**********************************************************************
@@ -123,16 +123,16 @@ void Keypad_setKeyMap(char a_keyMap[KEYPAD_ROWS][KEYPAD_COLUMNS]){
 **********************************************************************/
  
 void Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scanFrequency){
-	  
-	g_keyHandlerCallback = a_keyHandlerCallback;
-	uint16_t ICR1Value = F_CPU/(64*a_scanFrequency);
-	  
-	timer16_setMode(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_MODE);
-	timer16_enableInterrupt(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
-	timer16_setISRCallback(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT,&_periodicScanISR);
-	timer16_setICR(KEYPAD_SCAN_TIMER,ICR1Value);
-	timer16_start(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_PRE);
-	
+      
+    g_keyHandlerCallback = a_keyHandlerCallback;
+    uint16_t ICR1Value = F_CPU/(64*a_scanFrequency);
+      
+    TIMER16_SET_MODE(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_MODE);
+    TIMER16_ENABLE_INTERRUPT(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
+    TIMER16_SET_ISR_CALLBACK(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT,&_periodicScanISR);
+    TIMER16_SET_ICR(KEYPAD_SCAN_TIMER,ICR1Value);
+    TIMER16_START(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_PRE);
+    
 }
 
 /**********************************************************************
@@ -148,11 +148,11 @@ void Keypad_enablePeriodicScan(keyhandler_t a_keyHandlerCallback, uint8_t a_scan
 **********************************************************************/
   
 void Keypad_disablePeriodicScan(void){
-	  
-	timer16_disableInterrupt(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
-	timer16_setICR(KEYPAD_SCAN_TIMER,0);
-	timer16_stop(KEYPAD_SCAN_TIMER);
-	  
+      
+	TIMER16_DISABLE_INTERRUPT(KEYPAD_SCAN_TIMER,KEYPAD_SCAN_TIMER_INT);
+	TIMER16_SET_ICR(KEYPAD_SCAN_TIMER,0);
+	TIMER16_STOP(KEYPAD_SCAN_TIMER);
+      
 }
 
 /**********************************************************************
@@ -170,66 +170,66 @@ void Keypad_disablePeriodicScan(void){
 
 char Keypad_scan(void){
 
-	uint8_t rows,columns;
+    uint8_t rows,columns;
  
-	for(rows=KEYPAD_ROW_PORT_OFFSET;rows<KEYPAD_ROW_PORT_OFFSET+KEYPAD_ROWS;rows++){
-	 
-		#if (KEYPAD_CONFIG == 1)
-			
-			gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
-		 
-		#elif (KEYPAD_CONFIG == -1)
-			
-			gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
-		 
-		#endif
+    for(rows=KEYPAD_ROW_PORT_OFFSET;rows<KEYPAD_ROW_PORT_OFFSET+KEYPAD_ROWS;rows++){
+     
+        #if (KEYPAD_CONFIG == 1)
+            
+            GPIO_SET_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
+         
+        #elif (KEYPAD_CONFIG == -1)
+            
+            GPIO_CLEAR_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
+         
+        #endif
 
-		for (columns=KEYPAD_COLUMN_PORT_OFFSET;columns<KEYPAD_COLUMN_PORT_OFFSET+KEYPAD_COLUMNS;columns++){
+        for (columns=KEYPAD_COLUMN_PORT_OFFSET;columns<KEYPAD_COLUMN_PORT_OFFSET+KEYPAD_COLUMNS;columns++){
 
-			#if (KEYPAD_CONFIG == 1)
-				
-				if (gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
-					
-					DELAY_MS(100);
-					
-					if (gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){	
-						
-						gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
-						return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
-						
-					}
-				}
-					
-			#elif (KEYPAD_CONFIG == -1)
-				
-				if (!gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
-					
-					DELAY_MS(100);
-					
-					if (!gpio_readPin((pin_t)(KEYPAD_COLUMN_PORT+columns))){
-						
-						gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
-						return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
-						
-					}
-				}
-					
-			#endif	
-		}
-	 
-		#if (KEYPAD_CONFIG == 1)
-		 
-			gpio_clearPin((pin_t)(KEYPAD_ROW_PORT+rows));
-		 
-		#elif (KEYPAD_CONFIG == -1)
-		 
-			gpio_setPin((pin_t)(KEYPAD_ROW_PORT+rows));
-		 
-		#endif
-	
-	}
-		
-	return '\0';
+            #if (KEYPAD_CONFIG == 1)
+                
+                if (GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+                    
+                    DELAY_MS(100);
+                    
+                    if (GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+                        
+                        GPIO_CLEAR_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
+                        return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
+                        
+                    }
+                }
+                    
+            #elif (KEYPAD_CONFIG == -1)
+                
+                if (!GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+                    
+                    DELAY_MS(100);
+                    
+                    if (!GPIO_READ_PIN((pin_t)(KEYPAD_COLUMN_PORT+columns))){
+                        
+                        GPIO_SET_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
+                        return g_keyMap[rows-KEYPAD_ROW_PORT_OFFSET][columns-KEYPAD_COLUMN_PORT_OFFSET];
+                        
+                    }
+                }
+                    
+            #endif    
+        }
+     
+        #if (KEYPAD_CONFIG == 1)
+         
+            GPIO_CLEAR_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
+         
+        #elif (KEYPAD_CONFIG == -1)
+         
+            GPIO_SET_PIN((pin_t)(KEYPAD_ROW_PORT+rows));
+         
+        #endif
+    
+    }
+        
+    return '\0';
 }
 
 /**********************************************************************
@@ -246,10 +246,10 @@ char Keypad_scan(void){
 **********************************************************************/
  
 static void _periodicScanISR(void){
-	 
-	char key = Keypad_scan();
-	 
-	if(key != '\0')
-		g_keyHandlerCallback(key);
-	 
+     
+    char key = Keypad_scan();
+     
+    if(key != '\0')
+        g_keyHandlerCallback(key);
+     
 }

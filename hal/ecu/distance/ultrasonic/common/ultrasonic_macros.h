@@ -2,11 +2,11 @@
 *
 * File:         ultrasonic_macros.h
 *
-* Author(s):	Loay Ashraf <loay.ashraf.96@gmail.com>
+* Author(s):    Loay Ashraf <loay.ashraf.96@gmail.com>
 *
 * Date created: 11/06/2021
 *
-* Description:	contains function-like adapter macros for Ultrasonic
+* Description:  contains function-like adapter macros for Ultrasonic
 *               module.
 *
 **********************************************************************/
@@ -26,8 +26,8 @@
 
 #if defined(HC_SR04_H_)
 
-	#define ULTRASONIC_READCM	HC_SR04_read()
+    #define ULTRASONIC_READCM    HC_SR04_read()
 
-#endif	
+#endif    
 
 #endif /* ULTRASONIC_MACROS_H_ */

@@ -6,7 +6,7 @@
 *
 * Date created: 07/08/2019
 *
-* Description:	contains function definitions for RTCC module.
+* Description:  contains function definitions for RTCC module.
 *
 **********************************************************************/
 
@@ -31,9 +31,9 @@
 **********************************************************************/
 
 void RTCC_init(void){
-	
-	RTCC_INIT;
-	
+    
+    RTCC_INIT;
+    
 }
 
 /**********************************************************************
@@ -49,9 +49,9 @@ void RTCC_init(void){
 **********************************************************************/
 
 void RTCC_enable(void){
-	
-	RTCC_ENABLE;
-	
+    
+    RTCC_ENABLE;
+    
 }
 
 /**********************************************************************
@@ -67,9 +67,9 @@ void RTCC_enable(void){
 **********************************************************************/
 
 void RTCC_setClockMode(rtccclockmode_t a_clockMode){
-	
-	RTCC_SET_CLOCK_MODE(a_clockMode);
-	
+    
+    RTCC_SET_CLOCK_MODE(a_clockMode);
+    
 }
 
 /**********************************************************************
@@ -86,8 +86,8 @@ void RTCC_setClockMode(rtccclockmode_t a_clockMode){
 
 void RTCC_setClock(rtccclock_t a_clock){
 
-	RTCC_SET_CLOCK(a_clock);
-	
+    RTCC_SET_CLOCK(a_clock);
+    
 }
 
 /**********************************************************************
@@ -103,11 +103,11 @@ void RTCC_setClock(rtccclock_t a_clock){
 **********************************************************************/
 
 void RTCC_setCalendar(rtcccalendar_t a_calendar){
-	
-	a_calendar.year -= RTCC_MILLENNIUM;
-	
-	RTCC_SET_CALENDAR(a_calendar);
-	
+    
+    a_calendar.year -= RTCC_MILLENNIUM;
+    
+    RTCC_SET_CALENDAR(a_calendar);
+    
 }
 
 /**********************************************************************
@@ -123,9 +123,9 @@ void RTCC_setCalendar(rtcccalendar_t a_calendar){
 **********************************************************************/
 
 rtccclock_t RTCC_getClock(void){
-	
-	return RTCC_GET_CLOCK;
-	
+    
+    return RTCC_GET_CLOCK;
+    
 }
 
 /**********************************************************************
@@ -141,27 +141,27 @@ rtccclock_t RTCC_getClock(void){
 **********************************************************************/
 
 char * RTCC_getClockStr(void){
-	
-	rtccclock_t clock;
-	static char clockStr[12];
-	
-	clock = RTCC_GET_CLOCK;
-	
-	switch(clock.AMPM){
-		
-		case RT_AM: sprintf(clockStr,RTCC_CLOCK_FORMAT,clock.hour,clock.minute,clock.second,"AM");
-		break;
-		
-		case RT_PM: sprintf(clockStr,RTCC_CLOCK_FORMAT,clock.hour,clock.minute,clock.second,"PM");
-		break;
-		
-		default: sprintf(clockStr,RTCC_CLOCK_FORMAT,clock.hour,clock.minute,clock.second," ");
-		break;
-		
-	}
-	
-	clockStr[11] = '\0';
-	return clockStr;
+    
+    rtccclock_t clock;
+    static char clockStr[12];
+    
+    clock = RTCC_GET_CLOCK;
+    
+    switch(clock.AMPM){
+        
+        case RT_AM: sprintf(clockStr,RTCC_CLOCK_FORMAT,clock.hour,clock.minute,clock.second,"AM");
+        break;
+        
+        case RT_PM: sprintf(clockStr,RTCC_CLOCK_FORMAT,clock.hour,clock.minute,clock.second,"PM");
+        break;
+        
+        default: sprintf(clockStr,RTCC_CLOCK_FORMAT,clock.hour,clock.minute,clock.second," ");
+        break;
+        
+    }
+    
+    clockStr[11] = '\0';
+    return clockStr;
 }
 
 /**********************************************************************
@@ -177,14 +177,14 @@ char * RTCC_getClockStr(void){
 **********************************************************************/
 
 rtcccalendar_t RTCC_getCalendar(void){
-	
-	rtcccalendar_t calendar;
-	
-	calendar = RTCC_GET_CALENDAR;
-	calendar.year += RTCC_MILLENNIUM;
-	
-	return calendar;
-	
+    
+    rtcccalendar_t calendar;
+    
+    calendar = RTCC_GET_CALENDAR;
+    calendar.year += RTCC_MILLENNIUM;
+    
+    return calendar;
+    
 }
 
 /**********************************************************************
@@ -200,9 +200,9 @@ rtcccalendar_t RTCC_getCalendar(void){
 **********************************************************************/
 
 void RTCC_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig){
-	
-	RTCC_SET_ALARM(a_alarm,a_alarmConfig);
-	
+    
+    RTCC_SET_ALARM(a_alarm,a_alarmConfig);
+    
 }
 
 /**********************************************************************
@@ -218,9 +218,9 @@ void RTCC_setAlarm(rtccalarm_t a_alarm, rtccalarmconfig_t a_alarmConfig){
 **********************************************************************/
 
 void RTCC_enableAlarm(rtccalarm_t a_alarm){
-	
-	RTCC_ENABLE_ALARM(a_alarm);
-	
+    
+    RTCC_ENABLE_ALARM(a_alarm);
+    
 }
 
 /**********************************************************************
@@ -236,7 +236,7 @@ void RTCC_enableAlarm(rtccalarm_t a_alarm){
 **********************************************************************/
 
 void RTCC_disableAlarm(rtccalarm_t a_alarm){
-	
-	RTCC_DISABLE_ALARM(a_alarm);
-	
+    
+    RTCC_DISABLE_ALARM(a_alarm);
+    
 }
