@@ -38,7 +38,7 @@
 MCU = atmega16
 FCPU = 16000000UL
 FORMAT = ihex
-TARGET = ESFS
+TARGET = OCore-avr
 SRC_DIR = ./
 SRC = $(shell find $(SRC_DIR) -name *.cpp -or -name *.c -or -name *.s)
 ASRC =
